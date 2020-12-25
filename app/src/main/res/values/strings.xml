@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">TheJournal</string>
+    <string name="welcomeBackMessageDescription">A greeting message as the user logs in</string>
+    <string name="loginButtonText">LOGIN</string>
+    <string name="loginButtonId">login</string>
+    <string name="passwordHint">Password…</string>
+    <string name="emailHint">Email…</string>
+    <string name="alreadyHaveAnAccountButtonText">ALREADY HAVE AN ACCOUNT?</string>
+    <string name="inputTypeIs">text</string>
+    <string name="forgotPasswordTextView">FORGOT PASSWORD?</string>
+    <string name="newAccountTextView">NEW ACCOUNT?</string>
+    <string name="loginWithSocialMediaAccount">CONNECT WITH SOCIAL MEDIA ACCOUNT</string>
+</resources>
