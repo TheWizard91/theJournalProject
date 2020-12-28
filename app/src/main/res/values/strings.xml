@@ -1,13 +1,26 @@
 <resources>
     <string name="app_name">TheJournal</string>
-    <string name="welcomeBackMessageDescription">A greeting message as the user logs in</string>
+    <string name="welcome_back_message_description">A greeting message as the user logs in</string>
     <string name="loginButtonText">LOGIN</string>
     <string name="loginButtonId">login</string>
-    <string name="passwordHint">Password…</string>
-    <string name="emailHint">Email…</string>
-    <string name="alreadyHaveAnAccountButtonText">ALREADY HAVE AN ACCOUNT?</string>
-    <string name="inputTypeIs">text</string>
-    <string name="forgotPasswordTextView">FORGOT PASSWORD?</string>
-    <string name="newAccountTextView">NEW ACCOUNT?</string>
-    <string name="loginWithSocialMediaAccount">CONNECT WITH SOCIAL MEDIA ACCOUNT</string>
+    <string name="passwordHint">Enter Your Password…</string>
+    <string name="emailHint">Email Or Username…</string>
+    <string name="already_have_an_account_button_text">ALREADY HAVE AN ACCOUNT?</string>
+    <string name="input_type_is">text</string>
+    <string name="forgot_password_text_view">FORGOT PASSWORD?</string>
+    <string name="new_account_text_view">NEW ACCOUNT?</string>
+    <string name="login_with_social_media_account">CONNECT WITH SOCIAL MEDIA ACCOUNT</string>
+    <string name="sign_up_button">SIGN IN</string>
+    <string name="confirm_password">Confirm Password…</string>
+    <string name="register_welcome_message_description">greetingImageLogoForUser</string>
+    <string name="circle_image">Description of the image that is on log in and sign up.</string>
+    <string name="greeting_message_in_log_inactivity">Welcome Back!</string>
+    <string name="please_log_in_into_your_account_text">Please Log In Into Your Account</string>
+    <string name="or_text_view">Or</string>
+    <string name="social_media_account_text_view">Log In With Social Media Account.</string>
+    <string name="password_eye_description">pressing the eye icon the user  will see the password entered.</string>
+    <string name="log_in_image_button_description">When the user presses this image button they will redirected to home fragment.</string>
+    <string name="welcome_message_text_view">Welcome!</string>
+    <string name="please_sign_up_text_view">Please Sign Up.</string>
+    <string name="sing_up_image_button_description">User will get to home fragment upon clicking this button</string>
 </resources>
