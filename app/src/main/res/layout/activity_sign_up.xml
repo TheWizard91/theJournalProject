@@ -55,7 +55,7 @@
             android:autofillHints=""
             android:background="@drawable/my_text_view"
             android:ems="10"
-            android:hint="@string/passwordHint"
+            android:hint="@string/password_hint"
             android:inputType="textPassword"
             android:textColorHint="@color/darker_gray"
             app:layout_constraintBottom_toBottomOf="parent"

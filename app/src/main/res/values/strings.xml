@@ -1,9 +1,9 @@
 <resources>
     <string name="app_name">TheJournal</string>
     <string name="welcome_back_message_description">A greeting message as the user logs in</string>
-    <string name="loginButtonText">LOGIN</string>
-    <string name="loginButtonId">login</string>
-    <string name="passwordHint">Enter Your Password…</string>
+    <string name="log_in_button_text">LOGIN</string>
+    <string name="login_button_id">login</string>
+    <string name="password_hint">Enter Your Password…</string>
     <string name="emailHint">Email Or Username…</string>
     <string name="already_have_an_account_button_text">ALREADY HAVE AN ACCOUNT?</string>
     <string name="input_type_is">text</string>
