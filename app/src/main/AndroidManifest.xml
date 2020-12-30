@@ -27,7 +27,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.TheJournal">
-        <activity android:name=".log_in_activities_adds_on.ForgotPasswordActivity"></activity>
+        <activity android:name=".sing_up_adds_on.AccountSettingsActivity"></activity>
+        <activity android:name=".log_in_activities_adds_on.ForgotPasswordActivity" />
         <activity android:name=".SignUpActivity" />
         <activity android:name=".LogInActivity" />
         <activity android:name=".MainActivity">

@@ -8,7 +8,7 @@
     tools:context=".SignUpActivity">
 
     <ProgressBar
-        android:id="@+id/progressbarId"
+        android:id="@+id/sign_up_progress_bar_id"
         style="?android:attr/progressBarStyleHorizontal"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -28,7 +28,7 @@
         android:background="@drawable/background_layer">
 
         <EditText
-            android:id="@+id/registerEmailAddressTextViewId"
+            android:id="@+id/sign_up_mail_address_text_view_id"
             android:layout_width="0dp"
             android:layout_height="@dimen/layoutHeightDimension"
             android:layout_marginStart="@dimen/layoutMarginRightAndLeft"
@@ -47,7 +47,7 @@
             app:layout_constraintVertical_bias="0.083" />
 
         <EditText
-            android:id="@+id/registerPasswordTextViewId"
+            android:id="@+id/sign_up_password_text_view_id"
             android:layout_width="0dp"
             android:layout_height="@dimen/layoutHeightDimension"
             android:layout_marginStart="@dimen/layoutMarginRightAndLeft"
@@ -62,11 +62,11 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/registerEmailAddressTextViewId"
+            app:layout_constraintTop_toBottomOf="@+id/sign_up_mail_address_text_view_id"
             app:layout_constraintVertical_bias="0.06" />
 
         <EditText
-            android:id="@+id/registerPasswordConfirmationId"
+            android:id="@+id/sign_password_confirmation_id"
             android:layout_width="0dp"
             android:layout_height="@dimen/layoutHeightDimension"
             android:layout_marginStart="@dimen/layoutMarginRightAndLeft"
@@ -81,11 +81,11 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/registerPasswordTextViewId"
+            app:layout_constraintTop_toBottomOf="@+id/sign_up_password_text_view_id"
             app:layout_constraintVertical_bias="0.086" />
 
         <ImageButton
-            android:id="@+id/registerButtonId"
+            android:id="@+id/sign_up_button_id"
             android:layout_width="200dp"
             android:layout_height="@dimen/layoutHeightDimension"
             android:layout_marginStart="@dimen/layoutMarginRightAndLeft"
@@ -138,7 +138,7 @@
             android:text="@string/already_have_an_account_button_text"
             android:textColor="@color/shade_of_gray_for_darker_blue"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/registerPasswordConfirmationId" />
+            app:layout_constraintTop_toBottomOf="@+id/sign_password_confirmation_id" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
