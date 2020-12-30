@@ -67,7 +67,7 @@ public class SignUpActivity extends AppCompatActivity {
 
     private void createANewAccount() {
         signUpButton.setOnClickListener(new View.OnClickListener() {
-            @SuppressLint("WrongConstant")
+//            @SuppressLint("WrongConstant")
             @Override
             public void onClick(View v) {
                 String emailInserted = enterEmail.getText().toString();
@@ -75,10 +75,9 @@ public class SignUpActivity extends AppCompatActivity {
                 String passwordConfirmed = confirmPassword.getText().toString();
                 if(!TextUtils.isEmpty(emailInserted) && !TextUtils.isEmpty(passwordConfirmed) && !TextUtils.isEmpty(passwordConfirmed)){
                     if(passwordInserted.equals(passwordConfirmed)){
-                        progressBar.setVisibility(0);
+                        progressBar.setVisibility(View.VISIBLE);
                         userAuthorized.createUserWithEmailAndPassword(emailInserted, passwordInserted)
                                 .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                                    @SuppressLint("WrongConstant")
                                     @Override
                                     public void onComplete(@NonNull Task<AuthResult> task) {
                                         if(task.isSuccessful()){
@@ -86,13 +85,14 @@ public class SignUpActivity extends AppCompatActivity {
                                         } else {
                                             Toast.makeText(SignUpActivity.this,
                                                     "Error: "+((Exception) Objects.requireNonNull(task.getException()))
-                                            .getMessage(), 5).show();
+                                            .getMessage(), Toast.LENGTH_LONG).show();
                                         }
-                                        progressBar.setVisibility(4);
+//                                        progressBar.setVisibility(4);
                                     }
                                 });
+                    } else {
+                        Toast.makeText(SignUpActivity.this, "Passwords Do Not Match", Toast.LENGTH_LONG).show();
                     }
-                    Toast.makeText(SignUpActivity.this, "Passwords Do Not Match", 0).show();
                 }
             }
         });
@@ -100,6 +100,7 @@ public class SignUpActivity extends AppCompatActivity {
 
     private void sendToAccountSettingsActivity() {
         startActivity(new Intent(this, AccountSettingsActivity.class));
+        finish();
     }
 
     private void finishTheLogInActivity() {

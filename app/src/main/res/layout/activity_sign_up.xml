@@ -7,15 +7,18 @@
     android:background="@color/darker_blue"
     tools:context=".SignUpActivity">
 
-    <ProgressBar
+    <androidx.core.widget.ContentLoadingProgressBar
         android:id="@+id/sign_up_progress_bar_id"
-        style="?android:attr/progressBarStyleHorizontal"
+        style="@style/Widget.AppCompat.SeekBar.Discrete"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:background="@color/pure_white"
+        android:indeterminate="true"
+        android:indeterminateTint="@color/my_orange"
+        android:visibility="invisible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:visibility="invisible"/>
+        app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout"
