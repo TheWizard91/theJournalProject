@@ -19,18 +19,17 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="350dp"
-        android:layout_height="400dp"
+        android:layout_height="600dp"
         android:background="@drawable/background_layer"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" >
+        app:layout_constraintTop_toTopOf="parent">
 
         <TextView
             android:id="@+id/account_settings_id"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
             android:ems="10"
             android:fontFamily="@font/poppins_bold"
             android:text="@string/set_up_your_account_welcome_text"
@@ -48,10 +47,10 @@
             android:id="@+id/account_settings_please_set_up_your_account_here_id"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="1dp"
             android:ems="10"
             android:fontFamily="@font/poppins"
             android:text="@string/account_settings_please_set_up_your_account_here_text"
+            android:textAlignment="center"
             android:textColor="@color/shade_of_gray_for_darker_blue"
             android:textSize="14sp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -62,7 +61,8 @@
             android:id="@+id/account_settings_enter_username_id"
             android:layout_width="300dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="8dp"
+            android:autofillHints=""
             android:background="@drawable/my_text_view"
             android:ems="10"
             android:fontFamily="@font/poppins"
@@ -70,14 +70,14 @@
             android:inputType="textPersonName"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/account_settings_please_set_up_your_account_here_id"
-            android:autofillHints="" />
+            app:layout_constraintTop_toBottomOf="@+id/account_settings_user_account_image_id" />
 
         <EditText
             android:id="@+id/account_settings_interest_id"
             android:layout_width="300dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
+            android:autofillHints=""
             android:background="@drawable/my_text_view"
             android:ems="10"
             android:fontFamily="@font/poppins"
@@ -85,14 +85,14 @@
             android:inputType="textPersonName"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/account_settings_enter_username_id"
-            android:autofillHints="" />
+            app:layout_constraintTop_toBottomOf="@+id/account_settings_enter_username_id" />
 
         <EditText
             android:id="@+id/account_settings_user_phone_number_id"
             android:layout_width="300dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
+            android:autofillHints=""
             android:background="@drawable/my_text_view"
             android:ems="10"
             android:fontFamily="@font/poppins"
@@ -100,14 +100,14 @@
             android:inputType="phone"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/account_settings_interest_id"
-            android:autofillHints="" />
+            app:layout_constraintTop_toBottomOf="@+id/account_settings_interest_id" />
 
         <EditText
             android:id="@+id/account_settings_user_address_id"
             android:layout_width="300dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
+            android:autofillHints=""
             android:background="@drawable/my_text_view"
             android:ems="10"
             android:fontFamily="@font/poppins"
@@ -115,8 +115,7 @@
             android:inputType="textPostalAddress"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/account_settings_user_phone_number_id"
-            android:autofillHints="" />
+            app:layout_constraintTop_toBottomOf="@+id/account_settings_user_phone_number_id" />
 
         <RadioGroup
             android:id="@+id/account_settings_group_button_id"
@@ -139,6 +138,8 @@
                 tools:layout_editor_absoluteX="106dp"
                 tools:layout_editor_absoluteY="273dp" />
 
+            <!--            android:checked="true"-->
+            <!--            android:buttonTint="@color/my_orange"-->
             <RadioButton
                 android:id="@+id/account_settings_radio_button_two_id"
                 android:layout_width="match_parent"
@@ -154,7 +155,7 @@
             android:id="@+id/account_settings_set_up_id"
             android:layout_width="300dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="8dp"
             android:background="@drawable/button_background"
             android:fontFamily="@font/poppins_bold"
             android:text="@string/account_settings_set_up_button_text"
@@ -163,6 +164,20 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/account_settings_group_button_id" />
+
+        <ImageView
+            android:id="@+id/account_settings_user_account_image_id"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="64dp"
+            android:baseline="@dimen/layoutMarginRightAndLeft"
+            android:clickable="true"
+            android:contentDescription="@string/account_settgins_user_account_image_description"
+            android:focusable="true"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/account_settings_please_set_up_your_account_here_id"
+            tools:srcCompat="@tools:sample/avatars" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -32,4 +32,5 @@
     <string name="account_settings_radio_button_one_text" >Male</string>
     <string name="account_settings_radio_button_two_text" >Female</string>
     <string name="account_settings_set_up_button_text">READY!</string>
+    <string name="account_settgins_user_account_image_description">User image</string>
 </resources>
