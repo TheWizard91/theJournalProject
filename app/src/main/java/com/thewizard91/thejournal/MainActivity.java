@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.thewizard91.thejournal.sing_up_adds_on.AccountSettingsActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -37,6 +38,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void sendToLoginActivity() {
         // Start the Login Activity
-        startActivity(new Intent(this, LogInActivity.class));
+        startActivity(new Intent(this, AccountSettingsActivity.class));
+        finish();
     }
 }

@@ -82,6 +82,7 @@ public class SignUpActivity extends AppCompatActivity {
                                     public void onComplete(@NonNull Task<AuthResult> task) {
                                         if(task.isSuccessful()){
                                             sendToAccountSettingsActivity();
+//                                            test();
                                         } else {
                                             Toast.makeText(SignUpActivity.this,
                                                     "Error: "+((Exception) Objects.requireNonNull(task.getException()))
@@ -98,9 +99,14 @@ public class SignUpActivity extends AppCompatActivity {
         });
     }
 
+    private void test() {
+        startActivity(new Intent(this, MainActivity.class));
+        finish();
+    }
+
     private void sendToAccountSettingsActivity() {
         startActivity(new Intent(this, AccountSettingsActivity.class));
-        finish();
+//        finish();
     }
 
     private void finishTheLogInActivity() {

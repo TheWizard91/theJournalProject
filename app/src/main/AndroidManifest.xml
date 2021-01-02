@@ -12,7 +12,8 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+        tools:ignore="ScopedStorage" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" /> <!-- <uses-feature android:glEsVersion="20000" android:required="true"/> -->
     <uses-permission android:name="android.permission.WAKE_LOCK" />
@@ -22,12 +23,13 @@
 
     <application
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@mipmap/app_front_page"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.TheJournal">
-        <activity android:name=".sing_up_adds_on.AccountSettingsActivity"></activity>
+        android:theme="@style/Theme.TheJournal"
+        tools:ignore="AllowBackup">
+        <activity android:name=".sing_up_adds_on.AccountSettingsActivity" />
         <activity android:name=".log_in_activities_adds_on.ForgotPasswordActivity" />
         <activity android:name=".SignUpActivity" />
         <activity android:name=".LogInActivity" />
@@ -38,7 +40,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
+        <!--   Activity for ImageCrop API     -->
+        <activity android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
+            android:theme="@style/Base.Theme.AppCompat"/>
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />

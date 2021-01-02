@@ -61,7 +61,7 @@
             android:id="@+id/account_settings_enter_username_id"
             android:layout_width="300dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="16dp"
             android:autofillHints=""
             android:background="@drawable/my_text_view"
             android:ems="10"
@@ -73,7 +73,7 @@
             app:layout_constraintTop_toBottomOf="@+id/account_settings_user_account_image_id" />
 
         <EditText
-            android:id="@+id/account_settings_interest_id"
+            android:id="@+id/account_settings_user_description_id"
             android:layout_width="300dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
@@ -81,7 +81,7 @@
             android:background="@drawable/my_text_view"
             android:ems="10"
             android:fontFamily="@font/poppins"
-            android:hint="@string/account_settings_user_interests"
+            android:hint="@string/account_settings_user_description"
             android:inputType="textPersonName"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -100,7 +100,7 @@
             android:inputType="phone"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/account_settings_interest_id" />
+            app:layout_constraintTop_toBottomOf="@+id/account_settings_user_description_id" />
 
         <EditText
             android:id="@+id/account_settings_user_address_id"
@@ -151,33 +151,36 @@
 
         </RadioGroup>
 
-        <Button
+        <com.royrodriguez.transitionbutton.TransitionButton
             android:id="@+id/account_settings_set_up_id"
             android:layout_width="300dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
             android:background="@drawable/button_background"
+            android:backgroundTint="@color/darker_blue"
             android:fontFamily="@font/poppins_bold"
             android:text="@string/account_settings_set_up_button_text"
             android:textColor="@color/shade_of_gray_for_darker_blue"
             app:layout_constraintBottom_toBottomOf="parent"
+            app:defaultColor="@color/darker_blue"
+            app:loaderColor="@color/my_orange"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/account_settings_group_button_id" />
 
-        <ImageView
+        <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/account_settings_user_account_image_id"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="64dp"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:layout_marginTop="32dp"
+            android:background="@drawable/image_border"
             android:baseline="@dimen/layoutMarginRightAndLeft"
             android:clickable="true"
-            android:contentDescription="@string/account_settgins_user_account_image_description"
+            android:contentDescription="@string/account_settings_user_account_image_description"
             android:focusable="true"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/account_settings_please_set_up_your_account_here_id"
-            tools:srcCompat="@tools:sample/avatars" />
+            android:src="@mipmap/baseline_account_circle_black_24dp"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

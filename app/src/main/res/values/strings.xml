@@ -26,11 +26,11 @@
     <string name="set_up_your_account_welcome_text">Welcome!</string>
     <string name="account_settings_please_set_up_your_account_here_text">Account Settings Please Set Up Your Account.</string>
     <string name="account_settings_username_text">Enter Your Nickname…</string>
-    <string name="account_settings_user_interests">What Are Your Interests?</string>
+    <string name="account_settings_user_description">Who Are You?</string>
     <string name="account_settings_user_phone_number_text">Please Insert Your Phone Number…</string>
     <string name="account_settings_user_address_text">Address…</string>
     <string name="account_settings_radio_button_one_text" >Male</string>
     <string name="account_settings_radio_button_two_text" >Female</string>
     <string name="account_settings_set_up_button_text">READY!</string>
-    <string name="account_settgins_user_account_image_description">User image</string>
+    <string name="account_settings_user_account_image_description">User image</string>
 </resources>
