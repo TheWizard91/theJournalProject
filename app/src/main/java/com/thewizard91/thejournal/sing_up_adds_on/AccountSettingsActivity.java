@@ -1,5 +1,6 @@
 package com.thewizard91.thejournal.sing_up_adds_on;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.net.Uri;
@@ -85,7 +86,7 @@ public class AccountSettingsActivity extends AppCompatActivity {
 
         // Instantiating .XML components
         progressBar = findViewById(R.id.account_settings_progress_bar);
-        userImage = (ImageView) findViewById(R.id.account_settings_user_account_image_id);
+        userImage = findViewById(R.id.account_settings_user_account_image_id);
         username = findViewById(R.id.account_settings_enter_username_id);
         description = findViewById(R.id.account_settings_user_description_id);
         phoneNumber = findViewById(R.id.account_settings_user_phone_number_id);
@@ -119,52 +120,70 @@ public class AccountSettingsActivity extends AppCompatActivity {
         userImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                if(Build.VERSION.SDK_INT<23){
+                if(Build.VERSION.SDK_INT<23) {
+                    Toast.makeText(AccountSettingsActivity.this,
+                            "In if", Toast.LENGTH_SHORT).show();
 //                    _selectAndCropImage();
-//                } else if (ContextCompat.checkSelfPermission(AccountSettingsActivity.this,
-//                        "android.permission.READ_EXTERNAL_STORAGE")!=0){
-//                    ActivityCompat.requestPermissions(AccountSettingsActivity.this,
-//                            new String[] {"android.permission.READ_EXTERNAL_STORAGE"},
-//                            1);
-//                    Toast.makeText(AccountSettingsActivity.this,
-//                            "Permission Denied", Toast.LENGTH_LONG).show();
-//                } else {
+                } else if (ContextCompat.checkSelfPermission(AccountSettingsActivity.this,
+                        Manifest.permission.READ_EXTERNAL_STORAGE)!=0){
+                    ActivityCompat.requestPermissions(AccountSettingsActivity.this,
+                            new String[] {Manifest.permission.READ_EXTERNAL_STORAGE},
+                            1);
+                    Toast.makeText(AccountSettingsActivity.this,
+                            "Permission Denied",
+                            Toast.LENGTH_LONG).show();
+                } else {
                     _selectAndCropImage();
-//                }
+                    Toast.makeText(AccountSettingsActivity.this,
+                            "In else", Toast.LENGTH_SHORT).show();
+                }
             }
         });
     }
 
     private void _selectAndCropImage() {
-//        CropImage.activity()
-//                .setGuidelines(CropImageView.Guidelines.ON)
-//                .setMinCropResultSize(512, 512)
-//                .setAspectRatio(1, 1)
-//                .start(this);
         CropImage.activity()
                 .setGuidelines(CropImageView.Guidelines.ON)
+                .setMultiTouchEnabled(true)
+                .setMinCropResultSize(300, 300)
+                .setAspectRatio(1, 1)
                 .start(this);
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode==203){
+        if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
             CropImage.ActivityResult result = CropImage.getActivityResult(data);
-            if(resultCode==-1){
-                assert result != null;
-                Uri uri = result.getUri();
-                userImageUri = uri;
-                userImage.setImageURI(uri);
-                isTheUserChanged = true;
-            } else if (resultCode == 204) {
-                assert result != null;
-                Toast.makeText(this,
-                        ""+result.getError(),
-                        Toast.LENGTH_SHORT).show();
+            if (resultCode == RESULT_OK) {
+                Uri resultUri = result.getUri();
+            } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
+                Exception error = result.getError();
             }
         }
     }
+//    @Override
+//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+//        super.onActivityResult(requestCode, resultCode, data);
+//        if(requestCode==CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
+//            CropImage.ActivityResult result = CropImage.getActivityResult(data);
+//            if(resultCode==RESULT_OK){
+//                assert result != null;
+//                Uri uri = result.getUri();
+//                userImageUri = uri;
+//                userImage.setImageURI(uri);
+//                isTheUserChanged = true;
+//                Toast.makeText(this,
+//                        "Sending The Profile Image",
+//                        Toast.LENGTH_SHORT).show();
+//            } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
+//                assert result != null;
+//                Toast.makeText(this,
+//                        ""+result.getError(),
+//                        Toast.LENGTH_SHORT).show();
+//            }
+//        }
+//    }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
@@ -183,8 +202,7 @@ public class AccountSettingsActivity extends AppCompatActivity {
                             Toast.makeText(AccountSettingsActivity.this,
                                     "FIREBASE RETRIEVE ERROR: "+((Exception)Objects.requireNonNull(task.getException()))
                                             .getMessage(), Toast.LENGTH_LONG).show();
-                        } else if (task.getResult().exists()){
-
+                        } else if (task.getResult().exists()) {
                             String userProfileImage = task.getResult().getString("user_profile_image");
                             String userProfileName = task.getResult().getString("username");
                             userImageUri = Uri.parse(userProfileImage);
@@ -231,10 +249,10 @@ public class AccountSettingsActivity extends AppCompatActivity {
                                     new TransitionButton.OnAnimationStopEndListener() {
                                         @Override
                                         public void onAnimationStopEnd() {
-                                            sendToMainActivity();
-//                                            Intent intent = new Intent(getBaseContext(), MainActivity.class);
-//                                            intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-//                                            startActivity(intent);
+//                                            sendToMainActivity();
+                                            Intent intent = new Intent(getBaseContext(), MainActivity.class);
+                                            intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                                            startActivity(intent);
                                         }
                                     });
                         } else {
@@ -264,6 +282,7 @@ public class AccountSettingsActivity extends AppCompatActivity {
                 final StorageReference pathToTheUserProfileImageInFirebase = cloudStorageInstance.child("storage_of_"+userName)
                         .child("profile_images")
                         .child(randomNameForUserProfileImage+".jpg");
+
                 // Saving the Path where the image profile has
                 // been sent so that we can add more info about the user
                 // as well as their image profile in.jpg format.
@@ -353,7 +372,14 @@ public class AccountSettingsActivity extends AppCompatActivity {
                 userInterests);
     }
 
-    private void _makeTheMap(String imageUri, String userName, String userDescription, String userPhoneNumber, String userAddress, String userGender, String userAge, String[] userInterests) {
+    private void _makeTheMap(String imageUri,
+                             String userName,
+                             String userDescription,
+                             String userPhoneNumber,
+                             String userAddress,
+                             String userGender,
+                             String userAge,
+                             String[] userInterests) {
         Map<String, String> userMap = new HashMap<>();
         userMap.put("profile_image_of", imageUri);
         userMap.put("username", userName);

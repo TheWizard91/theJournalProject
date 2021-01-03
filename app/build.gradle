@@ -66,7 +66,9 @@ dependencies {
     implementation "com.github.ChiliLabs:ChiliPhotoPicker:0.3.1"
 
     // Android Image Cropper
-    api 'com.theartofdev.edmodo:android-image-cropper:2.8.0'
+    implementation 'com.theartofdev.edmodo:android-image-cropper:2.8.0'
+//    implementation 'com.theartofdev.edmodo:android-image-cropper:2.5.0'
+
 
     // Image zooming by click -- Android Image Popup
     implementation 'com.github.chathuralakmal:AndroidImagePopup:1.2.2'
@@ -101,5 +103,9 @@ dependencies {
 
     // BoomMenu
     implementation 'com.nightonke:boommenu:2.1.1'
+
+    // For Appache licnece
+    apply plugin: 'com.google.android.gms.oss-licenses-plugin'
+    implementation 'com.google.android.gms:play-services-oss-licenses:17.0.0'
 
 }
