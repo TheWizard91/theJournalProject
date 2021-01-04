@@ -115,22 +115,17 @@ public class AccountSettingsActivity extends AppCompatActivity {
         userImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.M) {
-                    Toast.makeText(AccountSettingsActivity.this,
-                            "In if", Toast.LENGTH_SHORT).show();
+                if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    Toast.makeText(AccountSettingsActivity.this, "In if", Toast.LENGTH_SHORT).show();
                     _selectAndCropImage();
                 } else if (ContextCompat.checkSelfPermission(AccountSettingsActivity.this,
-                        Manifest.permission.READ_EXTERNAL_STORAGE)!=0) {
+                        Manifest.permission.READ_EXTERNAL_STORAGE) != 0) {
                     ActivityCompat.requestPermissions(AccountSettingsActivity.this,
-                            new String[] {Manifest.permission.READ_EXTERNAL_STORAGE},
-                            1);
+                            new String[] {Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
                     Toast.makeText(AccountSettingsActivity.this,
-                            "Permission Denied",
-                            Toast.LENGTH_LONG).show();
+                            "Permission Denied", Toast.LENGTH_LONG).show();
                 } else {
                     _selectAndCropImage();
-//                    Toast.makeText(AccountSettingsActivity.this,
-//                            "In else", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -151,7 +146,7 @@ public class AccountSettingsActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
             CropImage.ActivityResult result = CropImage.getActivityResult(data);
-            if(resultCode == RESULT_OK){
+            if(resultCode == RESULT_OK) {
                 assert result != null;
                 Uri resultUri = result.getUri();
                 userImageUri = resultUri;
