@@ -8,16 +8,13 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.core.app.ActivityCompat;
@@ -51,13 +48,11 @@ import java.util.UUID;
 
 import id.zelory.compressor.Compressor;
 
-import static java.util.jar.Pack200.Packer.ERROR;
-
 public class AccountSettingsActivity extends AppCompatActivity {
 
     // .XML Components
     private ContentLoadingProgressBar progressBar;
-    private ImageView userImage;
+    private AppCompatImageView userImage;
     private EditText username;
     private EditText description;
     private EditText phoneNumber;
@@ -120,12 +115,12 @@ public class AccountSettingsActivity extends AppCompatActivity {
         userImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(Build.VERSION.SDK_INT<23) {
+                if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.M) {
                     Toast.makeText(AccountSettingsActivity.this,
                             "In if", Toast.LENGTH_SHORT).show();
-//                    _selectAndCropImage();
+                    _selectAndCropImage();
                 } else if (ContextCompat.checkSelfPermission(AccountSettingsActivity.this,
-                        Manifest.permission.READ_EXTERNAL_STORAGE)!=0){
+                        Manifest.permission.READ_EXTERNAL_STORAGE)!=0) {
                     ActivityCompat.requestPermissions(AccountSettingsActivity.this,
                             new String[] {Manifest.permission.READ_EXTERNAL_STORAGE},
                             1);
@@ -134,8 +129,8 @@ public class AccountSettingsActivity extends AppCompatActivity {
                             Toast.LENGTH_LONG).show();
                 } else {
                     _selectAndCropImage();
-                    Toast.makeText(AccountSettingsActivity.this,
-                            "In else", Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(AccountSettingsActivity.this,
+//                            "In else", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -144,46 +139,35 @@ public class AccountSettingsActivity extends AppCompatActivity {
     private void _selectAndCropImage() {
         CropImage.activity()
                 .setGuidelines(CropImageView.Guidelines.ON)
+                .setCropShape(CropImageView.CropShape.OVAL)
+                .setRequestedSize(100, 100)
                 .setMultiTouchEnabled(true)
-                .setMinCropResultSize(300, 300)
                 .setAspectRatio(1, 1)
                 .start(this);
     }
 
     @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
+        if(requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
             CropImage.ActivityResult result = CropImage.getActivityResult(data);
-            if (resultCode == RESULT_OK) {
+            if(resultCode == RESULT_OK){
+                assert result != null;
                 Uri resultUri = result.getUri();
+                userImageUri = resultUri;
+                userImage.setImageURI(resultUri);
+                isTheUserChanged = true;
+                Toast.makeText(this,
+                        "Sending The Profile Image",
+                        Toast.LENGTH_SHORT).show();
             } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
-                Exception error = result.getError();
+                assert result != null;
+                Toast.makeText(this,
+                        ""+result.getError(),
+                        Toast.LENGTH_SHORT).show();
             }
         }
     }
-//    @Override
-//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-//        super.onActivityResult(requestCode, resultCode, data);
-//        if(requestCode==CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
-//            CropImage.ActivityResult result = CropImage.getActivityResult(data);
-//            if(resultCode==RESULT_OK){
-//                assert result != null;
-//                Uri uri = result.getUri();
-//                userImageUri = uri;
-//                userImage.setImageURI(uri);
-//                isTheUserChanged = true;
-//                Toast.makeText(this,
-//                        "Sending The Profile Image",
-//                        Toast.LENGTH_SHORT).show();
-//            } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
-//                assert result != null;
-//                Toast.makeText(this,
-//                        ""+result.getError(),
-//                        Toast.LENGTH_SHORT).show();
-//            }
-//        }
-//    }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
@@ -317,7 +301,8 @@ public class AccountSettingsActivity extends AppCompatActivity {
                             }
                         });
             }
-            _storeUserInfoFieldsInFireStore((Task<UploadTask.TaskSnapshot>) null, userName, userDescription, userPhoneNumber, userAddress, userGender, userAge, userInterests);
+            _storeUserInfoFieldsInFireStore((Task<UploadTask.TaskSnapshot>) null,
+                    userName, userDescription, userPhoneNumber, userAddress, userGender, userAge, userInterests);
         }
     }
 
