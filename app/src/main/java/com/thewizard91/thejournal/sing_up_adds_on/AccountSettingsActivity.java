@@ -3,11 +3,18 @@ package com.thewizard91.thejournal.sing_up_adds_on;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
+//import android.os.FileUtils;
 import android.os.Handler;
+import android.provider.MediaStore;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.RadioButton;
@@ -15,10 +22,12 @@ import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.core.content.FileProvider;
 import androidx.core.widget.ContentLoadingProgressBar;
 import androidx.fragment.app.FragmentActivity;
 
@@ -34,21 +43,38 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.royrodriguez.transitionbutton.TransitionButton;
+import com.soundcloud.android.crop.Crop;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
+import com.thewizard91.thejournal.BuildConfig;
 import com.thewizard91.thejournal.MainActivity;
 import com.thewizard91.thejournal.R;
+import com.yalantis.ucrop.UCrop;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
+//import spartons.com.imagecropper.utils.UiHelper;
+import org.apache.commons.io.FileUtils;
 
 import id.zelory.compressor.Compressor;
 
 public class AccountSettingsActivity extends AppCompatActivity {
+
+    //
+    private static final int CAMERA_ACTION_PICK_REQUEST_CODE = 610;
+    private static final int PICK_IMAGE_GALLERY_REQUEST_CODE = 609;
+    public static final int CAMERA_STORAGE_REQUEST_CODE = 611;
+    public static final int ONLY_CAMERA_REQUEST_CODE = 612;
+    public static final int ONLY_STORAGE_REQUEST_CODE = 613;
+//    private UiHelper uiHelper = new UiHelper();
+    String currentPhotoPath = "";
 
     // .XML Components
     private ContentLoadingProgressBar progressBar;
@@ -115,9 +141,11 @@ public class AccountSettingsActivity extends AppCompatActivity {
         userImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+//                openCamera();
                 if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    openImagesDocument();
+//                    openCamera();
                     Toast.makeText(AccountSettingsActivity.this, "In if", Toast.LENGTH_SHORT).show();
-                    _selectAndCropImage();
                 } else if (ContextCompat.checkSelfPermission(AccountSettingsActivity.this,
                         Manifest.permission.READ_EXTERNAL_STORAGE) != 0) {
                     ActivityCompat.requestPermissions(AccountSettingsActivity.this,
@@ -125,49 +153,97 @@ public class AccountSettingsActivity extends AppCompatActivity {
                     Toast.makeText(AccountSettingsActivity.this,
                             "Permission Denied", Toast.LENGTH_LONG).show();
                 } else {
-                    _selectAndCropImage();
+//                    openImagesDocument();
+                    openCamera();
                 }
             }
         });
     }
 
-    private void _selectAndCropImage() {
-        CropImage.activity()
-                .setGuidelines(CropImageView.Guidelines.ON)
-                .setCropShape(CropImageView.CropShape.OVAL)
-                .setRequestedSize(100, 100)
-                .setMultiTouchEnabled(true)
-                .setAspectRatio(1, 1)
-                .start(this);
-    }
+//    private void _selectAndCropImage() {
+//        CropImage.activity()
+//                .setGuidelines(CropImageView.Guidelines.ON)
+//                .setCropShape(CropImageView.CropShape.OVAL)
+//                .setRequestedSize(100, 100)
+//                .setMultiTouchEnabled(true)
+//                .setAspectRatio(1, 1)
+//                .start(this);
+//        Crop.of(inputUri, outputUri).asSquare().start(activity);
+//        Crop.pickImage(this);
+//        UCrop.of(sourceUri, destinationUri)
+//                .withAspectRatio(16, 9)
+//                .withMaxResultSize(100, 100)
+//                .start(this);
+//    }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
-            CropImage.ActivityResult result = CropImage.getActivityResult(data);
-            if(resultCode == RESULT_OK) {
-                assert result != null;
-                Uri resultUri = result.getUri();
-                userImageUri = resultUri;
-                userImage.setImageURI(resultUri);
-                isTheUserChanged = true;
-                Toast.makeText(this,
-                        "Sending The Profile Image",
-                        Toast.LENGTH_SHORT).show();
-            } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
-                assert result != null;
-                Toast.makeText(this,
-                        ""+result.getError(),
-                        Toast.LENGTH_SHORT).show();
-            }
-        }
-    }
+//    @Override
+//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+//        super.onActivityResult(requestCode, resultCode, data);
+//        if(requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
+//            CropImage.ActivityResult result = CropImage.getActivityResult(data);
+//            if(resultCode == RESULT_OK) {
+//                assert result != null;
+//                userImageUri = result.getUri();
+//                userImage.setImageURI(userImageUri);
+//                isTheUserChanged = true;
+//                Toast.makeText(this, "Sending The Profile Image", Toast.LENGTH_SHORT).show();
+//            } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
+//                assert result != null;
+//                Toast.makeText(this, ""+result.getError(), Toast.LENGTH_SHORT).show();
+//            }
+//        }
+//    }
+
+//    @Override
+//    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+//        super.onActivityResult(requestCode, resultCode, data);
+//        if (requestCode == CAMERA_ACTION_PICK_REQUEST_CODE && resultCode == RESULT_OK) {
+//            Uri uri = Uri.parse(currentPhotoPath);
+//            openCropActivity(uri, uri);
+//        } else if (requestCode == UCrop.REQUEST_CROP && resultCode == RESULT_OK) {
+//            assert data != null;
+//            Uri uri = UCrop.getOutput(data);
+//            showImage(uri);
+//        }
+//    }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
+
+//    @Override
+//    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+//        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+//        if (requestCode == CAMERA_STORAGE_REQUEST_CODE) {
+//            if (grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1] == PackageManager.PERMISSION_GRANTED)
+//                uiHelper.showImagePickerDialog(this, this);
+//            else if (grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1] == PackageManager.PERMISSION_DENIED) {
+//                uiHelper.toast(this, "ImageCropper needs Storage access in order to store your profile picture.");
+//                finish();
+//            } else if (grantResults[0] == PackageManager.PERMISSION_DENIED && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
+//                uiHelper.toast(this, "ImageCropper needs Camera access in order to take profile picture.");
+//                finish();
+//            } else if (grantResults[0] == PackageManager.PERMISSION_DENIED && grantResults[1] == PackageManager.PERMISSION_DENIED) {
+//                uiHelper.toast(this, "ImageCropper needs Camera and Storage access in order to take profile picture.");
+//                finish();
+//            }
+//        } else if (requestCode == ONLY_CAMERA_REQUEST_CODE) {
+//            if (grantResults[0] == PackageManager.PERMISSION_GRANTED)
+//                uiHelper.showImagePickerDialog(this, this);
+//            else {
+//                uiHelper.toast(this, "ImageCropper needs Camera access in order to take profile picture.");
+//                finish();
+//            }
+//        } else if (requestCode == ONLY_STORAGE_REQUEST_CODE) {
+//            if (grantResults[0] == PackageManager.PERMISSION_GRANTED)
+//                uiHelper.showImagePickerDialog(this, this);
+//            else {
+//                uiHelper.toast(this, "ImageCropper needs Storage access in order to store your profile picture.");
+//                finish();
+//            }
+//        }
+//    }
 
     private void createTheUserDatabaseTable() {
         cloudBaseDatabaseInstance.collection("Users")
@@ -394,5 +470,133 @@ public class AccountSettingsActivity extends AppCompatActivity {
     private void sendToMainActivity() {
         startActivity(new Intent(this, MainActivity.class));
         finish();
+    }
+
+    private void openCamera() {
+        /*
+         Opening the camera when the user clicks on the openCamera dialog action
+         */
+        Intent pictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        File file = getImageFile(); // 1 imageFile is created
+        Uri uri;
+        // If the SDK >= 23, create the Uri with FileProvider to prevent FileUriExposedException.
+        // The BuildConfig gives name to the package of our application and concat the.provider in manifest
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
+            uri = FileProvider.getUriForFile(this, BuildConfig.APPLICATION_ID.concat(".provider"), file);
+        else
+            //  Creates the Uri fromFile utility method if SDK < 24.
+            uri = Uri.fromFile(file);
+        // Set the path to where we want to store the selected image, to then read the image
+        // in the onActivityResult method from the uri path
+        pictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
+        startActivityForResult(pictureIntent, CAMERA_ACTION_PICK_REQUEST_CODE);
+    }
+
+    private File getImageFile() {
+        /*
+          Returns a new File in the external storage directory with .jpg extension
+         */
+        String imageFileName = "JPEG_" + System.currentTimeMillis() + "_";
+        File storageDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM), "Camera");
+//        StringBuilder storageDirString = new StringBuilder(String.valueOf(storageDir));
+        Log.d("storageDirIs: ", String.valueOf(storageDir));//storage/emulated/0/DCIM/Camera
+//        for(int i=1; i<storageDir.length();i++) {
+//            storageDirString.append(storageDir.toString().charAt(i));
+//            Log.d("i", String.valueOf(storageDir.toString().charAt(i)));
+//        }
+//        File correctedStorageDir = new File(String.valueOf(storageDir).substring(1));
+        Log.d("imageNameIs:", imageFileName);//JPEG_1609904306162_
+//        Log.d("correctedStorageDirIs:", correctedStorageDir.toString());
+        File file = null;
+        try {
+            file = File.createTempFile("/"+imageFileName, ".jpg", storageDir);
+            Log.e("fileIs1:", file.toString());//java.io.IOException: Permission denied
+        } catch (IOException e) {
+            e.printStackTrace();
+            Log.d("ErrorDetected", e.toString());
+        }
+
+        // currentPhotoPath is where the image is stored ones taken by the user.
+        currentPhotoPath = "file:" + Objects.requireNonNull(file).getAbsolutePath();
+        return file;
+    }
+
+    private void openCropActivity(Uri sourceUri, Uri destinationUri) {
+        /*
+        Replacing the image with the newly cropped one.
+        That is because the two parameters are going to have the same value passed
+        resulting to the same destination.
+        If a different logic is needed, then change their values.
+         */
+        UCrop.of(sourceUri, destinationUri)
+                .withMaxResultSize(300, 300)
+                .withAspectRatio(5f, 5f)
+                .start(this);
+    }
+    private void showImage(Uri imageUri) {
+        /*
+        Show cropped image inside the imageView by getting the imageUri.
+         */
+        File file = FileUtils.getFile(String.valueOf(imageUri));
+        InputStream inputStream = null;
+        try {
+            inputStream = new FileInputStream(file);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
+        // inserting the image cropped in the android component where the user  profile image is
+        userImage.setImageBitmap(bitmap);
+    }
+
+    @SuppressLint("ObsoleteSdkInt")
+    private void openImagesDocument() {
+        /*
+        Allows user to choose image from the gallery by the selectImage dialog action.
+         */
+        Intent pictureIntent = new Intent(Intent.ACTION_GET_CONTENT);
+
+        // Specifying that we need images only and nothing else.
+        pictureIntent.setType("image/*");
+
+        // The CATEGORY_OPENABLE tells which Uri can be opened.
+        // However, more category can be opened at: https://developer.android.com/reference/android/content/Intent.html#CATEGORY_OPENABLE
+        pictureIntent.addCategory(Intent.CATEGORY_OPENABLE);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+
+            // Specifying that we need only the two types below.
+            String[] mimeTypes = new String[]{"image/jpeg", "image/png"};
+            pictureIntent.putExtra(Intent.EXTRA_MIME_TYPES, mimeTypes);
+        }
+
+        // The option to choose the type of image only if there are multiple types.
+        startActivityForResult(Intent.createChooser(pictureIntent,"Select Picture"), PICK_IMAGE_GALLERY_REQUEST_CODE);  // 4
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == CAMERA_ACTION_PICK_REQUEST_CODE && resultCode == RESULT_OK) {
+            Uri uri = Uri.parse(currentPhotoPath);
+            openCropActivity(uri, uri);
+            showImage(uri);
+        } else if (requestCode == UCrop.REQUEST_CROP && resultCode == RESULT_OK) {
+            assert data != null;
+            Uri uri = UCrop.getOutput(data);
+            showImage(uri);
+        } else if (requestCode == PICK_IMAGE_GALLERY_REQUEST_CODE && resultCode == RESULT_OK && data != null) {
+
+            // Get the selected image Uri from data
+            Uri sourceUri = data.getData();
+
+            // Create the image File where you want to store the cropped image result.
+            File file = getImageFile();
+            /*File is none, this is what gives me the error.*/
+
+            // Simply creates the destinationUri fromFile utility method.
+            Uri destinationUri = Uri.fromFile(file);
+            openCropActivity(sourceUri, destinationUri);
+        }
     }
 }
