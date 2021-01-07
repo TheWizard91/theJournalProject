@@ -24,7 +24,6 @@
 #noinspection ShrinkerUnresolvedReference
 -keep class androidx.appcompat.widget.** { *; }
 
-
 #Ucrop
 -dontwarn com.yalantis.ucrop**
 -keep class com.yalantis.ucrop** { *; }

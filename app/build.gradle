@@ -80,9 +80,9 @@ dependencies {
 
     // Android Image Cropper
     implementation 'com.theartofdev.edmodo:android-image-cropper:2.8.0'
-    implementation 'com.soundcloud.android:android-crop:1.0.1@aar'
+//    implementation 'com.soundcloud.android:android-crop:1.0.1@aar'
     implementation 'com.github.yalantis:ucrop:2.2.6'
-    implementation 'com.github.yalantis:ucrop:2.2.6-native'
+//    implementation 'com.github.yalantis:ucrop:2.2.6-native'
 
     // Image zooming by click -- Android Image Popup
     implementation 'com.github.chathuralakmal:AndroidImagePopup:1.2.2'
