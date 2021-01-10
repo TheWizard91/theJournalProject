@@ -5,6 +5,7 @@
     package="com.thewizard91.thejournal">
 
     <uses-sdk
+        android:minSdkVersion="21"
         android:targetSdkVersion="30"
         tools:ignore="GradleOverrides" />
 
@@ -14,13 +15,14 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
         tools:ignore="ScopedStorage"
-        android:maxSdkVersion="30"/>
+        android:maxSdkVersion="21" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
     <uses-permission android:name="com.google.android.finsky.permission.BIND_GET_INSTALL_REFERRER_SERVICE" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-feature android:required="true" android:name="android.hardware.camera"/>
     <application
         android:allowBackup="true"
         android:icon="@mipmap/app_front_page"
@@ -30,6 +32,8 @@
         android:theme="@style/Theme.TheJournal"
         tools:ignore="AllowBackup,HardcodedDebugMode"
 
+
+        android:name="androidx.multidex.MultiDexApplication"
         android:testOnly="true"
         android:debuggable="true"
         android:appComponentFactory="androidx.core.app.CoreComponentFactory"
@@ -48,13 +52,14 @@
             </intent-filter>
         </activity>
 
-        <!--   Activity for ImageCrop API     -->
+<!--        &lt;!&ndash;   Activity for ImageCrop API     &ndash;&gt;-->
         <activity android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
             android:theme="@style/Base.Theme.AppCompat" />
-        <activity android:name="com.soundcloud.android.crop.CropImageActivity" />
+<!--        <activity android:name="com.soundcloud.android.crop.CropImageActivity"-->
+<!--            tools:ignore="MissingClass" />-->
         <activity
             android:name="com.yalantis.ucrop.UCropActivity"
-            android:screenOrientation="portrait"
+            android:screenOrientation="fullSensor"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
         <meta-data
             android:name="preloaded_fonts"

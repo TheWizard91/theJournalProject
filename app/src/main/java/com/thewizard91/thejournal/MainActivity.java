@@ -38,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void sendToLoginActivity() {
         // Start the Login Activity
-        startActivity(new Intent(this, AccountSettingsActivity.class));
+        startActivity(new Intent(this, LogInActivity.class));
         finish();
     }
 }

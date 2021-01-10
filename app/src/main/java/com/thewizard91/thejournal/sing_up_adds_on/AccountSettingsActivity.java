@@ -2,8 +2,10 @@ package com.thewizard91.thejournal.sing_up_adds_on;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -17,6 +19,7 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
@@ -42,6 +45,9 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.karumi.dexter.Dexter;
+import com.karumi.dexter.listener.single.PermissionListener;
+import com.oginotihiro.cropview.CropView;
 import com.royrodriguez.transitionbutton.TransitionButton;
 //import com.soundcloud.android.crop.Crop;
 import com.theartofdev.edmodo.cropper.CropImage;
@@ -63,8 +69,10 @@ import java.util.Objects;
 import java.util.UUID;
 //import spartons.com.imagecropper.utils.UiHelper;
 import org.apache.commons.io.FileUtils;
-
 import id.zelory.compressor.Compressor;
+//import com.takusemba.cropme.*;
+
+import static java.io.File.createTempFile;
 
 public class AccountSettingsActivity extends AppCompatActivity {
 
@@ -74,12 +82,17 @@ public class AccountSettingsActivity extends AppCompatActivity {
     public static final int CAMERA_STORAGE_REQUEST_CODE = 611;
     public static final int ONLY_CAMERA_REQUEST_CODE = 612;
     public static final int ONLY_STORAGE_REQUEST_CODE = 613;
-//    private UiHelper uiHelper = new UiHelper();
+    private static final int CODE_IMAGE_GALLERY = 1;
+    private static final String SAMPLE_CROPPED_IMG_NAME = "SampleCropImg";
+    //    private UiHelper uiHelper = new UiHelper();
     String currentPhotoPath = "";
 
     // .XML Components
     private ContentLoadingProgressBar progressBar;
-    private AppCompatImageView userImage;
+    private ImageView userImage;
+//    private CropImageView userImage;
+    //    private CropView userImage;
+//    private CropLayout userImage;
     private EditText username;
     private EditText description;
     private EditText phoneNumber;
@@ -97,8 +110,8 @@ public class AccountSettingsActivity extends AppCompatActivity {
     private boolean isTheUserChanged = false;
     private Uri userImageUri;
     private String userId;
-    private String gender="user's gender currently not available";
-    private String age="user's age currently not available";
+    private String gender = "user's gender currently not available";
+    private String age = "user's age currently not available";
     private String[] interests;
 
     private File testFile;
@@ -129,14 +142,14 @@ public class AccountSettingsActivity extends AppCompatActivity {
         userImageUri = null;
         userId = String.valueOf(userAuthorization.getCurrentUser());
 
-        // Create the User in Cloud Fire-store
-        createTheUserDatabaseTable();
-
         // Set up the user image
         setUpTheImageForTheUser();
 
         // Handle the ready button
         triggerTheEffectOfTheTransactionButton();
+
+        // Create the User in Cloud Fire-store
+        createTheUserDatabaseTable();
 
     }
 
@@ -144,44 +157,44 @@ public class AccountSettingsActivity extends AppCompatActivity {
         userImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                openCamera();
-                if(Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
-                    openImagesDocument();
+                startActivityForResult(new Intent().setAction(Intent.ACTION_GET_CONTENT).setType("image/*"), CODE_IMAGE_GALLERY);
+//                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+//                    openImagesDocument();
 //                    openCamera();
-//                    _selectAndCropImage();
-                    Toast.makeText(AccountSettingsActivity.this, "In if", Toast.LENGTH_SHORT).show();
-                } else if (ContextCompat.checkSelfPermission(AccountSettingsActivity.this,
-                        Manifest.permission.READ_EXTERNAL_STORAGE) != 0) {
-                    ActivityCompat.requestPermissions(AccountSettingsActivity.this,
-                            new String[] {Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE},
-                            CropImage.PICK_IMAGE_PERMISSIONS_REQUEST_CODE);
-                    Toast.makeText(AccountSettingsActivity.this,
-                            "Permission Denied", Toast.LENGTH_LONG).show();
-                } else {
-                    openImagesDocument();
+////                    _selectAndCropImage();
+//                    Toast.makeText(AccountSettingsActivity.this, "In if", Toast.LENGTH_SHORT).show();
+//                } else if (ContextCompat.checkSelfPermission(AccountSettingsActivity.this,
+//                        Manifest.permission.READ_EXTERNAL_STORAGE) != 0) {
+//                    ActivityCompat.requestPermissions(AccountSettingsActivity.this,
+//                            new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE},
+//                            CropImage.PICK_IMAGE_PERMISSIONS_REQUEST_CODE);
+//                    Toast.makeText(AccountSettingsActivity.this,
+//                            "Permission Denied", Toast.LENGTH_LONG).show();
+//                } else {
+//                    openImagesDocument();
 //                    openCamera();
-//                    _selectAndCropImage();
-                }
+////                    _selectAndCropImage();
+//                }
             }
         });
     }
 
-    private void _selectAndCropImage() {
-        CropImage.activity()
-                .setGuidelines(CropImageView.Guidelines.ON)
-                .setCropShape(CropImageView.CropShape.OVAL)
-                .setRequestedSize(100, 100)
-                .setMultiTouchEnabled(true)
-                .setAspectRatio(1, 1)
-                .start(this);;
-    }
-
+//    private void _selectAndCropImage() {
+//        CropImage.activity()
+//                .setGuidelines(CropImageView.Guidelines.ON)
+//                .setCropShape(CropImageView.CropShape.OVAL)
+//                .setRequestedSize(100, 100)
+//                .setMultiTouchEnabled(true)
+//                .setAspectRatio(1, 1)
+//                .start(this);
+//    }
+//
 //    @Override
 //    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 //        super.onActivityResult(requestCode, resultCode, data);
-//        if(requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
+//        if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
 //            CropImage.ActivityResult result = CropImage.getActivityResult(data);
-//            if(resultCode == RESULT_OK) {
+//            if (resultCode == RESULT_OK) {
 //                assert result != null;
 //                userImageUri = result.getUri();
 //                userImage.setImageURI(userImageUri);
@@ -189,7 +202,7 @@ public class AccountSettingsActivity extends AppCompatActivity {
 //                Toast.makeText(this, "Sending The Profile Image", Toast.LENGTH_SHORT).show();
 //            } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
 //                assert result != null;
-//                Toast.makeText(this, ""+result.getError(), Toast.LENGTH_SHORT).show();
+//                Toast.makeText(this, "" + result.getError(), Toast.LENGTH_SHORT).show();
 //            }
 //        }
 //    }
@@ -207,9 +220,9 @@ public class AccountSettingsActivity extends AppCompatActivity {
                     @SuppressLint({"WrongConstant", "CheckResult", "ShowToast"})
                     @Override
                     public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                        if(!task.isSuccessful()){
+                        if (!task.isSuccessful()) {
                             Toast.makeText(AccountSettingsActivity.this,
-                                    "FIREBASE RETRIEVE ERROR: "+((Exception)Objects.requireNonNull(task.getException()))
+                                    "FIREBASE RETRIEVE ERROR: " + ((Exception) Objects.requireNonNull(task.getException()))
                                             .getMessage(), Toast.LENGTH_LONG).show();
                         } else if (task.getResult().exists()) {
                             String userProfileImage = task.getResult().getString("user_profile_image");
@@ -219,7 +232,7 @@ public class AccountSettingsActivity extends AppCompatActivity {
 
                             RequestOptions placeHolderRequest = new RequestOptions();
                             placeHolderRequest.placeholder(R.mipmap.baseline_account_circle_black_24dp);
-                            Glide.with((FragmentActivity)AccountSettingsActivity.this)
+                            Glide.with((FragmentActivity) AccountSettingsActivity.this)
                                     .setDefaultRequestOptions(placeHolderRequest)
                                     .load(userProfileImage)
                                     .into(userImage);
@@ -253,7 +266,7 @@ public class AccountSettingsActivity extends AppCompatActivity {
                         boolean isSuccessful = true;
 
                         // Choose a stop animation if your call was successful or not
-                        if (isSuccessful){
+                        if (isSuccessful) {
                             readyButton.stopAnimation(TransitionButton.StopAnimationStyle.EXPAND,
                                     new TransitionButton.OnAnimationStopEndListener() {
                                         @Override
@@ -283,14 +296,14 @@ public class AccountSettingsActivity extends AppCompatActivity {
         final String[] userInterests = interests;
         // Add user interests in here.
         String randomNameForUserProfileImage = UUID.randomUUID().toString();
-        if (!TextUtils.isEmpty(userName)&&userImageUri!=null){
+        if (!TextUtils.isEmpty(userName) && userImageUri != null) {
             // Progress bar code goes here
-            if (isTheUserChanged){
+            if (isTheUserChanged) {
                 userId = String.valueOf(userAuthorization.getCurrentUser());
                 // Putting the image to the Firebase Storage. Look at "storage_of_userName"
-                final StorageReference pathToTheUserProfileImageInFirebase = cloudStorageInstance.child("storage_of_"+userName)
+                final StorageReference pathToTheUserProfileImageInFirebase = cloudStorageInstance.child("storage_of_" + userName)
                         .child("profile_images")
-                        .child(randomNameForUserProfileImage+".jpg");
+                        .child(randomNameForUserProfileImage + ".jpg");
 
                 // Saving the Path where the image profile has
                 // been sent so that we can add more info about the user
@@ -300,7 +313,7 @@ public class AccountSettingsActivity extends AppCompatActivity {
                             @SuppressLint({"WrongConstant", "ShowToast"})
                             @Override
                             public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
-                                if (task.isSuccessful()){
+                                if (task.isSuccessful()) {
                                     try {
                                         new Compressor(AccountSettingsActivity.this)
                                                 .setMaxWidth(100)
@@ -321,7 +334,7 @@ public class AccountSettingsActivity extends AppCompatActivity {
                                             userInterests);
                                 }
                                 Toast.makeText(AccountSettingsActivity.this,
-                                        "IMAGE ERROR: "+((Exception)Objects.requireNonNull(task.getException()))
+                                        "IMAGE ERROR: " + ((Exception) Objects.requireNonNull(task.getException()))
                                                 .getMessage(), Toast.LENGTH_LONG).show();
                             }
                         });
@@ -343,10 +356,9 @@ public class AccountSettingsActivity extends AppCompatActivity {
                                                  String userAddress,
                                                  String userGender,
                                                  String userAge,
-                                                 String[] userInterests)
-    {
+                                                 String[] userInterests) {
         String[] downloadURI = {null};
-        if(task!=null){
+        if (task != null) {
             final String[] downloadURICopy = downloadURI;
             task.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 @Override
@@ -406,15 +418,15 @@ public class AccountSettingsActivity extends AppCompatActivity {
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
-                        if(task.isSuccessful()){
+                        if (task.isSuccessful()) {
                             sendToMainActivity();
                             Toast.makeText(AccountSettingsActivity.this,
                                     "The user's settings are updated!",
                                     Toast.LENGTH_SHORT).show();
                         } else {
                             Toast.makeText(AccountSettingsActivity.this,
-                                    "FIRESTORE ERROR"+((Exception)Objects.requireNonNull(task.getException()))
-                                    .getMessage(), Toast.LENGTH_SHORT).show();
+                                    "FIRESTORE ERROR" + ((Exception) Objects.requireNonNull(task.getException()))
+                                            .getMessage(), Toast.LENGTH_SHORT).show();
                         }
                         // Progress bar code.
                     }
@@ -425,8 +437,6 @@ public class AccountSettingsActivity extends AppCompatActivity {
         startActivity(new Intent(this, MainActivity.class));
         finish();
     }
-
-    // FROM HERE IS UCROP CODE
 
     private void openCamera() {
         /*
@@ -452,21 +462,26 @@ public class AccountSettingsActivity extends AppCompatActivity {
         /*
           Returns a new File in the external storage directory with .jpg extension
          */
+//        Context c=getBaseContext();
+//        File f = c.getCacheDir();
+//        Unable to create temporary file, C:/data/user/0/com.thewizard91.thejournal/cache/JPEG_1610117421924_4991651777243470602.jpg
         String imageFileName = "/JPEG_" + System.currentTimeMillis() + "_";
         File storageDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM), "Camera");
 //        StringBuilder storageDirString = new StringBuilder(String.valueOf(storageDir));
-        Log.d("storageDirIs: ", String.valueOf(storageDir));//storage/emulated/0/DCIM/Camera
-//        File correctedStorageDir = new File(String.valueOf(storageDir).substring(1));
+//        File correctedStorageDir = new File(String.valueOf(storageDir).substring(1));//storage/emulated/0/DCIM/Camera
+        Log.d("storageDirIs: ", String.valueOf(storageDir));///storage/emulated/0/DCIM/Camera
         Log.d("imageNameIs:", imageFileName);//JPEG_1609904306162_
 //        Log.d("correctedStorageDirIs:", correctedStorageDir.toString());
+
         File file = null;
         try {
-            file = File.createTempFile(imageFileName, ".jpg", storageDir);
-            Log.e("fileIs1:", file.toString());//java.io.IOException: Permission denied
+            file = createTempFile(imageFileName, ".jpg", new File("C:" + storageDir.getAbsolutePath()));
         } catch (IOException e) {
             e.printStackTrace();
-            Log.d("ErrorDetected", e.toString());
+            Log.d("ErrorDetected:", e.toString());
         }
+//        file = new File(storageDir, imageFileName+".jpg");
+//        Log.d("fileIs", file.toString());
 
         // currentPhotoPath is where the image is stored ones taken by the user.
         currentPhotoPath = "file:" + Objects.requireNonNull(file).getAbsolutePath();
@@ -518,8 +533,9 @@ public class AccountSettingsActivity extends AppCompatActivity {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
 
             // Specifying that we need only the two types below.
-            String[] mimeTypes = new String[]{"image/jpeg", "image/png"};
+            String[] mimeTypes = new String[] {"image/jpeg", "image/png", "image/jpg"};
             pictureIntent.putExtra(Intent.EXTRA_MIME_TYPES, mimeTypes);
+
         }
 
         // The option to choose the type of image only if there are multiple types.
@@ -528,32 +544,215 @@ public class AccountSettingsActivity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
+        super.onActivityResult(requestCode, resultCode, data);//CAMERA_ACTION_PICK_REQUEST_CODE
 
-        if (requestCode == CAMERA_ACTION_PICK_REQUEST_CODE && resultCode == RESULT_OK) {
+        if (requestCode == CODE_IMAGE_GALLERY && resultCode == RESULT_OK) {
 
-            Uri uri = Uri.parse(currentPhotoPath);
-            openCropActivity(uri, uri);
-            showImage(uri);
+//            Uri uri = Uri.parse(currentPhotoPath);
+//            openCropActivity(uri, uri);
+//            showImage(uri);
+            assert data != null;
+            Uri imageUri = data.getData();
+            if(imageUri!=null){
+                startCrop(imageUri);
+            }
 
         } else if (requestCode == UCrop.REQUEST_CROP && resultCode == RESULT_OK) {
 
+//            assert data != null;
+//            Uri uri = UCrop.getOutput(data);
+//            showImage(uri);
             assert data != null;
-            Uri uri = UCrop.getOutput(data);
-            showImage(uri);
-
-        } else if (requestCode == PICK_IMAGE_GALLERY_REQUEST_CODE && resultCode == RESULT_OK && data != null) {
-
-            // Get the selected image Uri from data
-            Uri sourceUri = data.getData();
-
-            // Create the image File where you want to store the cropped image result.
-            File file = getImageFile();
-            /*File is none, this is what gives me the error.*/
-
-            // Simply creates the destinationUri fromFile utility method.
-            Uri destinationUri = Uri.fromFile(file);
-            openCropActivity(sourceUri, destinationUri);
+            Uri imageUriResultCrop = UCrop.getOutput(data);
+            if (imageUriResultCrop != null) {
+                userImage.setImageURI(imageUriResultCrop);
+            }
         }
+//        } else (requestCode == PICK_IMAGE_GALLERY_REQUEST_CODE && resultCode == RESULT_OK && data != null) {
+//
+//            // Get the selected image Uri from data
+//            Uri sourceUri = data.getData();
+//
+//            // Create the image File where you want to store the cropped image result.
+//            File file = getImageFile();
+//            /*File is none, this is what gives me the error.*/
+//
+//            // Simply creates the destinationUri fromFile utility method.
+//            Uri destinationUri = Uri.fromFile(file);
+//            openCropActivity(sourceUri, destinationUri);
+//        }
+    }
+
+    private void startCrop(@NonNull Uri uri) {
+        String destinationFileImage = SAMPLE_CROPPED_IMG_NAME;
+        destinationFileImage +=".jpg";
+
+        UCrop ucrop = UCrop.of(uri, Uri.fromFile(new File(getCacheDir(), destinationFileImage)));
+
+        ucrop.withAspectRatio(1f,1f);
+//        ucrop.withAspectRatio(3,4);
+//        ucrop.useSourceImageAspectRatio();
+//        ucrop.withAspectRatio(2,3);
+//        ucrop.withAspectRatio(16,9);
+
+        ucrop.withMaxResultSize(100, 100);
+        ucrop.withOptions(getOptions());
+        ucrop.start(this);
+    }
+
+    public UCrop.Options getOptions() {
+        UCrop.Options options = new UCrop.Options();
+//        options.setCompressionQuality(70);
+        // CompressType
+//        options.setCompressionFormat(Bitmap.CompressFormat.PNG);
+//        options.setCompressionFormat(Bitmap.CompressFormat.PNG);
+
+        // Ui
+        options.setHideBottomControls(false);
+        options.setFreeStyleCropEnabled(true);
+
+
+        //Colors
+        options.setStatusBarColor(getResources().getColor(R.color.darker_blue));
+        options.setToolbarTitle("Something!");
+
+        return options;
     }
 }
+
+    // FROM HERE IS UCROP CODE
+//
+//    private void openCamera() {
+//        /*
+//         Opening the camera when the user clicks on the openCamera dialog action
+//         */
+//        Intent pictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+//        File file = getImageFile(); // 1 imageFile is created
+//        Uri uri;
+//        // If the SDK >= 23, create the Uri with FileProvider to prevent FileUriExposedException.
+//        // The BuildConfig gives name to the package of our application and concat the.provider in manifest
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
+//            uri = FileProvider.getUriForFile(this, BuildConfig.APPLICATION_ID.concat(".provider"), file);
+//        else
+//            //  Creates the Uri fromFile utility method if SDK < 24.
+//            uri = Uri.fromFile(file);
+//        // Set the path to where we want to store the selected image, to then read the image
+//        // in the onActivityResult method from the uri path
+//        pictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
+//        startActivityForResult(pictureIntent, CAMERA_ACTION_PICK_REQUEST_CODE);
+//    }
+//
+//    private File getImageFile() {
+//        /*
+//          Returns a new File in the external storage directory with .jpg extension
+//         */
+////        Context c=getBaseContext();
+////        File f = c.getCacheDir();
+////        Unable to create temporary file, C:/data/user/0/com.thewizard91.thejournal/cache/JPEG_1610117421924_4991651777243470602.jpg
+//        String imageFileName = "/JPEG_" + System.currentTimeMillis() + "_";
+//        File storageDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM), "Camera");
+////        StringBuilder storageDirString = new StringBuilder(String.valueOf(storageDir));
+////        File correctedStorageDir = new File(String.valueOf(storageDir).substring(1));//storage/emulated/0/DCIM/Camera
+//        Log.d("storageDirIs: ", String.valueOf(storageDir));///storage/emulated/0/DCIM/Camera
+//        Log.d("imageNameIs:", imageFileName);//JPEG_1609904306162_
+////        Log.d("correctedStorageDirIs:", correctedStorageDir.toString());
+//
+//        File file = null;
+//        try {
+//            file = File.createTempFile(imageFileName, ".jpg", new File("C:" + storageDir.getAbsolutePath()));
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//            Log.d("ErrorDetected:", e.toString());
+//        }
+////        file = new File(storageDir, imageFileName+".jpg");
+////        Log.d("fileIs", file.toString());
+//
+//        // currentPhotoPath is where the image is stored ones taken by the user.
+//        currentPhotoPath = "file:" + Objects.requireNonNull(file).getAbsolutePath();
+//        return file;
+//    }
+//
+//    private void openCropActivity(Uri sourceUri, Uri destinationUri) {
+//        /*
+//        Replacing the image with the newly cropped one.
+//        That is because the two parameters are going to have the same value passed
+//        resulting to the same destination.
+//        If a different logic is needed, then change their values.
+//         */
+//        UCrop.of(sourceUri, destinationUri)
+//                .withMaxResultSize(300, 300)
+//                .withAspectRatio(5f, 5f)
+//                .start(this);
+//    }
+//    private void showImage(Uri imageUri) {
+//        /*
+//        Show cropped image inside the imageView by getting the imageUri.
+//         */
+//        File file = FileUtils.getFile(String.valueOf(imageUri));
+//        InputStream inputStream = null;
+//        try {
+//            inputStream = new FileInputStream(file);
+//        } catch (FileNotFoundException e) {
+//            e.printStackTrace();
+//        }
+//        Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
+//        // inserting the image cropped in the android component where the user  profile image is
+//        userImage.setImageBitmap(bitmap);
+//    }
+//
+//    @SuppressLint("ObsoleteSdkInt")
+//    private void openImagesDocument() {
+//        /*
+//        Allows user to choose image from the gallery by the selectImage dialog action.
+//         */
+//        Intent pictureIntent = new Intent(Intent.ACTION_GET_CONTENT);
+//
+//        // Specifying that we need images only and nothing else.
+//        pictureIntent.setType("image/*");
+//
+//        // The CATEGORY_OPENABLE tells which Uri can be opened.
+//        // However, more category can be opened at: https://developer.android.com/reference/android/content/Intent.html#CATEGORY_OPENABLE
+//        pictureIntent.addCategory(Intent.CATEGORY_OPENABLE);
+//
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+//
+//            // Specifying that we need only the two types below.
+//            String[] mimeTypes = new String[] {"image/jpeg", "image/png", "image/jpg"};
+//            pictureIntent.putExtra(Intent.EXTRA_MIME_TYPES, mimeTypes);
+//
+//        }
+//
+//        // The option to choose the type of image only if there are multiple types.
+//        startActivityForResult(Intent.createChooser(pictureIntent,"Select Picture"), PICK_IMAGE_GALLERY_REQUEST_CODE);  // 4
+//    }
+//
+//    @Override
+//    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+//        super.onActivityResult(requestCode, resultCode, data);
+//
+//        if (requestCode == CAMERA_ACTION_PICK_REQUEST_CODE && resultCode == RESULT_OK) {
+//
+//            Uri uri = Uri.parse(currentPhotoPath);
+//            openCropActivity(uri, uri);
+//            showImage(uri);
+//
+//        } else if (requestCode == UCrop.REQUEST_CROP && resultCode == RESULT_OK) {
+//
+//            assert data != null;
+//            Uri uri = UCrop.getOutput(data);
+//            showImage(uri);
+//
+//        } else if (requestCode == PICK_IMAGE_GALLERY_REQUEST_CODE && resultCode == RESULT_OK && data != null) {
+//
+//            // Get the selected image Uri from data
+//            Uri sourceUri = data.getData();
+//
+//            // Create the image File where you want to store the cropped image result.
+//            File file = getImageFile();
+//            /*File is none, this is what gives me the error.*/
+//
+//            // Simply creates the destinationUri fromFile utility method.
+//            Uri destinationUri = Uri.fromFile(file);
+//            openCropActivity(sourceUri, destinationUri);
+//        }
+//    }

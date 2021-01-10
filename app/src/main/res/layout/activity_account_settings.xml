@@ -167,7 +167,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/account_settings_group_button_id" />
 
-        <androidx.appcompat.widget.AppCompatImageView
+        <ImageView
             android:id="@+id/account_settings_user_account_image_id"
             android:layout_width="150dp"
             android:layout_height="150dp"
@@ -177,10 +177,10 @@
             android:clickable="true"
             android:contentDescription="@string/account_settings_user_account_image_description"
             android:focusable="true"
+            android:src="@mipmap/baseline_account_circle_black_24dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/account_settings_please_set_up_your_account_here_id"
-            android:src="@mipmap/baseline_account_circle_black_24dp"/>
+            app:layout_constraintTop_toBottomOf="@+id/account_settings_please_set_up_your_account_here_id" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
