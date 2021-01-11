@@ -1,11 +1,7 @@
 package com.thewizard91.thejournal.sing_up_adds_on;
 
-import android.Manifest;
 import android.annotation.SuppressLint;
-import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -28,8 +24,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatImageView;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 import androidx.core.widget.ContentLoadingProgressBar;
 import androidx.fragment.app.FragmentActivity;
@@ -45,13 +39,8 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
-import com.karumi.dexter.Dexter;
-import com.karumi.dexter.listener.single.PermissionListener;
-import com.oginotihiro.cropview.CropView;
 import com.royrodriguez.transitionbutton.TransitionButton;
 //import com.soundcloud.android.crop.Crop;
-import com.theartofdev.edmodo.cropper.CropImage;
-import com.theartofdev.edmodo.cropper.CropImageView;
 import com.thewizard91.thejournal.BuildConfig;
 import com.thewizard91.thejournal.MainActivity;
 import com.thewizard91.thejournal.R;
@@ -62,7 +51,6 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -89,7 +77,7 @@ public class AccountSettingsActivity extends AppCompatActivity {
 
     // .XML Components
     private ContentLoadingProgressBar progressBar;
-    private ImageView userImage;
+    private AppCompatImageView userImage;
 //    private CropImageView userImage;
     //    private CropView userImage;
 //    private CropLayout userImage;
@@ -98,7 +86,7 @@ public class AccountSettingsActivity extends AppCompatActivity {
     private EditText phoneNumber;
     private EditText address;
     private RadioGroup radioButtons;
-    private RadioButton getMale, getFemale;
+    private RadioButton getMale, getFemale, genderRadioButton;
     private TransitionButton readyButton;
 
     // Firebase instances
@@ -112,7 +100,7 @@ public class AccountSettingsActivity extends AppCompatActivity {
     private String userId;
     private String gender = "user's gender currently not available";
     private String age = "user's age currently not available";
-    private String[] interests;
+    private String[] interests = {"None"};
 
     private File testFile;
 
@@ -120,6 +108,22 @@ public class AccountSettingsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_account_settings);
+
+        //
+        init();
+
+        // Create the User in Cloud Fire-store
+        createTheUserDatabaseTable();
+
+        // Set up the user image
+        setUpTheImageForTheUser();
+
+        // Handle the ready button
+        triggerTheReadyTransactionButton();
+
+    }
+
+    public void init(){
 
         // Instantiating .XML components
         progressBar = findViewById(R.id.account_settings_progress_bar);
@@ -141,15 +145,7 @@ public class AccountSettingsActivity extends AppCompatActivity {
         // Instantiation of Java Objects
         userImageUri = null;
         userId = String.valueOf(userAuthorization.getCurrentUser());
-
-        // Set up the user image
-        setUpTheImageForTheUser();
-
-        // Handle the ready button
-        triggerTheEffectOfTheTransactionButton();
-
-        // Create the User in Cloud Fire-store
-        createTheUserDatabaseTable();
+        Log.d("userIdIs:", userId);// THIS WORKS
 
     }
 
@@ -213,6 +209,8 @@ public class AccountSettingsActivity extends AppCompatActivity {
     }
 
     private void createTheUserDatabaseTable() {
+
+        // Creating the the User Database Table from collection -> document
         cloudBaseDatabaseInstance.collection("Users")
                 .document(userId)
                 .get()
@@ -220,38 +218,60 @@ public class AccountSettingsActivity extends AppCompatActivity {
                     @SuppressLint({"WrongConstant", "CheckResult", "ShowToast"})
                     @Override
                     public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+
+                        // If User Database Table is not created because of some error, then notify the user.
+                        // Else, create one.
                         if (!task.isSuccessful()) {
+
                             Toast.makeText(AccountSettingsActivity.this,
                                     "FIREBASE RETRIEVE ERROR: " + ((Exception) Objects.requireNonNull(task.getException()))
                                             .getMessage(), Toast.LENGTH_LONG).show();
-                        } else if (task.getResult().exists()) {
-                            String userProfileImage = task.getResult().getString("user_profile_image");
-                            String userProfileName = task.getResult().getString("username");
-                            userImageUri = Uri.parse(userProfileImage);
-                            username.setText(userProfileName);
 
-                            RequestOptions placeHolderRequest = new RequestOptions();
-                            placeHolderRequest.placeholder(R.mipmap.baseline_account_circle_black_24dp);
-                            Glide.with((FragmentActivity) AccountSettingsActivity.this)
-                                    .setDefaultRequestOptions(placeHolderRequest)
-                                    .load(userProfileImage)
-                                    .into(userImage);
+                        } else if (task.getResult().exists()) {
+
+                            _helperOfCreateTheUserDatabaseTable(task);
+                            Toast.makeText(AccountSettingsActivity.this, "Updating Account", Toast.LENGTH_LONG).show();
                         } else {
-                            Toast.makeText(AccountSettingsActivity.this,
-                                    "The Data Not Exists", Toast.LENGTH_LONG).show();
+
+                            Toast.makeText(AccountSettingsActivity.this, "Account Does Not Exists", Toast.LENGTH_LONG).show();
                         }
                         readyButton.setEnabled(true);
                     }
                 });
     }
 
-    private void triggerTheEffectOfTheTransactionButton() {
+    @SuppressLint("CheckResult")
+    private void _helperOfCreateTheUserDatabaseTable(Task<DocumentSnapshot> task) {
+        /*
+        Retrieve information un the User database table.
+         */
+
+        // Get user's profile image and nickname.
+        String userProfileImage = task.getResult().getString("user_profile_image");
+        String userProfileName = task.getResult().getString("username");
+        userImageUri = Uri.parse(userProfileImage);
+        username.setText(userProfileName);
+
+        // Replace the image chose by the user in the right place.
+        RequestOptions placeHolderRequest = new RequestOptions();
+        placeHolderRequest.placeholder(R.mipmap.baseline_account_circle_black_24dp);
+        Glide.with((FragmentActivity) AccountSettingsActivity.this)
+                .setDefaultRequestOptions(placeHolderRequest)
+                .load(userProfileImage)
+                .into(userImage);
+
+    }
+
+    private void triggerTheReadyTransactionButton() {
         readyButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
                 // Retrieve information inserted by the user in the Text boxes.
                 _retrieveUserData();
+
+                // Get gender
+                addListenerRadioButton();
 
                 // Start the loading animation when the user tap the button
                 readyButton.startAnimation();
@@ -262,7 +282,10 @@ public class AccountSettingsActivity extends AppCompatActivity {
                     @Override
                     public void run() {
 
-                        //TODO: User the isSuccessful variable the right way.
+                        /*
+                        TODO: User the isSuccessful variable the right way.
+                        Meaning when the user is created alread.
+                         */
                         boolean isSuccessful = true;
 
                         // Choose a stop animation if your call was successful or not
@@ -272,9 +295,11 @@ public class AccountSettingsActivity extends AppCompatActivity {
                                         @Override
                                         public void onAnimationStopEnd() {
 //                                            sendToMainActivity();
+
                                             Intent intent = new Intent(getBaseContext(), MainActivity.class);
                                             intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                                             startActivity(intent);
+
                                         }
                                     });
                         } else {
@@ -287,6 +312,12 @@ public class AccountSettingsActivity extends AppCompatActivity {
     }
 
     private void _retrieveUserData() {
+        /*
+        Helper method of retrieve information entered by the user so that we can populate the database
+        that we are about to create and put them in the Storage.
+         */
+
+        // Retrieve info inserted by the user.
         final String userName = username.getText().toString();
         final String userDescription = description.getText().toString();
         final String userPhoneNumber = phoneNumber.getText().toString();
@@ -294,27 +325,44 @@ public class AccountSettingsActivity extends AppCompatActivity {
         final String userGender = gender;
         final String userAge = age;
         final String[] userInterests = interests;
+        Log.d("MadeItHere","Yes"); // I DO GET HERE.
+
         // Add user interests in here.
         String randomNameForUserProfileImage = UUID.randomUUID().toString();
-        if (!TextUtils.isEmpty(userName) && userImageUri != null) {
+
+        if (!TextUtils.isEmpty(userName)) {
+
+            Log.d("InIf0:", "yes");
             // Progress bar code goes here
             if (isTheUserChanged) {
+
+                Log.d("InIf1:", "yes");
                 userId = String.valueOf(userAuthorization.getCurrentUser());
+
                 // Putting the image to the Firebase Storage. Look at "storage_of_userName"
                 final StorageReference pathToTheUserProfileImageInFirebase = cloudStorageInstance.child("storage_of_" + userName)
                         .child("profile_images")
                         .child(randomNameForUserProfileImage + ".jpg");
 
+                Log.d("afterStorage", "yes");
                 // Saving the Path where the image profile has
                 // been sent so that we can add more info about the user
                 // as well as their image profile in.jpg format.
                 pathToTheUserProfileImageInFirebase.putFile(userImageUri)
                         .addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
-                            @SuppressLint({"WrongConstant", "ShowToast"})
+//                            @SuppressLint({"WrongConstant", "ShowToast"})
                             @Override
                             public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
+
                                 if (task.isSuccessful()) {
+
+                                    Log.d("InIf2:", "yes");
+
+                                    // Wrapping the image compressor object in
+                                    // an exception because it fixed the bug.
                                     try {
+
+                                        // Compress the quality of the image
                                         new Compressor(AccountSettingsActivity.this)
                                                 .setMaxWidth(100)
                                                 .setMaxHeight(100)
@@ -322,8 +370,13 @@ public class AccountSettingsActivity extends AppCompatActivity {
                                                 .compressToBitmap(new File(pathToTheUserProfileImageInFirebase.getPath()));
 
                                     } catch (IOException e) {
+
                                         e.printStackTrace();
+                                        Log.d("ErrorDetected:", e.toString());
+
                                     }
+
+                                    // Make the map - make and populate the table.
                                     _storeUserInfoFieldsInFireStore(task,
                                             userName,
                                             userDescription,
@@ -332,21 +385,52 @@ public class AccountSettingsActivity extends AppCompatActivity {
                                             userGender,
                                             userAge,
                                             userInterests);
+
+                                } else {
+
+                                    Log.d("inElse:", "yes");
+
                                 }
+
                                 Toast.makeText(AccountSettingsActivity.this,
                                         "IMAGE ERROR: " + ((Exception) Objects.requireNonNull(task.getException()))
                                                 .getMessage(), Toast.LENGTH_LONG).show();
+
                             }
                         });
             }
+
+            Log.d("outOfIf1:", "yes");
             _storeUserInfoFieldsInFireStore((Task<UploadTask.TaskSnapshot>) null,
                     userName, userDescription, userPhoneNumber, userAddress, userGender, userAge, userInterests);
+
         }
+
+        Log.d("outOfIf0:", "yes");
     }
 
+    private void addListenerRadioButton() {
+        int selectId = radioButtons.getCheckedRadioButtonId();
+//        radioButtons = findViewById(selectId);
+        genderRadioButton = findViewById(selectId);
+        gender = genderRadioButton.getText().toString();
+    }
+    @SuppressLint("NonConstantResourceId")
     private void _triggerTheRadioButtonsForUserGender(View view) {
         // Is the button now clicked?
         boolean checked = ((RadioButton) view).isChecked();
+
+        // Check which radio button was clicked.
+        switch (view.getId()){
+            case R.id.account_settings_radio_button_one_id:
+                if(checked)
+                    gender = "Male";
+                break;
+            case R.id.account_settings_radio_button_two_id:
+                if (checked)
+                    gender = "Female";
+                break;
+        }
     }
 
     private void _storeUserInfoFieldsInFireStore(Task<UploadTask.TaskSnapshot> task,
@@ -357,18 +441,29 @@ public class AccountSettingsActivity extends AppCompatActivity {
                                                  String userGender,
                                                  String userAge,
                                                  String[] userInterests) {
+        /*
+        Method helper of _retrieveUserData so that filled can be filled.
+         */
+
         String[] downloadURI = {null};
         if (task != null) {
+
             final String[] downloadURICopy = downloadURI;
+
             task.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+
                 @Override
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+
                     taskSnapshot.getStorage()
                             .getDownloadUrl()
                             .addOnSuccessListener(new OnSuccessListener<Uri>() {
                                 @Override
                                 public void onSuccess(Uri uri) {
+
                                     downloadURICopy[0] = uri.toString();
+
+                                    // Mapping each single field with their respective values.
                                     _makeTheMap(downloadURICopy[0],
                                             userName,
                                             userDescription,
@@ -382,8 +477,11 @@ public class AccountSettingsActivity extends AppCompatActivity {
                 }
             });
         } else {
+
             downloadURI[0] = userImageUri.toString();
+
         }
+
         _makeTheMap(downloadURI[0],
                 userName,
                 userDescription,
@@ -402,6 +500,10 @@ public class AccountSettingsActivity extends AppCompatActivity {
                              String userGender,
                              String userAge,
                              String[] userInterests) {
+        /*
+        Mapping each single field with their respective values.
+         */
+
         Map<String, String> userMap = new HashMap<>();
         userMap.put("profile_image_of", imageUri);
         userMap.put("username", userName);
@@ -410,23 +512,33 @@ public class AccountSettingsActivity extends AppCompatActivity {
         userMap.put("address", userAddress);
         userMap.put("gender", userGender);
         userMap.put("age", userAge);
-        for (String userInterest : userInterests)
-            userMap.put("interests", "" + userInterest + ", ");
+
+        if(userInterests.length != 0)
+        {
+            for (String uI : userInterests)
+                userMap.put("interests", "" + uI + ", ");
+        }
+        // Now populating the fields.
         cloudBaseDatabaseInstance.collection("Users")
                 .document(userId)
                 .set(userMap)
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
+
                         if (task.isSuccessful()) {
+
                             sendToMainActivity();
                             Toast.makeText(AccountSettingsActivity.this,
                                     "The user's settings are updated!",
                                     Toast.LENGTH_SHORT).show();
+
                         } else {
+
                             Toast.makeText(AccountSettingsActivity.this,
-                                    "FIRESTORE ERROR" + ((Exception) Objects.requireNonNull(task.getException()))
+                                    "FIRE-STORE ERROR" + ((Exception) Objects.requireNonNull(task.getException()))
                                             .getMessage(), Toast.LENGTH_SHORT).show();
+
                         }
                         // Progress bar code.
                     }
@@ -552,9 +664,10 @@ public class AccountSettingsActivity extends AppCompatActivity {
 //            openCropActivity(uri, uri);
 //            showImage(uri);
             assert data != null;
-            Uri imageUri = data.getData();
-            if(imageUri!=null){
-                startCrop(imageUri);
+            userImageUri = data.getData();
+            isTheUserChanged = true;
+            if(userImageUri!=null){
+                startCrop(userImageUri);
             }
 
         } else if (requestCode == UCrop.REQUEST_CROP && resultCode == RESULT_OK) {
@@ -611,10 +724,9 @@ public class AccountSettingsActivity extends AppCompatActivity {
         options.setHideBottomControls(false);
         options.setFreeStyleCropEnabled(true);
 
-
         //Colors
         options.setStatusBarColor(getResources().getColor(R.color.darker_blue));
-        options.setToolbarTitle("Something!");
+        options.setToolbarTitle("Choose The Image For Your Profile!");
 
         return options;
     }
