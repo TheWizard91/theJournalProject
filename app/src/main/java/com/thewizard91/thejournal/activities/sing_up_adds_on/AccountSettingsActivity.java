@@ -1,4 +1,4 @@
-package com.thewizard91.thejournal.sing_up_adds_on;
+package com.thewizard91.thejournal.activities.sing_up_adds_on;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
@@ -15,7 +15,6 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
@@ -42,7 +41,7 @@ import com.google.firebase.storage.UploadTask;
 import com.royrodriguez.transitionbutton.TransitionButton;
 //import com.soundcloud.android.crop.Crop;
 import com.thewizard91.thejournal.BuildConfig;
-import com.thewizard91.thejournal.MainActivity;
+import com.thewizard91.thejournal.activities.MainActivity;
 import com.thewizard91.thejournal.R;
 import com.yalantis.ucrop.UCrop;
 
@@ -267,11 +266,11 @@ public class AccountSettingsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                // Retrieve information inserted by the user in the Text boxes.
-                _retrieveUserData();
-
                 // Get gender
                 addListenerRadioButton();
+
+                // Retrieve information inserted by the user in the Text boxes.
+                _retrieveUserData();
 
                 // Start the loading animation when the user tap the button
                 readyButton.startAnimation();
@@ -284,7 +283,7 @@ public class AccountSettingsActivity extends AppCompatActivity {
 
                         /*
                         TODO: User the isSuccessful variable the right way.
-                        Meaning when the user is created alread.
+                        Meaning when the user is created already.
                          */
                         boolean isSuccessful = true;
 

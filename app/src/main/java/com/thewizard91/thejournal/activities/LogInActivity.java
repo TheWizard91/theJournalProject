@@ -1,4 +1,4 @@
-package com.thewizard91.thejournal;
+package com.thewizard91.thejournal.activities;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -11,12 +11,12 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
 
-import com.google.android.gms.tasks.OnCanceledListener;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.thewizard91.thejournal.log_in_activities_adds_on.ForgotPasswordActivity;
+import com.thewizard91.thejournal.R;
+import com.thewizard91.thejournal.activities.log_in_activities_adds_on.ForgotPasswordActivity;
 
 import android.os.Bundle;
 import android.widget.TextView;
@@ -41,6 +41,14 @@ public class LogInActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_log_in);
 
+        init();
+        triggerLogInButton();
+        triggerForgotPasswordText();
+        triggerNeedAccountText();
+        triggerLogInWithSocialMediaAccount();
+    }
+
+    private void init() {
         progressBar = findViewById(R.id.log_in_progress_bar_id);
         enterEmailOrUserName = findViewById(R.id.log_in_enter_email_or_username_text_view_id);
         password = findViewById(R.id.log_in_enter_your_password_text_view_id);
@@ -50,10 +58,6 @@ public class LogInActivity extends AppCompatActivity {
         useSocialMediaAccountToLogIn = findViewById(R.id.log_in_with_social_media_account_id);
 
         userAuthorized = FirebaseAuth.getInstance();
-        triggerLogInButton();
-        triggerForgotPasswordText();
-        triggerNeedAccountText();
-        triggerLogInWithSocialMediaAccount();
     }
 
     private void triggerLogInWithSocialMediaAccount() {

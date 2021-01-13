@@ -40,17 +40,24 @@
         tools:targetApi="p"
         android:requestLegacyExternalStorage="true">
 
-        <activity android:name=".sing_up_adds_on.AccountSettingsActivity" />
-        <activity android:name=".log_in_activities_adds_on.ForgotPasswordActivity" />
-        <activity android:name=".SignUpActivity" />
-        <activity android:name=".LogInActivity" />
-        <activity android:name=".MainActivity">
+        <activity android:name=".activities.sing_up_adds_on.AccountSettingsActivity" />
+        <activity android:name=".activities.log_in_activities_adds_on.ForgotPasswordActivity" />
+        <activity android:name=".activities.SignUpActivity" />
+        <activity android:name=".activities.LogInActivity" />
+        <activity android:name=".activities.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
+
             </intent-filter>
         </activity>
+
+        <activity android:name=".activities.SearchResultsActivity">
+        <intent-filter>
+            <action android:name="android.intent.action.SEARCH" />
+        </intent-filter>
+    </activity>
 
 <!--        &lt;!&ndash;   Activity for ImageCrop API     &ndash;&gt;-->
         <activity android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
@@ -74,6 +81,9 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/provider_paths"/>
         </provider>
+<!--        For the Searching.. -->
+        <meta-data android:name="android.app.searchable"
+            android:resource="@xml/searchable" />
     </application>
 
 </manifest>

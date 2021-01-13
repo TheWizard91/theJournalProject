@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/darker_blue"
-    tools:context=".sing_up_adds_on.AccountSettingsActivity">
+    tools:context=".activities.sing_up_adds_on.AccountSettingsActivity">
 
     <androidx.core.widget.ContentLoadingProgressBar
         android:id="@+id/account_settings_progress_bar"

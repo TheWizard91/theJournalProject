@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/darker_blue"
-    tools:context=".SignUpActivity">
+    tools:context=".activities.SignUpActivity">
 
     <androidx.core.widget.ContentLoadingProgressBar
         android:id="@+id/sign_up_progress_bar_id"

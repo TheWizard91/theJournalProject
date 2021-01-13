@@ -29,8 +29,17 @@
     <string name="account_settings_user_description">Who Are You?</string>
     <string name="account_settings_user_phone_number_text">Please Insert Your Phone Number…</string>
     <string name="account_settings_user_address_text">Address…</string>
-    <string name="account_settings_radio_button_one_text" >Male</string>
-    <string name="account_settings_radio_button_two_text" >Female</string>
+    <string name="account_settings_radio_button_one_text">Male</string>
+    <string name="account_settings_radio_button_two_text">Female</string>
     <string name="account_settings_set_up_button_text">READY!</string>
     <string name="account_settings_user_account_image_description">User image</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="newest_text">Newest</string>
+    <string name="popular_text">Popular</string>
+    <string name="other_text">Other</string>
+    <string name="following_text">Following</string>
+    <string name="main_activity_home_fragment_title_text">Dream Journal</string>
+    <string name="search_title">Search</string>
+    <string name="search_hint">Search...</string>
 </resources>

@@ -1,24 +1,23 @@
-package com.thewizard91.thejournal;
+package com.thewizard91.thejournal.activities;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
-import androidx.appcompat.app.AppCompatActivity;
+
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.thewizard91.thejournal.sing_up_adds_on.AccountSettingsActivity;
+import com.thewizard91.thejournal.R;
+import com.thewizard91.thejournal.activities.sing_up_adds_on.AccountSettingsActivity;
 
 import android.content.Intent;
 

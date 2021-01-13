@@ -4,15 +4,176 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context=".activities.MainActivity">
 
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Hello Android!"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        <androidx.core.widget.ContentLoadingProgressBar
+            android:id="@+id/main_activity_progress_bar"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.coordinatorlayout.widget.CoordinatorLayout
+            android:id="@+id/coordinatorLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:textAlignment="inherit"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/main_activity_progress_bar">
+
+                <com.google.android.material.appbar.AppBarLayout
+                    android:id="@+id/main_activity_app_bar_layout_id"
+                    android:layout_width="match_parent"
+                    android:layout_height="150dp"
+                    android:background="@drawable/collapsing_tool_bar_background_layer">
+
+                        <com.google.android.material.appbar.CollapsingToolbarLayout
+                            android:id="@+id/my_collapsing_toolbar_id"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent">
+
+                                <androidx.appcompat.widget.Toolbar
+                                    android:id="@+id/my_toolbar_id"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="?attr/actionBarSize"
+                                    app:layout_collapseMode="pin"
+                                    app:popupTheme="@style/AppTheme"  />
+
+                                <androidx.appcompat.widget.LinearLayoutCompat
+                                    android:id="@+id/my_tooL_bar_menu_id"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_horizontal|bottom" >
+
+                                        <TextView
+                                            android:id="@+id/newest_text_id"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:fontFamily="@font/poppins_bold"
+                                            android:text="@string/newest_text"
+                                            android:ems="3"
+                                            android:textColor="@android:color/white"
+                                            android:layout_marginEnd="20dp"/>
+
+                                        <TextView
+                                            android:id="@+id/popular_text_id"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:text="@string/popular_text"
+                                            android:fontFamily="@font/poppins_bold"
+                                            android:ems="3"
+                                            android:textColor="@android:color/white"
+                                            android:layout_marginEnd="20dp"/>
+
+                                        <TextView
+                                            android:id="@+id/following_text_id"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:text="@string/following_text"
+                                            android:fontFamily="@font/poppins_bold"
+                                            android:ems="4"
+                                            android:textColor="@android:color/white"
+                                            android:layout_marginEnd="20dp"/>
+
+                                        <TextView
+                                            android:id="@+id/other_text_id"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:text="@string/other_text"
+                                            android:fontFamily="@font/poppins_bold"
+                                            android:ems="3"
+                                            android:textColor="@android:color/white" />
+
+                                </androidx.appcompat.widget.LinearLayoutCompat>
+
+                                <TextView
+                                    android:id="@+id/main_activity_home_fragment_title_id"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:fontFamily="@font/poppins_bold"
+                                    android:text="@string/main_activity_home_fragment_title_text"
+                                    android:textColor="@color/abc_decor_view_status_guard_light"
+                                    android:textSize="24sp"
+                                    android:layout_gravity="center|start"
+                                    android:layout_marginStart="@dimen/activity_horizontal_margin"/>
+
+                        </com.google.android.material.appbar.CollapsingToolbarLayout>
+
+                </com.google.android.material.appbar.AppBarLayout>
+
+                <include layout="@layout/content_scrolling" />
+
+        </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+<!--        <ImageView-->
+<!--            android:id="@+id/welcomeBackImageVIew"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="300dp"-->
+<!--            android:contentDescription="@string/circle_image"-->
+<!--            android:scaleType="centerCrop"-->
+<!--            app:layout_constraintBottom_toBottomOf="parent"-->
+<!--            app:layout_constraintEnd_toEndOf="parent"-->
+<!--            app:layout_constraintHorizontal_bias="0.0"-->
+<!--            app:layout_constraintStart_toStartOf="parent"-->
+<!--            app:layout_constraintTop_toTopOf="parent"-->
+<!--            app:layout_constraintVertical_bias="0.037"-->
+<!--            app:srcCompat="@mipmap/circle_deeper_down" />-->
+
+<!--        <androidx.appcompat.widget.LinearLayoutCompat-->
+<!--            android:id="@+id/linearlayout_in_the_framelayout_of_activity_main_layout"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_gravity="bottom|right|center_vertical|center_horizontal|center|end"-->
+<!--            android:layout_marginEnd="16dp"-->
+<!--            android:layout_marginBottom="8dp"-->
+<!--            android:background="@color/fui_transparent"-->
+<!--            android:clickable="true"-->
+<!--            android:focusable="true"-->
+<!--            android:orientation="vertical"-->
+<!--            app:layout_constraintBottom_toTopOf="@+id/main_bottom_nav"-->
+<!--            app:layout_constraintEnd_toEndOf="parent">-->
+
+<!--            <com.google.android.material.floatingactionbutton.FloatingActionButton-->
+<!--                android:id="@+id/floatingActionButton"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:clickable="true"-->
+<!--                android:focusable="true"-->
+<!--                android:scaleType="fitCenter"-->
+<!--                android:src="@mipmap/baseline_add_white_24dp"-->
+<!--                app:backgroundTint="@color/mainThemeColor" />-->
+
+<!--        </androidx.appcompat.widget.LinearLayoutCompat>-->
+
+        <com.google.android.material.bottomnavigation.BottomNavigationView
+            android:id="@+id/main_bottom_nav"
+            android:clipChildren="false"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:backgroundTint="@color/common_google_signin_btn_text_dark"
+            app:itemIconSize="24dp"
+            app:itemRippleColor="@color/black"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintVertical_bias="1"
+            app:menu="@menu/bottom_menu"
+            android:background="@drawable/background_layer"/>
+
+<!--        <include-->
+<!--            android:id="@+id/main_toolbar"-->
+<!--            app:layout_constraintBottom_toBottomOf="0"-->
+<!--            app:layout_constraintEnd_toEndOf="0"-->
+<!--            app:layout_constraintHorizontal_bias="1"-->
+<!--            app:layout_constraintStart_toStartOf="0"-->
+<!--            app:layout_constraintTop_toTopOf="0"-->
+<!--            layout="@layout/toolbar_main"/>-->
+
 </androidx.constraintlayout.widget.ConstraintLayout>

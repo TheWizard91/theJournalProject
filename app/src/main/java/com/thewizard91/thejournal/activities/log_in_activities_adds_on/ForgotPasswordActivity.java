@@ -1,4 +1,4 @@
-package com.thewizard91.thejournal.log_in_activities_adds_on;
+package com.thewizard91.thejournal.activities.log_in_activities_adds_on;
 
 import androidx.appcompat.app.AppCompatActivity;
 
