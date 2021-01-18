@@ -23,22 +23,25 @@
     <uses-permission android:name="com.google.android.finsky.permission.BIND_GET_INSTALL_REFERRER_SERVICE" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-feature android:required="true" android:name="android.hardware.camera"/>
+
+<!--
+        @android:style/Theme.Holo.NoActionBar.Fullscreen"-->
     <application
         android:allowBackup="true"
         android:icon="@mipmap/app_front_page"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.TheJournal"
         tools:ignore="AllowBackup,HardcodedDebugMode"
-
+        android:theme="@style/Theme.TheJournal"
 
         android:name="androidx.multidex.MultiDexApplication"
         android:testOnly="true"
         android:debuggable="true"
         android:appComponentFactory="androidx.core.app.CoreComponentFactory"
         tools:targetApi="p"
-        android:requestLegacyExternalStorage="true">
+        android:requestLegacyExternalStorage="true"
+        package="com.example.floatingactionbuttontobottomnavigation" >
 
         <activity android:name=".activities.sing_up_adds_on.AccountSettingsActivity" />
         <activity android:name=".activities.log_in_activities_adds_on.ForgotPasswordActivity" />

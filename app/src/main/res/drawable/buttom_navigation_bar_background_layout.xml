@@ -8,7 +8,7 @@
                 android:startColor="@color/darker_blue"
                 android:centerColor="@color/half_blue_half_transparent"
                 android:endColor="@color/mainThemeColor" />
-            <corners android:topLeftRadius="0dp" android:topRightRadius="0dp" />
+            <corners android:bottomLeftRadius="0dp" android:bottomRightRadius="0dp" />
         </shape>
     </item>
 </selector>

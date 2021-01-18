@@ -41,5 +41,11 @@
     <string name="following_text">Following</string>
     <string name="main_activity_home_fragment_title_text">Dream Journal</string>
     <string name="search_title">Search</string>
-    <string name="search_hint">Search...</string>
+    <string name="search_hint">Search…</string>
+    <string name="floating_button_description">click here</string>
+    <string name="search_text_hint">Search…</string>
+    <string name="home">Home</string>
+    <string name="notifications">Notifications</string>
+    <string name="likes">Likes</string>
+    <string name="account">Account</string>
 </resources>
