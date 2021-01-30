@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:node="replace"
-    package="com.thewizard91.thejournal">
+    package="com.thewizard91.thejournal"
+    tools:node="replace">
 
     <uses-sdk
         android:minSdkVersion="21"
@@ -13,36 +13,37 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
-        tools:ignore="ScopedStorage"
-        android:maxSdkVersion="21" />
+    <uses-permission
+        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+        android:maxSdkVersion="21"
+        tools:ignore="ScopedStorage" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
     <uses-permission android:name="com.google.android.finsky.permission.BIND_GET_INSTALL_REFERRER_SERVICE" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
-    <uses-feature android:required="true" android:name="android.hardware.camera"/>
 
-<!--
-        @android:style/Theme.Holo.NoActionBar.Fullscreen"-->
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="true" />
+
     <application
+        android:name="androidx.multidex.MultiDexApplication"
+        package="com.example.floatingactionbuttontobottomnavigation"
         android:allowBackup="true"
+        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
+        android:debuggable="true"
         android:icon="@mipmap/app_front_page"
         android:label="@string/app_name"
+        android:requestLegacyExternalStorage="true"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        tools:ignore="AllowBackup,HardcodedDebugMode"
-        android:theme="@style/Theme.TheJournal"
-
-        android:name="androidx.multidex.MultiDexApplication"
         android:testOnly="true"
-        android:debuggable="true"
-        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
-        tools:targetApi="p"
-        android:requestLegacyExternalStorage="true"
-        package="com.example.floatingactionbuttontobottomnavigation" >
-
+        android:theme="@style/Theme.TheJournal"
+        tools:ignore="AllowBackup,HardcodedDebugMode"
+        tools:targetApi="p">
+        <activity android:name=".activities.AddANewPost" />
         <activity android:name=".activities.sing_up_adds_on.AccountSettingsActivity" />
         <activity android:name=".activities.log_in_activities_adds_on.ForgotPasswordActivity" />
         <activity android:name=".activities.SignUpActivity" />
@@ -52,29 +53,25 @@
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
-
             </intent-filter>
         </activity>
-
         <activity android:name=".activities.SearchResultsActivity">
-        <intent-filter>
-            <action android:name="android.intent.action.SEARCH" />
-        </intent-filter>
-    </activity>
-
-<!--        &lt;!&ndash;   Activity for ImageCrop API     &ndash;&gt;-->
-        <activity android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
-            android:theme="@style/Base.Theme.AppCompat" />
-<!--        <activity android:name="com.soundcloud.android.crop.CropImageActivity"-->
-<!--            tools:ignore="MissingClass" />-->
+            <intent-filter>
+                <action android:name="android.intent.action.SEARCH" />
+            </intent-filter>
+        </activity> <!-- &lt;!&ndash;   Activity for ImageCrop API     &ndash;&gt; -->
+        <activity
+            android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
+            android:theme="@style/Base.Theme.AppCompat" /> <!-- <activity android:name="com.soundcloud.android.crop.CropImageActivity" -->
+        <!-- tools:ignore="MissingClass" /> -->
         <activity
             android:name="com.yalantis.ucrop.UCropActivity"
             android:screenOrientation="fullSensor"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+
         <meta-data
             android:name="preloaded_fonts"
-            android:resource="@array/preloaded_fonts" />
-<!--        "android.support.v4.content.FileProvider"-->
+            android:resource="@array/preloaded_fonts" /> <!-- "android.support.v4.content.FileProvider" -->
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.provider"
@@ -82,10 +79,10 @@
             android:grantUriPermissions="true">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/provider_paths"/>
-        </provider>
-<!--        For the Searching.. -->
-        <meta-data android:name="android.app.searchable"
+                android:resource="@xml/provider_paths" />
+        </provider> <!-- For the Searching.. -->
+        <meta-data
+            android:name="android.app.searchable"
             android:resource="@xml/searchable" />
     </application>
 

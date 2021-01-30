@@ -48,4 +48,9 @@
     <string name="notifications">Notifications</string>
     <string name="likes">Likes</string>
     <string name="account">Account</string>
+    <string name="description_of_post_image">image of the post</string>
+    <string name="post_title_text">Insert Title…</string>
+    <string name="post_description_text">Insert Description…</string>
+    <string name="post_button_text">SEND</string>
+    <string name="new_post_message_text">Add A New Posts!</string>
 </resources>

@@ -98,14 +98,9 @@ public class SignUpActivity extends AppCompatActivity {
         });
     }
 
-    private void test() {
-        startActivity(new Intent(this, MainActivity.class));
-        finish();
-    }
-
     private void sendToAccountSettingsActivity() {
         startActivity(new Intent(this, AccountSettingsActivity.class));
-//        finish();
+        finish();
     }
 
     private void finishTheLogInActivity() {

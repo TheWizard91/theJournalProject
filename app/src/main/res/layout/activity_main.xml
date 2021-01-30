@@ -7,7 +7,8 @@
     android:layout_height="match_parent"
     android:background="@color/transparent"
     tools:context=".activities.MainActivity"
-    android:baselineAligned="false">
+    android:baselineAligned="false"
+    android:backgroundTint="@color/pure_white">
 
 <!--        <androidx.core.widget.ContentLoadingProgressBar-->
 <!--            android:id="@+id/main_activity_progress_bar"-->
@@ -32,6 +33,18 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
 
+
+<!--                        <androidx.appcompat.widget.Toolbar-->
+<!--                            android:id="@+id/my_toolbar_id"-->
+<!--                            android:layout_width="match_parent"-->
+<!--                            android:layout_height="?attr/actionBarSize"-->
+<!--                            app:layout_collapseMode="pin"-->
+<!--                            app:layout_constraintBottom_toBottomOf="@+id/main_activity_app_bar_layout_id"-->
+<!--                            app:layout_constraintEnd_toEndOf="parent"-->
+<!--                            app:layout_constraintStart_toStartOf="parent"-->
+<!--                            app:layout_constraintTop_toTopOf="@+id/main_activity_app_bar_layout_id"-->
+<!--                            app:popupTheme="@style/AppTheme" />-->
+
                         <com.google.android.material.appbar.AppBarLayout
                             android:id="@+id/main_activity_app_bar_layout_id"
                             android:layout_width="match_parent"
@@ -44,6 +57,7 @@
                                 <com.google.android.material.appbar.CollapsingToolbarLayout
                                     android:id="@+id/my_collapsing_toolbar_id"
                                     android:layout_width="match_parent"
+                                    android:background="@color/transparent"
                                     android:layout_height="match_parent"
                                     app:layout_constraintEnd_toEndOf="parent"
                                     app:layout_constraintStart_toStartOf="parent"
@@ -80,7 +94,7 @@
                                                     android:textAlignment="textStart"
                                                     android:drawableStart="@mipmap/baseline_search_black_24dp"
                                                     android:hint="@string/search_text_hint"
-                                                    android:textColor="@color/black"
+                                                    android:textColor="@color/darker_blue"
                                                     app:layout_constraintBottom_toBottomOf="parent"
                                                     app:layout_constraintEnd_toEndOf="parent"
                                                     app:layout_constraintHorizontal_bias="0.144"
@@ -149,7 +163,7 @@
                         </com.google.android.material.appbar.AppBarLayout>
 
                         <androidx.appcompat.widget.AppCompatButton
-                            android:id="@+id/newest_text_id"
+                            android:id="@+id/newest_id"
                             android:layout_width="wrap_content"
                             android:layout_height="30dp"
                             android:layout_marginStart="8dp"
@@ -167,7 +181,7 @@
                             android:focusable="true" />
 
                         <androidx.appcompat.widget.AppCompatButton
-                            android:id="@+id/popular_text_id"
+                            android:id="@+id/popular_id"
                             android:layout_width="wrap_content"
                             android:layout_height="30dp"
                             android:clickable="true"
@@ -179,13 +193,13 @@
                             android:textAlignment="center"
                             android:textColor="@color/darker_gray"
                             android:textSize="8sp"
-                            app:layout_constraintStart_toEndOf="@+id/newest_text_id"
+                            app:layout_constraintStart_toEndOf="@+id/newest_id"
                             app:layout_constraintTop_toBottomOf="@+id/main_activity_app_bar_layout_id"
                             tools:ignore="SmallSp"
                             android:focusable="true" />
 
                         <androidx.appcompat.widget.AppCompatButton
-                            android:id="@+id/following_text_id"
+                            android:id="@+id/following_id"
                             android:layout_width="wrap_content"
                             android:layout_height="30dp"
                             android:layout_marginStart="16dp"
@@ -198,12 +212,12 @@
                             android:textAlignment="center"
                             android:textColor="@color/darker_gray"
                             android:textSize="8sp"
-                            app:layout_constraintStart_toEndOf="@+id/popular_text_id"
+                            app:layout_constraintStart_toEndOf="@+id/popular_id"
                             app:layout_constraintTop_toBottomOf="@+id/main_activity_app_bar_layout_id"
                             tools:ignore="SmallSp" />
 
                         <androidx.appcompat.widget.AppCompatButton
-                            android:id="@+id/other_text_id"
+                            android:id="@+id/other_id"
                             android:layout_width="wrap_content"
                             android:layout_height="30dp"
                             android:layout_marginTop="8dp"
@@ -217,21 +231,34 @@
                             android:textSize="8sp"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintHorizontal_bias="1.0"
-                            app:layout_constraintStart_toEndOf="@+id/following_text_id"
+                            app:layout_constraintStart_toEndOf="@+id/following_id"
                             app:layout_constraintTop_toBottomOf="@+id/main_activity_app_bar_layout_id"
                             tools:ignore="SmallSp"
                             android:focusable="true" />
 
-                        <CalendarView
-                            android:id="@+id/calendarView"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="32dp"
-                            android:background="@drawable/calendar_background_layer"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintHorizontal_bias="0.491"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/popular_text_id" />
+
+                    <FrameLayout
+                        android:id="@+id/content_frame"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/popular_id"
+                        app:layout_constraintVertical_bias="0.0" >
+
+<!--                        <CalendarView-->
+<!--                            android:id="@+id/calendar_view"-->
+<!--                            android:layout_width="match_parent"-->
+<!--                            android:layout_height="wrap_content"-->
+<!--                            android:layout_marginTop="32dp"-->
+<!--                            android:background="@drawable/calendar_background_layer"-->
+<!--                            app:layout_constraintEnd_toEndOf="parent"-->
+<!--                            app:layout_constraintHorizontal_bias="0.491"-->
+<!--                            app:layout_constraintStart_toStartOf="parent"-->
+<!--                            app:layout_constraintTop_toBottomOf="@+id/popular_text_id" />-->
+
+                    </FrameLayout>
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 

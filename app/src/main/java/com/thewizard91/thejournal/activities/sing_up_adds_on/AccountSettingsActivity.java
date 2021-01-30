@@ -143,7 +143,7 @@ public class AccountSettingsActivity extends AppCompatActivity {
 
         // Instantiation of Java Objects
         userImageUri = null;
-        userId = String.valueOf(userAuthorization.getCurrentUser());
+        userId = String.valueOf(Objects.requireNonNull(userAuthorization.getCurrentUser()).getUid());
         Log.d("userIdIs:", userId);// THIS WORKS
 
     }
