@@ -36,6 +36,9 @@ public class LogInActivity extends AppCompatActivity {
 
     private FirebaseAuth userAuthorized;
 
+    String emailOrUsernameInserted;
+    String passwordInserted;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -97,8 +100,10 @@ public class LogInActivity extends AppCompatActivity {
         logInButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                String emailOrUsernameInserted = enterEmailOrUserName.getText().toString();
-                String passwordInserted = password.getText().toString();
+//                String emailOrUsernameInserted =
+                        emailOrUsernameInserted = enterEmailOrUserName.getText().toString();
+//                String passwordInserted =
+                        passwordInserted = password.getText().toString();
                 if (!emailOrUsernameInserted.isEmpty() && !passwordInserted.isEmpty()){
                     userAuthorized.signInWithEmailAndPassword(emailOrUsernameInserted, passwordInserted)
                             .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
@@ -109,8 +114,8 @@ public class LogInActivity extends AppCompatActivity {
                                         progressBar.setVisibility(0);
                                         sendToMainActivity();
                                     }
-                                    Toast.makeText(LogInActivity.this, "Error: "+((Exception)Objects.requireNonNull(task.getException()))
-                                            .getMessage(), 0).show();
+//                                    Toast.makeText(LogInActivity.this, "Error: "+((Exception)Objects.requireNonNull(task.getException()))
+//                                            .getMessage(), 0).show();
                                 }
                             });
                 }
@@ -119,6 +124,7 @@ public class LogInActivity extends AppCompatActivity {
     }
 
     private void sendToMainActivity() {
+        userAuthorized.signInWithEmailAndPassword(emailOrUsernameInserted,passwordInserted);
         startActivity(new Intent(this, MainActivity.class));
         finish();
     }

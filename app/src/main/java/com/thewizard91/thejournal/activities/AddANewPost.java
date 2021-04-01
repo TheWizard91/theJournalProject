@@ -224,7 +224,7 @@ public class AddANewPost extends AppCompatActivity {
                                 for(Map.Entry<String, Object> entry: map.entrySet()) {
                                     list.add(entry.getValue().toString());
                                 }
-                                username = list.get(0);
+                                username = list.get(0); //You can use if for the main activity!
                                 Log.d("usernameIs:", username);
                             }
                         }

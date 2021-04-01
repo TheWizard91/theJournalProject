@@ -10,12 +10,15 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
 //Firebase imports
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.jaeger.library.StatusBarUtil;
 import com.thewizard91.thejournal.R;
@@ -40,12 +43,17 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
  public class MainActivity extends AppCompatActivity implements AppBarLayout.OnOffsetChangedListener{
 
+     TextView logo;
      // Menu
      Menu menu;
      MenuInflater inflater;
@@ -81,6 +89,7 @@ import java.util.Objects;
      //Normal object instances
      private String currentUserId;
      private FragmentTransaction fragmentTransaction;
+     private String username;
 
      @RequiresApi(api = Build.VERSION_CODES.M)
      @Override
@@ -88,9 +97,10 @@ import java.util.Objects;
          super.onCreate(savedInstanceState);
          setContentView(R.layout.activity_main);
 
-         if(currentUser != null) init();
+         init();
 
-        sendToLoginActivity();
+         if(currentUser == null) sendToLoginActivity();
+//        homeFragmentMethod();
      }
 //
 //     @Override
@@ -160,6 +170,7 @@ import java.util.Objects;
 
          isItReady = false;
          myAppBarLayout = findViewById(R.id.main_activity_app_bar_layout_id);
+         logo = findViewById(R.id.main_activity_home_fragment_title_id);
 
          // Checking if the user is already logged in
          userAuthorized = FirebaseAuth.getInstance();
@@ -170,17 +181,21 @@ import java.util.Objects;
          if (currentUser != null) {
              // TODO: Move on with the next stuff
              // Get the user's id
+             Log.d("currentUserIs:",currentUser.toString());
              currentUserId = userAuthorized.getCurrentUser().getUid();
 
              // Initialize the fragments starting with the homeFragment.
              // Meaning that the user will be directed into the homeFragment as
              // soon as she/he logged in and account is verified.
-             homeFragment = new HomeFragment();
-             replaceFragment(homeFragment);
-             notificationsFragment = new NotificationsFragment();
-             likesFragment = new LikesFragment();
-             accountFragment = new AccountFragment();
+             homeFragmentMethod();
              fragmentsMenu();
+             logo.setOnClickListener(new View.OnClickListener() {
+                 @Override
+                 public void onClick(View v) {
+                     userAuthorized.signOut();
+                     sendToLoginActivity();
+                 }
+             });
 
              // The buttons on top of the posts.
              newestButton = findViewById(R.id.newest_id);
@@ -191,11 +206,19 @@ import java.util.Objects;
              addFloatingButton = findViewById(R.id.floating_action_button);
 
              //
-             AddANewPost();
+//             AddANewPost();
          }
 
          myAppBarLayout.addOnOffsetChangedListener((AppBarLayout.OnOffsetChangedListener) this);
 
+     }
+
+     private void homeFragmentMethod() {
+         homeFragment = new HomeFragment();
+         replaceFragment(homeFragment);
+         notificationsFragment = new NotificationsFragment();
+         likesFragment = new LikesFragment();
+         accountFragment = new AccountFragment();
      }
 
      private void AddANewPost() {
@@ -209,7 +232,7 @@ import java.util.Objects;
 
      private void sendToAddANewPostActivity() {
          startActivity(new Intent(this, AddANewPost.class));
-         finish();
+//         finish();
      }
 
      private void fragmentsMenu() {
@@ -321,4 +344,24 @@ import java.util.Objects;
          finish();
      }
 
+     private void setUsername() {
+         cloudBaseDatabase.collection("Users")
+                 .document(currentUserId)
+                 .get()
+                 .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                     @Override
+                     public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                         DocumentSnapshot documentSnapshot = task.getResult();
+                         List<String> list = new ArrayList<>();
+                         Map<String, Object> map = documentSnapshot.getData();
+
+                         if(map != null) {
+                             for (Map.Entry<String, Object> entry : map.entrySet()) {
+                                 list.add(entry.getValue().toString());
+                             }
+                             username = list.get(0);
+                         }
+                     }
+                 });
+     }
  }

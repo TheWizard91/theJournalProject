@@ -288,22 +288,18 @@ public class AccountSettingsActivity extends AppCompatActivity {
                         boolean isSuccessful = true;
 
                         // Choose a stop animation if your call was successful or not
-                        if (isSuccessful) {
-                            readyButton.stopAnimation(TransitionButton.StopAnimationStyle.EXPAND,
-                                    new TransitionButton.OnAnimationStopEndListener() {
-                                        @Override
-                                        public void onAnimationStopEnd() {
+                        readyButton.stopAnimation(TransitionButton.StopAnimationStyle.EXPAND,
+                                new TransitionButton.OnAnimationStopEndListener() {
+                                    @Override
+                                    public void onAnimationStopEnd() {
 //                                            sendToMainActivity();
 
-                                            Intent intent = new Intent(getBaseContext(), MainActivity.class);
-                                            intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                                            startActivity(intent);
+                                        Intent intent = new Intent(getBaseContext(), MainActivity.class);
+                                        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                                        startActivity(intent);
 
-                                        }
-                                    });
-                        } else {
-                            readyButton.stopAnimation(TransitionButton.StopAnimationStyle.SHAKE, null);
-                        }
+                                    }
+                                });
                     }
                 }, 2000);
             }
@@ -355,7 +351,7 @@ public class AccountSettingsActivity extends AppCompatActivity {
 
                                 if (task.isSuccessful()) {
 
-                                    Log.d("InIf2:", "yes");
+//                                    Log.d("InIf2:", "yes");
 
                                     // Wrapping the image compressor object in
                                     // an exception because it fixed the bug.
@@ -387,25 +383,28 @@ public class AccountSettingsActivity extends AppCompatActivity {
 
                                 } else {
 
-                                    Log.d("inElse:", "yes");
+//                                    Log.d("inElse:", "yes");
+                                    Toast.makeText(AccountSettingsActivity.this,
+                                            "IMAGE ERROR: " + ((Exception) Objects.requireNonNull(task.getException()))
+                                                    .getMessage(), Toast.LENGTH_LONG).show();
 
                                 }
-
-                                Toast.makeText(AccountSettingsActivity.this,
-                                        "IMAGE ERROR: " + ((Exception) Objects.requireNonNull(task.getException()))
-                                                .getMessage(), Toast.LENGTH_LONG).show();
+//
+//                                Toast.makeText(AccountSettingsActivity.this,
+//                                        "IMAGE ERROR: " + ((Exception) Objects.requireNonNull(task.getException()))
+//                                                .getMessage(), Toast.LENGTH_LONG).show();
 
                             }
                         });
             }
 
-            Log.d("outOfIf1:", "yes");
+//            Log.d("outOfIf1:", "yes");
             _storeUserInfoFieldsInFireStore((Task<UploadTask.TaskSnapshot>) null,
                     userName, userDescription, userPhoneNumber, userAddress, userGender, userAge, userInterests);
 
         }
 
-        Log.d("outOfIf0:", "yes");
+//        Log.d("outOfIf0:", "yes");
     }
 
     private void addListenerRadioButton() {
@@ -461,6 +460,7 @@ public class AccountSettingsActivity extends AppCompatActivity {
                                 public void onSuccess(Uri uri) {
 
                                     downloadURICopy[0] = uri.toString();
+                                    userImageUri= Uri.parse(downloadURICopy[0]);
 
                                     // Mapping each single field with their respective values.
                                     _makeTheMap(downloadURICopy[0],
@@ -475,11 +475,12 @@ public class AccountSettingsActivity extends AppCompatActivity {
                             });
                 }
             });
-        } else {
+        }
+//        else {
 
             downloadURI[0] = userImageUri.toString();
 
-        }
+//        }
 
         _makeTheMap(downloadURI[0],
                 userName,

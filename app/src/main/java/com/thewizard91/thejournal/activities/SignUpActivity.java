@@ -46,7 +46,7 @@ public class SignUpActivity extends AppCompatActivity {
         haveAnAccountAlready = findViewById(R.id.already_have_an_account_message_id);
         signUpButton = findViewById(R.id.sign_up_button_id);
         userAuthorized = FirebaseAuth.getInstance();
-        finishTheLogInActivity();
+//        finishTheLogInActivity();
         createANewAccount();
         triggerHaveAlreadyAnAccount();
     }
@@ -107,7 +107,8 @@ public class SignUpActivity extends AppCompatActivity {
         haveAnAccountAlready.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                finish();
+//                finish();
+                Toast.makeText(SignUpActivity.this, "DO NOTHING", Toast.LENGTH_SHORT).show();
             }
         });
     }
