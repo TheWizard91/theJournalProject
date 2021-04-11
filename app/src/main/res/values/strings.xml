@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">Nao</string>
+    <string name="user_image_description">User Image</string>
+    <string name="user_image_username">Insert An Username</string>
+    <string name="hint_email">Insert Email…</string>
+    <string name="hint_password">Insert Password…</string>
+    <string name="update_user_button">UPDATE</string>
+    <string name="hint_user_password_confirmation">Confirm Password…</string>
+    <string name="create_new_user">Create New User</string>
+</resources>

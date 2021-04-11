@@ -1,0 +1,105 @@
+plugins {
+    id 'com.android.application'
+    id 'com.google.gms.google-services'
+}
+
+android {
+    compileSdkVersion 30
+    buildToolsVersion "30.0.3"
+
+    defaultConfig {
+        applicationId "com.thewizard91.nao"
+        minSdkVersion 21
+        targetSdkVersion 30
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+}
+
+dependencies {
+
+    implementation 'androidx.appcompat:appcompat:1.2.0'
+    implementation 'com.google.android.material:material:1.3.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
+    // For Firebase
+    implementation 'com.google.firebase:firebase-auth:20.0.3'
+    implementation 'com.google.firebase:firebase-firestore:22.1.2'
+    implementation 'com.google.firebase:firebase-storage:19.2.2'
+    testImplementation 'junit:junit:4.+'
+
+    androidTestImplementation 'androidx.test.ext:junit:1.1.2'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
+
+    //  Plus
+
+    // FrescoImageViewer USE THIS!
+    implementation 'com.github.stfalcon:frescoimageviewer:0.5.0'
+    implementation 'com.github.stfalcon:stfalcon-imageviewer:1.0.1'
+
+    // PanoramaImageView
+    implementation 'com.gjiazhe:PanoramaImageView:1.0'
+
+    // UCrop
+    implementation 'com.github.yalantis:ucrop:2.2.6'
+    implementation 'com.github.yalantis:ucrop:2.2.6-native'
+
+    // Glide
+    implementation 'com.github.bumptech.glide:glide:4.11.0'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.11.0'
+
+    // Compressor
+    implementation 'id.zelory:compressor:2.1.0'
+//    implementation 'id.zelory:compressor:3.0.0'
+
+    // Autocomplete for text.
+    implementation("com.otaliastudios:autocomplete:1.1.0")
+
+    // Side Menu
+    implementation 'com.github.yalantis:Side-Menu.Android:1.0.2'
+    implementation ('com.github.ozodrukh:CircularReveal:2.0.1@aar') {
+        transitive = true;
+    }
+
+    // BoomMenu
+    implementation 'com.nightonke:boommenu:2.1.1'
+
+    // For Apache licence
+//    apply plugin: 'com.google.android.gms.oss-licenses-plugin'
+    implementation 'com.google.android.gms:play-services-oss-licenses:17.0.0'
+
+    // Google Play
+    implementation 'com.google.android.gms:play-services-wallet:18.1.2'
+    implementation 'com.google.android.gms:play-services-gcm:17.0.0'
+
+    // For Chat21 SDK Documentation
+    // Official Android SDK for Stream Chat
+    implementation "io.getstream:stream-chat-android:4.4.9"
+//    implementation 'com.android.support:multidex:1.0.3'
+    implementation 'org.apache.commons:commons-io:1.3.2'
+    implementation 'commons-io:commons-io:2.4'
+
+    // Permissions
+    implementation 'com.karumi:dexter:6.2.2'
+
+    // Multidex
+    implementation "androidx.multidex:multidex:2.0.1"
+
+    // StatusBarUtil
+    implementation 'com.jaeger.statusbarutil:library:1.5.1'
+
+    // For Floating bottom
+    implementation "com.google.android.material:material:1.4.0-alpha02"
+}
