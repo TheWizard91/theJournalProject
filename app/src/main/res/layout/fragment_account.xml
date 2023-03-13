@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+<!--    <TextView-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:text="Account"/>-->
+
+<!--    <FrameLayout-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="match_parent">-->
+
+<!--        <androidx.constraintlayout.widget.ConstraintLayout-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="match_parent">-->
+
+<!--            <androidx.cardview.widget.CardView-->
+<!--                android:id="@+id/account_fragment_card_view"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="300dp"-->
+<!--                app:layout_constraintEnd_toEndOf="0"-->
+<!--                app:layout_constraintStart_toStartOf="parent"-->
+<!--                app:layout_constraintTop_toTopOf="0"-->
+<!--                app:layout_constraintVertical_bias="0">-->
+
+<!--                <androidx.constraintlayout.widget.ConstraintLayout-->
+<!--                    android:id="@+id/account_fragment_third_inner_constraint_layout"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="match_parent">-->
+
+<!--                    <androidx.constraintlayout.utils.widget.ImageFilterView-->
+<!--                        android:layout_width="100dp"-->
+<!--                        android:layout_height="100dp"-->
+<!--                        android:background="@color/black"-->
+<!--                        android:src="@drawable/ic_account_circle"-->
+<!--                        app:layout_constraintBottom_toBottomOf="parent"-->
+<!--                        app:layout_constraintEnd_toEndOf="parent"-->
+<!--                        app:layout_constraintStart_toStartOf="parent"-->
+<!--                        app:layout_constraintTop_toTopOf="parent" />-->
+<!--                    &lt;!&ndash;                        app:layout_constraintEnd_toEndOf="0"&ndash;&gt;-->
+<!--                    app:layout_constraintHorizontal_bias="0.467"-->
+<!--                    app:layout_constraintStart_toStartOf="0"-->
+<!--                    app:layout_constraintTop_toTopOf="0" />-->
+
+<!--                </androidx.constraintlayout.widget.ConstraintLayout>-->
+
+<!--            </androidx.cardview.widget.CardView>-->
+
+<!--            <com.google.android.material.floatingactionbutton.FloatingActionButton-->
+<!--                android:layout_gravity="bottom|right|center_vertical|center_horizontal|center|end"-->
+<!--                android:id="@+id/heart_floating_button"-->
+<!--                android:focusable="true"-->
+<!--                android:clickable="true"-->
+<!--                android:layout_width="57dp"-->
+<!--                android:layout_height="56dp"-->
+<!--                android:layout_marginTop="276dp"-->
+<!--                android:src="@drawable/action_like"-->
+<!--                android:layout_marginEnd="24dp"-->
+<!--                app:layout_anchor="@+id/account_fragment_card_view"-->
+<!--                app:layout_anchorGravity="800055"-->
+<!--                app:layout_constraintEnd_toEndOf="0"-->
+<!--                app:layout_constraintTop_toTopOf="0" />-->
+
+<!--            <com.google.android.material.floatingactionbutton.FloatingActionButton-->
+<!--                android:id="@+id/chat_floating_button"-->
+<!--                android:focusable="true"-->
+<!--                android:clickable="true"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginTop="276dp"-->
+<!--                android:src="@drawable/baseline_chat_bubble_outline_white_24dp"-->
+<!--                android:layout_marginEnd="24dp"-->
+<!--                app:layout_anchor="@+id/account_fragment_card_view"-->
+<!--                app:layout_constraintEnd_toStartOf="@+id/heart_floating_button"-->
+<!--                app:layout_constraintTop_toTopOf="@+id/account_fragment_card_view" />-->
+
+<!--        </androidx.constraintlayout.widget.ConstraintLayout>-->
+
+<!--    </FrameLayout>-->
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

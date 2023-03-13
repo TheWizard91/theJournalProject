@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto" xmlns:aapt="http://schemas.android.com/aapt">
+<!--    <item android:icon="@drawable/baseline_power_settings_new_black_24dp" android:enabled="true" android:id="@+id/action_logout_button" android:visible="true" android:title="@string/action_logout_text" android:checkable="false" app:showAsAction="always"/>-->
+</menu>

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/home"
+        android:icon="@drawable/ic_home"
+        android:title="@string/home"
+        app:exb_color="@color/pastel_blue" />
+
+    <item
+        android:id="@+id/notifications"
+        android:icon="@drawable/ic_notifications"
+        android:title="@string/notifications"
+        app:exb_color="@color/pastel_blue" />
+
+    <item
+        android:id="@+id/placeholder"
+        android:title="" />
+
+    <item
+        android:id="@+id/likes"
+        android:icon="@drawable/baseline_browse_gallery_24"
+        android:title="@string/gallery"
+        app:exb_color="@color/pastel_blue" />
+
+    <item
+        android:id="@+id/account"
+        android:icon="@drawable/ic_my_account"
+        android:title="@string/account"
+        app:exb_color="@color/pastel_blue" />
+
+</menu>

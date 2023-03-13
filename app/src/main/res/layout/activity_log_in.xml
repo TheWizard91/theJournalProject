@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/darker_blue"
+    tools:context=".activities.LogInActivity">
+
+    <ProgressBar
+        android:id="@+id/log_in_progress_bar_id"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:visibility="invisible"/>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/content_frame"
+        android:layout_width="350dp"
+        android:layout_height="500dp"
+        android:background="@drawable/background_layer"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/greeting_in_log_in_activity_id"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="68dp"
+            android:ems="10"
+            android:fontFamily="@font/poppins_bold"
+            android:text="@string/greeting_message_in_log_inactivity"
+            android:textAlignment="center"
+            android:textColor="@color/shade_of_gray_for_darker_blue"
+            android:textSize="24sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/please_log_in_into_your_account_id"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:text="@string/please_log_in_into_your_account_text"
+            android:textAlignment="center"
+            android:textColor="#EEEEEE"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/greeting_in_log_in_activity_id" />
+
+        <EditText
+            android:id="@+id/log_in_enter_email_or_username_text_view_id"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:autofillHints=""
+            android:background="@drawable/my_text_view"
+            android:ems="10"
+            android:fontFamily="@font/poppins"
+            android:hint="@string/emailHint"
+            android:inputType="textEmailAddress"
+            android:minHeight="48dp"
+            android:textColor="@color/black"
+            android:textColorHint="#5C6BC0"
+            android:textSize="18sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/please_log_in_into_your_account_id" />
+
+        <EditText
+            android:id="@+id/log_in_enter_your_password_text_view_id"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:autofillHints=""
+            android:background="@drawable/my_text_view"
+            android:ems="10"
+            android:fontFamily="@font/poppins"
+            android:hint="@string/password_hint"
+            android:inputType="textPassword"
+            android:minHeight="48dp"
+            android:textColor="@color/black"
+            android:textColorHint="#757575"
+            android:textSize="18sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/log_in_enter_email_or_username_text_view_id" />
+
+        <TextView
+            android:id="@+id/log_in_forgot_password_id"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="12dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:fontFamily="@font/poppins"
+            android:minHeight="48dp"
+            android:text="@string/forgot_password_text_view"
+            android:textColor="@color/pastel_gray"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/log_in_enter_your_password_text_view_id" />
+
+        <TextView
+            android:id="@+id/log_in_new_account_id"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:layout_marginEnd="24dp"
+            android:clickable="false"
+            android:fontFamily="@font/poppins"
+            android:text="@string/new_account_text_view"
+            android:textColor="#283593"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/log_in_enter_your_password_text_view_id" />
+
+<!--        <androidx.appcompat.widget.AppCompatImageButton-->
+<!--            android:id="@+id/log_in_show_password_image_view_id"-->
+<!--            android:layout_width="48dp"-->
+<!--            android:layout_height="48dp"-->
+<!--            android:layout_marginEnd="12dp"-->
+<!--            android:background="@color/pastel_blue"-->
+<!--            android:clickable="true"-->
+<!--            android:contentDescription="@string/password_eye_description"-->
+<!--            android:focusable="true"-->
+<!--            app:layout_constraintBottom_toBottomOf="@+id/log_in_enter_your_password_text_view_id"-->
+<!--            app:layout_constraintEnd_toEndOf="@+id/log_in_enter_your_password_text_view_id"-->
+<!--            app:layout_constraintTop_toTopOf="@+id/log_in_enter_your_password_text_view_id"-->
+<!--            app:layout_constraintVertical_bias="0.625"-->
+<!--            app:src="@drawable/ic_show_password" />-->
+
+        <com.royrodriguez.transitionbutton.TransitionButton
+            android:id="@+id/log_in_image_button_id"
+            android:layout_width="200dp"
+            android:layout_height="48dp"
+            android:layout_marginTop="48dp"
+            android:background="@drawable/button_background"
+            android:contentDescription="@string/log_in_image_button_description"
+            android:fontFamily="@font/poppins"
+            android:scaleType="fitXY"
+            android:text="@string/log_in_button_text"
+            android:textColor="#82B1FF"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/log_in_enter_your_password_text_view_id"
+            app:loaderColor="@color/my_orange" />
+
+        <TextView
+            android:id="@+id/or_text_view_id"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:fontFamily="@font/poppins"
+            android:text="@string/or_text_view"
+            android:textColor="#E3F2FD"
+            android:textSize="24sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/log_in_image_button_id" />
+
+        <TextView
+            android:id="@+id/log_in_with_social_media_account_id"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:minHeight="48dp"
+            android:text="@string/social_media_account_text_view"
+            android:textColor="#880E4F"
+            android:textSize="18sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.507"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/or_text_view_id"
+            app:layout_constraintVertical_bias="0.0" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/darker_blue"
+    tools:context=".activities.sing_up_adds_on.AccountSettingsActivity">
+
+    <androidx.core.widget.ContentLoadingProgressBar
+        android:id="@+id/account_settings_progress_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.000" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="350dp"
+        android:layout_height="650dp"
+        android:background="@drawable/background_layer"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/account_settings_id"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:fontFamily="@font/poppins_bold"
+            android:text="@string/set_up_your_account_welcome_text"
+            android:textAlignment="center"
+            android:textColor="@color/shade_of_gray_for_darker_blue"
+            android:textSize="24sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.044" />
+
+        <TextView
+            android:id="@+id/account_settings_please_set_up_your_account_here_id"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:fontFamily="@font/poppins"
+            android:text="@string/account_settings_please_set_up_your_account_here_text"
+            android:textAlignment="center"
+            android:textColor="@color/shade_of_gray_for_darker_blue"
+            android:textSize="14sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/account_settings_id" />
+
+        <EditText
+            android:id="@+id/account_settings_enter_username_id"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:autofillHints=""
+            android:background="@drawable/my_text_view"
+            android:ems="10"
+            android:fontFamily="@font/poppins"
+            android:hint="@string/account_settings_username_text"
+            android:inputType="textPersonName"
+            android:minHeight="48dp"
+            android:textColor="@color/black"
+            android:textColorHint="#757575"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/account_settings_user_account_image_id" />
+
+        <EditText
+            android:id="@+id/account_settings_user_description_id"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:autofillHints=""
+            android:background="@drawable/my_text_view"
+            android:ems="10"
+            android:fontFamily="@font/poppins"
+            android:hint="@string/account_settings_user_description"
+            android:inputType="textPersonName"
+            android:minHeight="48dp"
+            android:textColor="@color/black"
+            android:textColorHint="#757575"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/account_settings_enter_username_id" />
+
+        <EditText
+            android:id="@+id/account_settings_user_phone_number_id"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:autofillHints=""
+            android:background="@drawable/my_text_view"
+            android:ems="10"
+            android:fontFamily="@font/poppins"
+            android:hint="@string/account_settings_user_phone_number_text"
+            android:inputType="phone"
+            android:minHeight="48dp"
+            android:textColor="@color/black"
+            android:textColorHint="#757575"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/account_settings_user_description_id" />
+
+        <EditText
+            android:id="@+id/account_settings_user_address_id"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:autofillHints=""
+            android:background="@drawable/my_text_view"
+            android:ems="10"
+            android:fontFamily="@font/poppins"
+            android:hint="@string/account_settings_user_address_text"
+            android:inputType="textPostalAddress"
+            android:minHeight="48dp"
+            android:textColor="@color/black"
+            android:textColorHint="#757575"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/account_settings_user_phone_number_id" />
+
+        <RadioGroup
+            android:id="@+id/account_settings_group_button_id"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/account_settings_user_address_id">
+
+            <RadioButton
+                android:id="@+id/account_settings_radio_button_one_id"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ems="5"
+                android:fontFamily="@font/poppins"
+                android:text="@string/account_settings_radio_button_one_text"
+                android:textColor="#37474F"
+                tools:ignore="TextContrastCheck"
+                tools:layout_editor_absoluteX="106dp"
+                tools:layout_editor_absoluteY="273dp" />
+
+            <!--            android:checked="true"-->
+            <!--            android:buttonTint="@color/my_orange"-->
+            <RadioButton
+                android:id="@+id/account_settings_radio_button_two_id"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="5"
+                android:fontFamily="@font/poppins"
+                android:text="@string/account_settings_radio_button_two_text"
+                android:textColor="#0D47A1" />
+
+        </RadioGroup>
+
+        <com.royrodriguez.transitionbutton.TransitionButton
+            android:id="@+id/account_settings_set_up_id"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/button_background"
+            android:backgroundTint="@color/darker_blue"
+            android:fontFamily="@font/poppins_bold"
+            android:text="@string/account_settings_set_up_button_text"
+            android:textColor="@color/shade_of_gray_for_darker_blue"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:defaultColor="@color/darker_blue"
+            app:loaderColor="@color/my_orange"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/account_settings_group_button_id" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/account_settings_user_account_image_id"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:layout_marginTop="32dp"
+            android:background="@drawable/image_border"
+            android:baseline="@dimen/layoutMarginRightAndLeft"
+            android:clickable="true"
+            android:contentDescription="@string/account_settings_user_account_image_description"
+            android:focusable="true"
+            app:srcCompat="@drawable/ic_baseline_insert_photo_24"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/account_settings_please_set_up_your_account_here_id" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
