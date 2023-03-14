@@ -19,8 +19,8 @@
         android:title="" />
 
     <item
-        android:id="@+id/likes"
-        android:icon="@drawable/baseline_browse_gallery_24"
+        android:id="@+id/gallery"
+        android:icon="@drawable/ic_gallery"
         android:title="@string/gallery"
         app:exb_color="@color/pastel_blue" />
 

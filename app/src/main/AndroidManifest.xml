@@ -43,13 +43,13 @@
         android:theme="@style/Theme.TheJournal"
         tools:ignore="AllowBackup,HardcodedDebugMode"
         tools:targetApi="p">
-        <activity
-            android:name=".SendCOmmentActiivity"
-            android:exported="false">
-            <meta-data
-                android:name="android.app.lib_name"
-                android:value="" />
-        </activity>
+<!--        <activity-->
+<!--            android:name=".SendCOmmentActiivity"-->
+<!--            android:exported="false">-->
+<!--            <meta-data-->
+<!--                android:name="android.app.lib_name"-->
+<!--                android:value="" />-->
+<!--        </activity>-->
         <activity android:name=".activities.NewPostActivity" />
         <activity android:name=".activities.sing_up_adds_on.AccountSettingsActivity" />
         <activity android:name=".activities.log_in_activities_adds_on.ForgotPasswordActivity" />

@@ -1,24 +1,20 @@
 package com.thewizard91.thejournal.fragments;
 
 import android.content.Context;
-import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.AppCompatButton;
+import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 //import com.thewizard91.thealbumproject.C2521R;
@@ -26,9 +22,6 @@ import com.google.android.exoplayer2.util.Log;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.android.material.appbar.AppBarLayout;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentChange;
@@ -39,18 +32,21 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.StorageReference;
 import com.thewizard91.thejournal.R;
 import com.thewizard91.thejournal.activities.MainActivity;
 import com.thewizard91.thejournal.adapters.CommentsAdapter;
 import com.thewizard91.thejournal.models.comments.CommentsModel;
-
-import org.w3c.dom.Comment;
+import com.thewizard91.thejournal.models.notifications.NotificationsModel;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.time.format.DateTimeFormatter;
+import java.time.LocalDateTime;
 
 public class CommentsFragment extends Fragment {
     private String blogPostId;
@@ -63,6 +59,9 @@ public class CommentsFragment extends Fragment {
     public Context context;
     public String currentUserId;
     private FirebaseFirestore firebaseFirestore;
+    private FirebaseDatabase realtimeDatabase;
+    private DatabaseReference realtimeDatabaseReference;
+    private StorageReference dataServerStorage;
     public Boolean isTheFirstPageOfCommentsLoaded = true;
     public DocumentSnapshot lastVisibleComment;
     public  String username;
@@ -73,6 +72,7 @@ public class CommentsFragment extends Fragment {
     private MainActivity activity;
     private Button sendCommentButtonView;
 
+    public CommentsFragment() {}
     public CommentsFragment(String blogPostId, String currentUserId) {
         this.blogPostId = blogPostId;
         this.currentUserId = currentUserId;
@@ -95,6 +95,8 @@ public class CommentsFragment extends Fragment {
         FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
         FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
         FirebaseUser currentUser = firebaseAuth.getCurrentUser();
+        realtimeDatabase = FirebaseDatabase.getInstance();
+        realtimeDatabaseReference = realtimeDatabase.getReference();
         currentUserId = firebaseAuth.getCurrentUser().getUid();
 //        Log.d("idOfUser",currentUserId);
         username = currentUser.getDisplayName();
@@ -178,7 +180,7 @@ public class CommentsFragment extends Fragment {
                 .collection("Comments")
                 .orderBy("timestamp", Query.Direction.ASCENDING)
                 .startAfter(lastVisibleComment)
-                .limit(1)
+                .limit(5)
                 .addSnapshotListener(new EventListener<QuerySnapshot>() {
 
                     public void onEvent(QuerySnapshot queryDocumentSnapshots, FirebaseFirestoreException e) {
@@ -212,7 +214,8 @@ public class CommentsFragment extends Fragment {
                 .document(blogPostId)
                 .collection("Comments")
                 .orderBy("timestamp", Query.Direction.ASCENDING)
-                .limit(100).addSnapshotListener(new EventListener<QuerySnapshot>() {
+                .limit(100)
+                .addSnapshotListener(new EventListener<QuerySnapshot>() {
 
             public void onEvent(QuerySnapshot queryDocumentSnapshots, FirebaseFirestoreException e) {
                 if (queryDocumentSnapshots == null) {
@@ -260,36 +263,56 @@ public class CommentsFragment extends Fragment {
     private void sendCommentToDatabase() {
         /**Extracting the information from(by element fields) the user so the map can be made**/
         sendCommentButtonView.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.O)
             public void onClick(View view) {
                 String comment = commentTextView.getText().toString();
                 if (!TextUtils.isEmpty(comment)) {
                     // Send down the info to the map
-                    makeTheMap(comment,
-                            FieldValue.serverTimestamp(),
-                            currentUserId);
+//                    makeTheMap(comment,
+//                            FieldValue.serverTimestamp(),
+//                            currentUserId);
+                    FieldValue time = FieldValue.serverTimestamp();
+                    CommentsModel commentsModel = new CommentsModel(blogPostId,userProfileImageUri,comment,
+                                                "","","","",time,
+                                                currentUserId,username,userProfileImageUri);
+                    String commentId = UUID.randomUUID().toString();
+                    Map<String,Object> newCommentMap = commentsModel.firebaseDatabaseMap();
+                    Log.d("newCommentMap",newCommentMap.toString());
+                    makeTheDatabase(commentId,newCommentMap);
+
+                    DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
+                    LocalDateTime now =LocalDateTime.now();
+                    String date = dateTimeFormatter.format(now).toString();
+                    NotificationsModel notificationsModel = new NotificationsModel(username,currentUserId,
+                            date,userProfileImageUri,username+" has just posted a comment.");
+
+                    // Create post map and create the database in realtime database.
+                    Map<String,Object> mapOfRealtimeDatabase = notificationsModel.realTimeDatabaseMap();
+                    addToRealtimeDatabase(mapOfRealtimeDatabase,commentId);
+//                    Log.d("myImageUri",userProfileImageUri);
                     new CommentsAdapter(commentsModelList);
                 }
             }
         });
     }
+    private void addToRealtimeDatabase(Map<String, Object> mapOfRealtimeDatabase, String commentId) {
+        realtimeDatabaseReference.child("Notifications")
+                .child(commentId)
+                .setValue(mapOfRealtimeDatabase);
+    }
+    public void makeTheDatabase(String commentUID,Map<String,Object> map) {
+        /**Making the map that will populate the database.*/
 
-    public void makeTheMap(String comment,
-                           FieldValue time,
-                           String currentUserId) {
-        /***
-         * Making the map that will populate the database.
-         * */
-
-        Map<String, Object> newCommentMap = new HashMap<>();
-        newCommentMap.put("commentText", comment);
-        newCommentMap.put("timestamp", time);
-        newCommentMap.put("userId", currentUserId);
-        newCommentMap.put("username", username);
-        newCommentMap.put("userProfileImageUri", userProfileImageUri);
+//        Map<String, Object> newCommentMap = new HashMap<>();
+//        newCommentMap.put("commentText", comment);
+//        newCommentMap.put("timestamp", time);
+//        newCommentMap.put("userId", currentUserId);
+//        newCommentMap.put("username", username);
+//        newCommentMap.put("userProfileImageUri", userProfileImageUri);
 
         firebaseFirestore.collection("Posts/" + blogPostId + "/Comments")
-                .document(currentUserId + ":" + UUID.randomUUID().toString())
-                .set(newCommentMap).addOnCompleteListener(new OnCompleteListener<Void>() {
+                .document(currentUserId + ":" + commentUID)
+                .set(map).addOnCompleteListener(new OnCompleteListener<Void>() {
             public void onComplete(@NonNull Task<Void> task) {
                 if (!task.isSuccessful()) {
                     Toast.makeText(context, "There Was An Error Posting The Comment: " + task.getException(), Toast.LENGTH_SHORT).show();

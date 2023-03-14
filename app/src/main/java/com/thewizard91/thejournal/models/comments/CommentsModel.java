@@ -1,6 +1,10 @@
 package com.thewizard91.thejournal.models.comments;
 
+import com.google.firebase.firestore.FieldValue;
+
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 public class CommentsModel extends CommentsModelId {
     private String blogPostId;
@@ -11,9 +15,29 @@ public class CommentsModel extends CommentsModelId {
     private String likesCount;
     private String thumbsUpImageUri;
     private Date timestamp;
+    private FieldValue time;
     private String userId;
     private String username;
     private String userProfileImageUri;
+
+    public CommentsModel() {}
+    public CommentsModel(String blogPostId, String commentReplyImageUri,
+                         String commentText, String commentsCount,
+                         String imageUri, String likesCount,
+                         String thumbsUpImageUri, FieldValue time,
+                         String userId, String username, String userProfileImageUri) {
+        this.blogPostId = blogPostId;
+        this.commentReplyImageUri = commentReplyImageUri;
+        this.commentText = commentText;
+        this.commentsCount = commentsCount;
+        this.imageUri = imageUri;
+        this.likesCount = likesCount;
+        this.thumbsUpImageUri = thumbsUpImageUri;
+        this.time = time;
+        this.userId = userId;
+        this.username = username;
+        this.userProfileImageUri = userProfileImageUri;
+    }
 
     public String getUsername() {
         return this.username;
@@ -93,5 +117,21 @@ public class CommentsModel extends CommentsModelId {
 
     public void setUserProfileImageUri(String userProfileImageUri) {
         this.userProfileImageUri = userProfileImageUri;
+    }
+    public Map<String,Object> firebaseDatabaseMap() {
+        Map<String,Object> commentsMap = new HashMap<>();
+        commentsMap.put("blogPostId",blogPostId);
+        commentsMap.put("commentReplyImageUri",commentReplyImageUri);
+        commentsMap.put("commentText",commentText);
+        commentsMap.put("commentsCount",commentsCount);
+        commentsMap.put("imageUri",imageUri);
+        commentsMap.put("likesCount",likesCount);
+        commentsMap.put("thumbsUpImageUri",thumbsUpImageUri);
+        commentsMap.put("timestamp",time);
+        commentsMap.put("userId",userId);
+        commentsMap.put("username",username);
+        commentsMap.put("userProfileImageUri",userProfileImageUri);
+
+        return commentsMap;
     }
 }

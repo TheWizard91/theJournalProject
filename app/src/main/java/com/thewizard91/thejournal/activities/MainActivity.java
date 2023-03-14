@@ -54,26 +54,17 @@ import github.com.st235.lib_expandablebottombar.MenuItemDescriptor;
  public class MainActivity extends AppCompatActivity implements AppBarLayout.OnOffsetChangedListener {
 
      TextView logo;
-
      AppBarLayout appBarLayout;
      CollapsingToolbarLayout collapsingToolbarLayout;
      public AppCompatImageButton logoutButton;
-
      // Menu
      Menu menu;
      MenuInflater inflater;
      SearchManager searchManager;
      SearchView searchView;
-
      MenuItem menuItem;
-
-     // Layouts
      AppBarLayout myAppBarLayout;
-     AppCompatButton newestButton;
-     AppCompatButton popularButton;
-     AppCompatButton followingButton;
-//     AppCompatButton otherButton;
-    private RecyclerView postsList;
+     private RecyclerView postsList;
 
      boolean isItReady;
      //Firebase instances
@@ -116,16 +107,9 @@ import github.com.st235.lib_expandablebottombar.MenuItemDescriptor;
      @SuppressLint("ObsoleteSdkInt")
      private void init() {
 
-         /*
-          Toolbar that need to be hidden. That means, this is the one with the label
-          TheJournal, therefore, we do not need ot touch this code.
-          */
-
          isItReady = false;
          collapsingToolbarLayout = findViewById(R.id.collapsing_toolbar_layout);
-//         collapsingToolbarLayout.setVisibility(View.INVISIBLE);
          appBarLayout = findViewById(R.id.main_activity_app_bar_layout_id);
-//         appBarLayout.setVisibility(View.INVISIBLE);
          myAppBarLayout = findViewById(R.id.main_activity_app_bar_layout_id);
          logo = findViewById(R.id.main_activity_home_fragment_title_id);
          logoutButton = findViewById(R.id.logout);
@@ -146,8 +130,6 @@ import github.com.st235.lib_expandablebottombar.MenuItemDescriptor;
 
          if (currentUser != null) {
              // TODO: Move on with the next stuff
-             // Get the user's id
-//             Log.d("currentUserIs:",currentUser.toString());
              currentUserId = userAuthorized.getCurrentUser().getUid();
 
              // Initialize the fragments starting with the homeFragment.
@@ -155,20 +137,6 @@ import github.com.st235.lib_expandablebottombar.MenuItemDescriptor;
              // soon as she/he logged in and account is verified.
              homeFragmentMethod();
              fragmentsMenu();
-//             logo.setOnClickListener(new View.OnClickListener() {
-//                 @Override
-//                 public void onClick(View v) {
-//                     userAuthorized.signOut();
-//                     sendToLoginActivity();
-//                 }
-//             });
-
-             // The buttons on top of the posts.
-//             newestButton = findViewById(R.id.newest_id);
-//             popularButton = findViewById(R.id.popular_id);
-//             followingButton = findViewById(R.id.following_id);
-//             otherButton = findViewById(R.id.other_id);
-
              addFloatingButton = findViewById(R.id.floating_action_button);
              sendBackFloatingActionButton = findViewById(R.id.send_back_button);
              sendBackFloatingActionButton.setVisibility(View.INVISIBLE);
@@ -202,15 +170,13 @@ import github.com.st235.lib_expandablebottombar.MenuItemDescriptor;
      }
 
      private void fragmentsMenu() {
+         /**Replacing fragments according to the user's click.*/
 
-         /*
-         Replacing fragments according to the user's click.
-          */
-         github.com.st235.lib_expandablebottombar.Menu menu = bottomAppBar.getMenu();//(github.com.st235.lib_expandablebottombar.Menu) bottomAppBar.getMenu();
+         github.com.st235.lib_expandablebottombar.Menu menu = bottomAppBar.getMenu();
 
          menu.add(new MenuItemDescriptor.Builder(this,R.id.home,R.drawable.ic_home,R.string.home,Color.GRAY).build());
          menu.add(new MenuItemDescriptor.Builder(this,R.id.notifications,R.drawable.ic_notifications,R.string.notifications,Color.GRAY).build());
-         menu.add(new MenuItemDescriptor.Builder(this,R.id.gallery,R.drawable.baseline_browse_gallery_24,R.string.gallery,Color.GRAY).build());
+         menu.add(new MenuItemDescriptor.Builder(this,R.id.gallery,R.drawable.ic_gallery,R.string.gallery,Color.GRAY).build());
          menu.add(new MenuItemDescriptor.Builder(this,R.id.account,R.drawable.ic_my_account,R.string.account,Color.GRAY).build());
          MainActivity mainActivity = MainActivity.this;
          bottomAppBar.setOnItemSelectedListener((view, item, byUser) -> {
@@ -221,7 +187,7 @@ import github.com.st235.lib_expandablebottombar.MenuItemDescriptor;
                  case R.id.notifications:
                      replaceFragment(mainActivity.notificationsFragment);
                      break;
-                 case R.id.likes:
+                 case R.id.gallery:
                      replaceFragment(mainActivity.galleryFragment);
                      break;
                  case R.id.account:
@@ -230,65 +196,7 @@ import github.com.st235.lib_expandablebottombar.MenuItemDescriptor;
              }
              return null;
          });
-         bottomAppBar.setOnItemReselectedListener((view, item, byUser) -> {
-             switch (item.getId()) {
-                 case R.id.home:
-                     replaceFragment(mainActivity.homeFragment);
-                     break;
-                 case R.id.notifications:
-                     replaceFragment(mainActivity.notificationsFragment);
-                     break;
-                 case R.id.likes:
-                     replaceFragment(mainActivity.galleryFragment);
-                     break;
-                 case R.id.account:
-                     replaceFragment(mainActivity.accountFragment);
-                     break;
-             }
-             return null;
-         });
-
-//         MainActivity mainActivity = MainActivity.this;
-//         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
-//             @SuppressLint("NonConstantResourceId")
-//             @Override
-//             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-//                 switch (item.getItemId()) {
-//                     case R.id.home:
-//                         replaceFragment(mainActivity.homeFragment);
-////                         _helper_of_fragment_menu(item.getItemId());
-//                         return true;
-//                     case R.id.notifications:
-////                         _helper_of_fragment_menu(item.getItemId());
-//                         replaceFragment(mainActivity.notificationsFragment);
-//                         return true;
-//                     case R.id.likes:
-//                         replaceFragment(mainActivity.galleryFragment);
-////                         _helper_of_fragment_menu(item.getItemId());
-//                     case R.id.account:
-//                         replaceFragment(mainActivity.accountFragment);
-////                         _helper_of_fragment_menu(item.getItemId());
-//                         return true;
-//                 }
-//                 return false;
-//             }
-//         });
      }
-
-//     private void _helper_of_fragment_menu(int itemId) {
-//         //Check that we are at home fragment
-//         if(itemId != R.id.home){
-//             newestButton.setVisibility(View.INVISIBLE);
-//             popularButton.setVisibility(View.INVISIBLE);
-//             followingButton.setVisibility(View.INVISIBLE);
-////             otherButton.setVisibility(View.INVISIBLE);
-//         } else {
-//             newestButton.setVisibility(View.VISIBLE);
-//             popularButton.setVisibility(View.VISIBLE);
-//             followingButton.setVisibility(View.VISIBLE);
-////             otherButton.setVisibility(View.VISIBLE);
-//         }
-//     }
 
      private void replaceFragment(Fragment fragment) {
          /*

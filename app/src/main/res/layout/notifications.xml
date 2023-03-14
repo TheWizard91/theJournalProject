@@ -41,7 +41,8 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/notificationsCircleImageView"
                 app:layout_constraintTop_toTopOf="parent"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:gravity="center" >
 
                 <TextView
                     android:id="@+id/notificationsDate"
@@ -49,7 +50,8 @@
                     android:layout_height="wrap_content"
                     android:text="@string/notificationsDate"
                     android:textAlignment="center"
-                    android:textColor="@color/pure_white" />
+                    android:ems="10"
+                    android:textColor="@color/shade_of_gray_for_darker_blue" />
 
                 <TextView
                     android:id="@+id/notificationsTextView"
@@ -57,7 +59,8 @@
                     android:layout_height="wrap_content"
                     android:text="@string/notificationsTextView"
                     android:textAlignment="center"
-                    android:textColor="@color/pure_white" />
+                    android:textColor="@color/pure_white"
+                    android:ems="10"/>
 
             </LinearLayout>
 

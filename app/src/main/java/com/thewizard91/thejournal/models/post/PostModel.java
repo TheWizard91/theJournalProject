@@ -50,7 +50,7 @@ public class PostModel extends PostId {
     public String getDescription () {
         return description;
     }
-    public void setDescription () {
+    public void setDescription (String description) {
         this.description = description;
     }
     public String getComments() {

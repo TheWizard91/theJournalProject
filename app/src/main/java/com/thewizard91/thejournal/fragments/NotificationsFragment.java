@@ -75,11 +75,13 @@ public class NotificationsFragment extends Fragment {
     private void showMoreNotificationsAsTheUSerScrolls() {
     }
 
+    /*TODO:I used the same trick that I used on the comments -- to initialize the first query with the first 100 comments.
+    *  That way, I do not worry about to load more comments (in this case notifications).*/
     private void createTheFirstQuery() {
         realtimeDatabaseReference.child("Notifications")
-                .child(notificationId)
+//                .child(notificationId)
                 .orderByPriority()
-                .limitToFirst(1)
+                .limitToFirst(100)
                 .addChildEventListener(new ChildEventListener() {
                     @Override
                     public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {

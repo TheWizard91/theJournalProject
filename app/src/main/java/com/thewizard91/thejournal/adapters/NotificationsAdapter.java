@@ -36,7 +36,6 @@ public class NotificationsAdapter extends RecyclerView.Adapter<RecyclerView.View
     public NotificationsAdapter(List<NotificationsModel> notificationsList) {
         this.listOfNotifications = notificationsList;
     }
-
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -48,7 +47,6 @@ public class NotificationsAdapter extends RecyclerView.Adapter<RecyclerView.View
         this.storageReference = FirebaseStorage.getInstance().getReference();
         return new ViewHolderOfNotifications(view);
     }
-
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         holder.setIsRecyclable(false);
@@ -78,7 +76,6 @@ public class NotificationsAdapter extends RecyclerView.Adapter<RecyclerView.View
         holderOfNotifications.setNotification(notificationText);
 //        holderOfNotifications.sete
     }
-
     @Override
     public int getItemCount() {
         return this.listOfNotifications.size();
@@ -95,7 +92,6 @@ public class NotificationsAdapter extends RecyclerView.Adapter<RecyclerView.View
             userProfileImage = view.findViewById(R.id.notificationsCircleImageView);
             date = view.findViewById(R.id.notificationsDate);
             notification = view.findViewById(R.id.notificationsTextView);
-//            username = view.findViewById(R.id.notificati)
         }
         public void setUserProfileImage(String user_profile_image_uri) {
             Log.d("notAdapter",user_profile_image_uri);
@@ -115,5 +111,4 @@ public class NotificationsAdapter extends RecyclerView.Adapter<RecyclerView.View
             ((TextView) view.findViewById(R.id.notificationsTextView)).setText(notificationText);
         }
     }
-
 }

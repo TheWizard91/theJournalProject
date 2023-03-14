@@ -41,11 +41,14 @@ import com.yalantis.ucrop.UCrop;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
+import java.time.format.DateTimeFormatter;
+import java.time.LocalDateTime;
 
 import id.zelory.compressor.Compressor;
 
@@ -203,14 +206,6 @@ public class NewPostActivity extends AppCompatActivity {
                                 userImageURI = uri.parse(downloadURI[0]);
                                 FieldValue time = FieldValue.serverTimestamp();
 
-                                // Create model for a notification regarding the latest post.
-                                NotificationsModel notificationsModel = new NotificationsModel(username,userId,
-                                        time,userProfileImageUri,username+" has just posted");
-
-                                // Create post map and create the database in realtime database.
-                                Map<String,Object> mapOfRealtimeDatabase = notificationsModel.realTimeDatabaseMap();
-                                addToRealtimeDatabase(mapOfRealtimeDatabase);
-
                                 //
                                 PostModel postModel = new PostModel(downloadURI[0],userId,time,username,insertTitle,insertDescription,userProfileImageUri);
                                 Map<String,Object>postMap = postModel.firebaseDatabaseMap();
@@ -221,6 +216,18 @@ public class NewPostActivity extends AppCompatActivity {
                                 // Creating a database and store info in there for the user
                                 // it will show his own post only
                                 addPostToUniqueUserFirebaseFireStoreSpace(postMap);
+
+                                DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
+                                LocalDateTime now =LocalDateTime.now();
+                                String date = dateTimeFormatter.format(now).toString();
+                                // Create model for a notification regarding the latest post.
+                                NotificationsModel notificationsModel = new NotificationsModel(username,userId,
+                                        date,userProfileImageUri,username+" has just posted.");
+
+                                // Create post map and create the database in realtime database.
+                                Map<String,Object> mapOfRealtimeDatabase = notificationsModel.realTimeDatabaseMap();
+                                addToRealtimeDatabase(mapOfRealtimeDatabase);
+
                             }
                         }
                     }));
@@ -231,7 +238,7 @@ public class NewPostActivity extends AppCompatActivity {
 
     private void addToRealtimeDatabase(Map<String, Object> mapOfRealtimeDatabase) {
         realtimeDatabaseReference.child("Notifications")
-                .child(userId)
+//                .child(userId)
                 .child(randomNameForTheNewPostImage)
                 .setValue(mapOfRealtimeDatabase);
     }
