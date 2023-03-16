@@ -90,7 +90,6 @@ public class NotificationsFragment extends Fragment {
                         } else if(!snapshot.exists()) {
                             Toast.makeText(context,"There is notification yet.",Toast.LENGTH_SHORT).show();
                         } else {
-                            Toast.makeText(context,"Else",Toast.LENGTH_SHORT).show();
 //                            lastVisibleNotification = snapshot.
                             notificationsModel = snapshot.getValue(NotificationsModel.class).withId(notificationId);
 //                            Log.d("uName",notificationsModel.getUsername());

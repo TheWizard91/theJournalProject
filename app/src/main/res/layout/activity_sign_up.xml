@@ -90,19 +90,18 @@
             app:layout_constraintTop_toBottomOf="@+id/sign_up_password_text_view_id"
             app:layout_constraintVertical_bias="0.086" />
 
-        <ImageButton
+        <com.royrodriguez.transitionbutton.TransitionButton
             android:id="@+id/sign_up_button_id"
-            android:layout_width="200dp"
-            android:layout_height="@dimen/layoutHeightDimension"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/layoutMarginRightAndLeft"
             android:layout_marginTop="28dp"
             android:layout_marginEnd="@dimen/layoutMarginRightAndLeft"
             android:background="@drawable/background_layer"
             android:contentDescription="@string/sing_up_image_button_description"
             android:scaleType="fitXY"
-            android:src="@mipmap/sing_up"
             android:text="@string/sign_up_button"
-            android:textColor="@color/darker_gray"
+            android:textColor="@color/pure_white"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/already_have_an_account_message_id" />
@@ -147,4 +146,5 @@
             app:layout_constraintTop_toBottomOf="@+id/sign_password_confirmation_id" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

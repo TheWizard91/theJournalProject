@@ -108,6 +108,7 @@ public class CommentsFragment extends Fragment {
         activity.addFloatingButton.setVisibility(View.INVISIBLE);
         activity.bottomAppBar.setVisibility(View.INVISIBLE);
         activity.sendBackFloatingActionButton.setVisibility(View.VISIBLE);
+
         if (FirebaseAuth.getInstance().getCurrentUser() != null) {
 
             // Send the info to firebase by retrieving the data from user and making the map
@@ -140,9 +141,6 @@ public class CommentsFragment extends Fragment {
 //        Log.d("Am I refreshing?","yes");
 //    }
 
-    private void sendToCommentActivity() {
-
-    }
     private void getUserImageProfileUri() {
         firebaseFirestore.collection("Users")
                 .document(currentUserId)
@@ -209,36 +207,34 @@ public class CommentsFragment extends Fragment {
 
     private void createTheFirstQuery() {
         /**Create the first query, plus, display it.**/
-
         firebaseFirestore.collection("Posts")
                 .document(blogPostId)
                 .collection("Comments")
                 .orderBy("timestamp", Query.Direction.ASCENDING)
                 .limit(100)
                 .addSnapshotListener(new EventListener<QuerySnapshot>() {
-
-            public void onEvent(QuerySnapshot queryDocumentSnapshots, FirebaseFirestoreException e) {
-                if (queryDocumentSnapshots == null) {
-                    throw new AssertionError();
-                } else if (queryDocumentSnapshots.isEmpty()) {
-                    Toast.makeText(context, "No comments on this post yet so be the first to comment!", Toast.LENGTH_SHORT).show();
-                } else {
-                    lastVisibleComment = queryDocumentSnapshots.getDocuments().get(queryDocumentSnapshots.size() - 1);
-                    Log.d("There is a comment","yes");
-                    for (DocumentChange document : queryDocumentSnapshots.getDocumentChanges()) {
-                        if (document.getType() == DocumentChange.Type.ADDED) {
-                            commentId = document.getDocument().getId();
-                            Log.d("commentId",commentId);
-                            commentsModel = document.getDocument().toObject(CommentsModel.class).withId(commentId);
-                            Log.d("commentsModel",commentsModel.toString());
-                            commentsModelList.add(commentsModel);
-                            Log.d("commentsModelList",commentsModelList.toString());
-                            commentsAdapter.notifyDataSetChanged();
+                    public void onEvent(QuerySnapshot queryDocumentSnapshots, FirebaseFirestoreException e) {
+                        if (queryDocumentSnapshots == null) {
+                            throw new AssertionError();
+                        } else if (queryDocumentSnapshots.isEmpty()) {
+                            Toast.makeText(context, "No comments on this post yet so be the first to comment!", Toast.LENGTH_SHORT).show();
+                        } else {
+                            lastVisibleComment = queryDocumentSnapshots.getDocuments().get(queryDocumentSnapshots.size() - 1);
+                            Log.d("There is a comment","yes");
+                            for (DocumentChange document : queryDocumentSnapshots.getDocumentChanges()) {
+                                if (document.getType() == DocumentChange.Type.ADDED) {
+                                    commentId = document.getDocument().getId();
+                                    Log.d("commentId",commentId);
+                                    commentsModel = document.getDocument().toObject(CommentsModel.class).withId(commentId);
+                                    Log.d("commentsModel",commentsModel.toString());
+                                    commentsModelList.add(commentsModel);
+                                    Log.d("commentsModelList",commentsModelList.toString());
+                                    commentsAdapter.notifyDataSetChanged();
+                                }
+                            }
                         }
                     }
-                }
-            }
-        });
+                });
     }
 
     private void sizeOfQuery (int size, callback myCallback) { myCallback.onCallback(size); }
@@ -267,26 +263,21 @@ public class CommentsFragment extends Fragment {
             public void onClick(View view) {
                 String comment = commentTextView.getText().toString();
                 if (!TextUtils.isEmpty(comment)) {
-                    // Send down the info to the map
-//                    makeTheMap(comment,
-//                            FieldValue.serverTimestamp(),
-//                            currentUserId);
                     FieldValue time = FieldValue.serverTimestamp();
                     CommentsModel commentsModel = new CommentsModel(blogPostId,userProfileImageUri,comment,
                                                 "","","","",time,
                                                 currentUserId,username,userProfileImageUri);
+                    // Firestore database.
                     String commentId = UUID.randomUUID().toString();
                     Map<String,Object> newCommentMap = commentsModel.firebaseDatabaseMap();
                     Log.d("newCommentMap",newCommentMap.toString());
                     makeTheDatabase(commentId,newCommentMap);
-
+                    // Create post map and create the database in realtime database.
                     DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
                     LocalDateTime now =LocalDateTime.now();
                     String date = dateTimeFormatter.format(now).toString();
                     NotificationsModel notificationsModel = new NotificationsModel(username,currentUserId,
                             date,userProfileImageUri,username+" has just posted a comment.");
-
-                    // Create post map and create the database in realtime database.
                     Map<String,Object> mapOfRealtimeDatabase = notificationsModel.realTimeDatabaseMap();
                     addToRealtimeDatabase(mapOfRealtimeDatabase,commentId);
 //                    Log.d("myImageUri",userProfileImageUri);
@@ -302,14 +293,6 @@ public class CommentsFragment extends Fragment {
     }
     public void makeTheDatabase(String commentUID,Map<String,Object> map) {
         /**Making the map that will populate the database.*/
-
-//        Map<String, Object> newCommentMap = new HashMap<>();
-//        newCommentMap.put("commentText", comment);
-//        newCommentMap.put("timestamp", time);
-//        newCommentMap.put("userId", currentUserId);
-//        newCommentMap.put("username", username);
-//        newCommentMap.put("userProfileImageUri", userProfileImageUri);
-
         firebaseFirestore.collection("Posts/" + blogPostId + "/Comments")
                 .document(currentUserId + ":" + commentUID)
                 .set(map).addOnCompleteListener(new OnCompleteListener<Void>() {

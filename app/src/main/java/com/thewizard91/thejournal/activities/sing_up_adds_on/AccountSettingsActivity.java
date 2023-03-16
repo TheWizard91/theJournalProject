@@ -307,8 +307,7 @@ public class AccountSettingsActivity extends AppCompatActivity {
     }
 
     private void _retrieveUserData() {
-        /*
-        Helper method of retrieve information entered by the user so that we can populate the database
+        /*Helper method of retrieve information entered by the user so that we can populate the database
         that we are about to create and put them in the Storage.
          */
 

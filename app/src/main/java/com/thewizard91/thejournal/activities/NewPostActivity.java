@@ -50,6 +50,7 @@ import java.util.UUID;
 import java.time.format.DateTimeFormatter;
 import java.time.LocalDateTime;
 
+import github.com.st235.lib_expandablebottombar.ExpandableBottomBar;
 import id.zelory.compressor.Compressor;
 
 import static java.io.File.createTempFile;
@@ -76,6 +77,8 @@ public class NewPostActivity extends AppCompatActivity {
     private Uri userImageURI;
     private String userProfileImageUri;
     String randomNameForTheNewPostImage;
+
+    private MainActivity mainActivity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -194,4 +194,6 @@ dependencies {
 
 //    https://github.com/elevenetc/TextSurface
 //    implementation 'com.github.elevenetc:textsurface:0.9.1'
+    implementation 'com.google.android.material:material:1.0.0'
+
 }

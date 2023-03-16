@@ -3,7 +3,6 @@
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.AppCompatButton;
 import androidx.appcompat.widget.AppCompatImageButton;
 import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.Fragment;
@@ -38,18 +37,20 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicReference;
 
 import github.com.st235.lib_expandablebottombar.ExpandableBottomBar;
 import github.com.st235.lib_expandablebottombar.MenuItemDescriptor;
+import github.com.st235.lib_expandablebottombar.Notification;
 
  public class MainActivity extends AppCompatActivity implements AppBarLayout.OnOffsetChangedListener {
 
@@ -62,7 +63,7 @@ import github.com.st235.lib_expandablebottombar.MenuItemDescriptor;
      MenuInflater inflater;
      SearchManager searchManager;
      SearchView searchView;
-     MenuItem menuItem;
+//     MenuItem menuItem;
      AppBarLayout myAppBarLayout;
      private RecyclerView postsList;
 
@@ -82,7 +83,6 @@ import github.com.st235.lib_expandablebottombar.MenuItemDescriptor;
 //     ActionBar bottomActionBar;
 //     public BottomNavigationView bottomNavigationView; //BottomNavigationView bottomNavigationView;
      public ExpandableBottomBar bottomAppBar; // BottomAppBar bottomAppBar
-
      // Fragments
      HomeFragment homeFragment;
      NotificationsFragment notificationsFragment;
@@ -104,7 +104,7 @@ import github.com.st235.lib_expandablebottombar.MenuItemDescriptor;
      }
 
      @RequiresApi(api = Build.VERSION_CODES.M)
-     @SuppressLint("ObsoleteSdkInt")
+     @SuppressLint({"ObsoleteSdkInt", "CutPasteId"})
      private void init() {
 
          isItReady = false;
@@ -173,18 +173,30 @@ import github.com.st235.lib_expandablebottombar.MenuItemDescriptor;
          /**Replacing fragments according to the user's click.*/
 
          github.com.st235.lib_expandablebottombar.Menu menu = bottomAppBar.getMenu();
-
          menu.add(new MenuItemDescriptor.Builder(this,R.id.home,R.drawable.ic_home,R.string.home,Color.GRAY).build());
          menu.add(new MenuItemDescriptor.Builder(this,R.id.notifications,R.drawable.ic_notifications,R.string.notifications,Color.GRAY).build());
          menu.add(new MenuItemDescriptor.Builder(this,R.id.gallery,R.drawable.ic_gallery,R.string.gallery,Color.GRAY).build());
          menu.add(new MenuItemDescriptor.Builder(this,R.id.account,R.drawable.ic_my_account,R.string.account,Color.GRAY).build());
          MainActivity mainActivity = MainActivity.this;
+//         Log.d("menuItems is", String.valueOf(bottomAppBar.getMenu().findItemById(R.id.home).notification()));
+         Notification notification = menu.findItemById(R.id.home).notification();
+//         Log.d("menuItems is", notification.toString());
+         notification.show("1");
          bottomAppBar.setOnItemSelectedListener((view, item, byUser) -> {
              switch (item.getId()) {
                  case R.id.home:
+//                     Notification homeNotification = menu.findItemById(R.id.home).notification();
+//                     if (!homeFragment.isVisible()) homeNotification.show("1");
+//                     else homeNotification.clear();
+//                     notification.show("1");
+                     notification.clear();
                      replaceFragment(mainActivity.homeFragment);
                      break;
                  case R.id.notifications:
+//                     Notification notificationNotification = menu.findItemById(R.id.notifications).notification();
+//                     if (!notificationsFragment.isVisible()) notificationNotification.show("3");
+//                     else notificationNotification.clear();
+                     notification.clear();
                      replaceFragment(mainActivity.notificationsFragment);
                      break;
                  case R.id.gallery:
@@ -199,8 +211,7 @@ import github.com.st235.lib_expandablebottombar.MenuItemDescriptor;
      }
 
      private void replaceFragment(Fragment fragment) {
-         /*
-         Replacing the fragment that the user is currently in by
+         /*Replacing the fragment that the user is currently in by
          sending them where in the fragment of their choice as they press
          any of those present in the bottom_nav_bar.
           */
