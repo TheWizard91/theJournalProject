@@ -1,6 +1,7 @@
  package com.thewizard91.thejournal.activities;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatImageButton;
@@ -11,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 //Firebase imports
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
@@ -18,6 +20,9 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.firebase.ui.database.SnapshotParser;
@@ -25,11 +30,13 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import com.google.firebase.firestore.QuerySnapshot;
 import com.thewizard91.thejournal.R;
 import com.thewizard91.thejournal.fragments.AccountFragment;
 import com.thewizard91.thejournal.fragments.GalleryFragment;
 import com.thewizard91.thejournal.fragments.HomeFragment;
 import com.thewizard91.thejournal.fragments.NotificationsFragment;
+import com.thewizard91.thejournal.models.notifications.NotificationsModel;
 
 import android.annotation.SuppressLint;
 import android.app.SearchManager;
@@ -38,8 +45,6 @@ import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.View;
 import android.widget.TextView;
 
@@ -51,6 +56,7 @@ import java.util.concurrent.atomic.AtomicReference;
 import github.com.st235.lib_expandablebottombar.ExpandableBottomBar;
 import github.com.st235.lib_expandablebottombar.MenuItemDescriptor;
 import github.com.st235.lib_expandablebottombar.Notification;
+import kotlin.collections.UCollectionsKt;
 
  public class MainActivity extends AppCompatActivity implements AppBarLayout.OnOffsetChangedListener {
 
@@ -58,12 +64,6 @@ import github.com.st235.lib_expandablebottombar.Notification;
      AppBarLayout appBarLayout;
      CollapsingToolbarLayout collapsingToolbarLayout;
      public AppCompatImageButton logoutButton;
-     // Menu
-     Menu menu;
-     MenuInflater inflater;
-     SearchManager searchManager;
-     SearchView searchView;
-//     MenuItem menuItem;
      AppBarLayout myAppBarLayout;
      private RecyclerView postsList;
 
@@ -72,10 +72,11 @@ import github.com.st235.lib_expandablebottombar.Notification;
      FirebaseFirestore cloudBaseDatabase;
      FirebaseAuth userAuthorized;
      FirebaseUser currentUser;
-
+     private FirebaseDatabase realtimeDatabase;
+     private DatabaseReference realtimeDatabaseReference;
      DatabaseReference databaseReference;
-     SnapshotParser snapshotParser;
-     DataSnapshot dataSnapshot;
+//     SnapshotParser snapshotParser;
+//     DataSnapshot dataSnapshot;
      FirebaseDatabase firebaseDatabase;
 
      public FloatingActionButton addFloatingButton;
@@ -83,6 +84,10 @@ import github.com.st235.lib_expandablebottombar.Notification;
 //     ActionBar bottomActionBar;
 //     public BottomNavigationView bottomNavigationView; //BottomNavigationView bottomNavigationView;
      public ExpandableBottomBar bottomAppBar; // BottomAppBar bottomAppBar
+     github.com.st235.lib_expandablebottombar.Menu menu;
+     Notification homeNotification;
+     Notification bellNotification;
+
      // Fragments
      HomeFragment homeFragment;
      NotificationsFragment notificationsFragment;
@@ -93,6 +98,8 @@ import github.com.st235.lib_expandablebottombar.Notification;
      private String currentUserId;
      private String username;
 
+     private int countPosts;
+     private int currentSize;
      @RequiresApi(api = Build.VERSION_CODES.M)
      @Override
      protected void onCreate(Bundle savedInstanceState) {
@@ -106,7 +113,6 @@ import github.com.st235.lib_expandablebottombar.Notification;
      @RequiresApi(api = Build.VERSION_CODES.M)
      @SuppressLint({"ObsoleteSdkInt", "CutPasteId"})
      private void init() {
-
          isItReady = false;
          collapsingToolbarLayout = findViewById(R.id.collapsing_toolbar_layout);
          appBarLayout = findViewById(R.id.main_activity_app_bar_layout_id);
@@ -120,33 +126,113 @@ import github.com.st235.lib_expandablebottombar.Notification;
          userAuthorized = FirebaseAuth.getInstance();
          cloudBaseDatabase = FirebaseFirestore.getInstance();
          currentUser = userAuthorized.getCurrentUser();
-
+         realtimeDatabase = FirebaseDatabase.getInstance();
+         realtimeDatabaseReference = realtimeDatabase.getReference();
          /*Setting up the database from*/
          databaseReference = FirebaseDatabase.getInstance().getReference().child("Posts");
 
-//         bottomNavigationView = findViewById(R.id.bottom_navigation_view);
-
          bottomAppBar = findViewById(R.id.main_bottom_nav);
+         menu = bottomAppBar.getMenu();
+         menu.add(new MenuItemDescriptor.Builder(this,R.id.home,R.drawable.ic_home,R.string.home,Color.GRAY).build());
+         menu.add(new MenuItemDescriptor.Builder(this,R.id.notifications,R.drawable.ic_notifications,R.string.notifications,Color.GRAY).build());
+         menu.add(new MenuItemDescriptor.Builder(this,R.id.gallery,R.drawable.ic_gallery,R.string.gallery,Color.GRAY).build());
+         menu.add(new MenuItemDescriptor.Builder(this,R.id.account,R.drawable.ic_my_account,R.string.account,Color.GRAY).build());
+         homeNotification = menu.findItemById(R.id.home).notification();
+         bellNotification = menu.findItemById(R.id.notifications).notification();
+         currentSize=0;
 
          if (currentUser != null) {
-             // TODO: Move on with the next stuff
              currentUserId = userAuthorized.getCurrentUser().getUid();
-
              // Initialize the fragments starting with the homeFragment.
              // Meaning that the user will be directed into the homeFragment as
              // soon as she/he logged in and account is verified.
              homeFragmentMethod();
              fragmentsMenu();
+             setDocumentsCount();
              addFloatingButton = findViewById(R.id.floating_action_button);
              sendBackFloatingActionButton = findViewById(R.id.send_back_button);
              sendBackFloatingActionButton.setVisibility(View.INVISIBLE);
 
-             // Add an new post in firestore.
+             // Add an new post in Firestore database.
              AddANewPost();
          }
-
          myAppBarLayout.addOnOffsetChangedListener((AppBarLayout.OnOffsetChangedListener) this);
+     }
+/*onResume count is 0.
+* onStop count is 3
+* onRestart count is 3*/
 
+     @Override
+     protected void onPause() {
+         super.onPause();
+//         setDocumentsCount();
+         currentSize=countPosts;
+         Log.d("onPause currentSize",String.valueOf(countPosts));
+     }
+
+     @Override
+     protected void onRestart() {
+         super.onRestart();
+//         setDocumentsCount();
+//         currentSize=countPosts;
+//         Log.d("onRestart currentSize",String.valueOf(currentSize));
+     }
+
+     @Override
+     protected void onStop() {
+         super.onStop();
+//         setDocumentsCount();
+//         currentSize=countPosts;
+//         Log.d("onStop currentSize",String.valueOf(currentSize));
+     }
+
+     @Override
+     protected void onResume() {
+         super.onResume();
+//         currentSize=countPosts;
+//         setDocumentsCount(currentSize);
+         Log.d("onResume currentSize",String.valueOf(currentSize));
+     }
+     public void setDocumentsCount() {
+         realtimeDatabaseReference.child("Notifications")
+                 .addChildEventListener(new ChildEventListener() {
+                     @Override
+                     public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+                         NotificationsModel notificationsModel=snapshot.getValue(NotificationsModel.class);
+//                         Log.d("main_username: ",notificationsModel.getUsername());
+//                         Log.d("main_userUri: ",notificationsModel.getUserProfileImageURI());
+//                         Log.d("main_date: ",notificationsModel.getDate());
+//                         Log.d("main_key",snapshot.getKey());
+//                         Log.d("main_snapshot",snapshot.toString());
+//                         Log.d("main_value: ", String.valueOf(snapshot.getValue()));
+//                         Log.d("main_size: ", String.valueOf(snapshot.getChildrenCount()));
+//                         snapshot.
+                         currentSize++;
+//                         Log.d("print n times",String.valueOf(currentSize));
+                         bellNotification.show(String.valueOf(currentSize));
+
+                     }
+
+                     @Override
+                     public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+
+                     }
+
+                     @Override
+                     public void onChildRemoved(@NonNull DataSnapshot snapshot) {
+
+                     }
+
+                     @Override
+                     public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+
+                     }
+
+                     @Override
+                     public void onCancelled(@NonNull DatabaseError error) {
+
+                     }
+                 });
      }
 
      private void homeFragmentMethod() {
@@ -171,33 +257,16 @@ import github.com.st235.lib_expandablebottombar.Notification;
 
      private void fragmentsMenu() {
          /**Replacing fragments according to the user's click.*/
-
-         github.com.st235.lib_expandablebottombar.Menu menu = bottomAppBar.getMenu();
-         menu.add(new MenuItemDescriptor.Builder(this,R.id.home,R.drawable.ic_home,R.string.home,Color.GRAY).build());
-         menu.add(new MenuItemDescriptor.Builder(this,R.id.notifications,R.drawable.ic_notifications,R.string.notifications,Color.GRAY).build());
-         menu.add(new MenuItemDescriptor.Builder(this,R.id.gallery,R.drawable.ic_gallery,R.string.gallery,Color.GRAY).build());
-         menu.add(new MenuItemDescriptor.Builder(this,R.id.account,R.drawable.ic_my_account,R.string.account,Color.GRAY).build());
          MainActivity mainActivity = MainActivity.this;
-//         Log.d("menuItems is", String.valueOf(bottomAppBar.getMenu().findItemById(R.id.home).notification()));
-         Notification notification = menu.findItemById(R.id.home).notification();
-//         Log.d("menuItems is", notification.toString());
-         notification.show("1");
          bottomAppBar.setOnItemSelectedListener((view, item, byUser) -> {
              switch (item.getId()) {
                  case R.id.home:
-//                     Notification homeNotification = menu.findItemById(R.id.home).notification();
-//                     if (!homeFragment.isVisible()) homeNotification.show("1");
-//                     else homeNotification.clear();
-//                     notification.show("1");
-                     notification.clear();
                      replaceFragment(mainActivity.homeFragment);
+//                     homeNotification.clear();
                      break;
                  case R.id.notifications:
-//                     Notification notificationNotification = menu.findItemById(R.id.notifications).notification();
-//                     if (!notificationsFragment.isVisible()) notificationNotification.show("3");
-//                     else notificationNotification.clear();
-                     notification.clear();
                      replaceFragment(mainActivity.notificationsFragment);
+                     bellNotification.clear();
                      break;
                  case R.id.gallery:
                      replaceFragment(mainActivity.galleryFragment);

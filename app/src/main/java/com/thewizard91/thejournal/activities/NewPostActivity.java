@@ -230,7 +230,6 @@ public class NewPostActivity extends AppCompatActivity {
                                 // Create post map and create the database in realtime database.
                                 Map<String,Object> mapOfRealtimeDatabase = notificationsModel.realTimeDatabaseMap();
                                 addToRealtimeDatabase(mapOfRealtimeDatabase);
-
                             }
                         }
                     }));

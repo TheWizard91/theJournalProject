@@ -2,6 +2,7 @@ package com.thewizard91.thejournal.activities;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.TextUtils;
@@ -18,11 +19,15 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.royrodriguez.transitionbutton.TransitionButton;
 import com.thewizard91.thejournal.R;
 import com.thewizard91.thejournal.activities.sing_up_adds_on.AccountSettingsActivity;
 
+import java.util.Map;
 import java.util.Objects;
+import java.util.UUID;
 
 public class SignUpActivity extends AppCompatActivity {
     private ProgressBar progressBar;

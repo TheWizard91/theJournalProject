@@ -46,6 +46,8 @@ public class HomeFragment extends Fragment {
     public boolean isTheFirstPageLoaded = true;
     View view;
 
+    public MainActivity mainActivity;
+
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         view = inflater.inflate(R.layout.fragment_home, container, false);

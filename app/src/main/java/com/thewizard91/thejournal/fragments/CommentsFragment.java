@@ -104,7 +104,6 @@ public class CommentsFragment extends Fragment {
 
         // Getting rid of navigation button at the bottom.
         activity = (MainActivity) getActivity();
-//        activity.bottomNavigationView.setVisibility(View.INVISIBLE);
         activity.addFloatingButton.setVisibility(View.INVISIBLE);
         activity.bottomAppBar.setVisibility(View.INVISIBLE);
         activity.sendBackFloatingActionButton.setVisibility(View.VISIBLE);

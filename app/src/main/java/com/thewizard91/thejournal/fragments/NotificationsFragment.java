@@ -57,7 +57,6 @@ public class NotificationsFragment extends Fragment {
         notificationAdapter = new NotificationsAdapter(this.notificationModelList);
         notificationsListView.setLayoutManager(new LinearLayoutManager((getActivity())));
         notificationsListView.setAdapter(this.notificationAdapter);
-//        Log.d("notificationAdapter...", String.valueOf(notificationAdapter));
         firebaseFirestore = FirebaseFirestore.getInstance();
         realtimeDatabase = FirebaseDatabase.getInstance();
         realtimeDatabaseReference = realtimeDatabase.getReference();

@@ -33,6 +33,8 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
@@ -51,6 +53,8 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -61,7 +65,7 @@ import id.zelory.compressor.Compressor;
 //import com.takusemba.cropme.*;
 
 import static java.io.File.createTempFile;
-
+import com.thewizard91.thejournal.models.notifications.NotificationsModel;
 public class AccountSettingsActivity extends AppCompatActivity {
 
     //
@@ -73,7 +77,7 @@ public class AccountSettingsActivity extends AppCompatActivity {
     private static final int CODE_IMAGE_GALLERY = 1;
     private static final String SAMPLE_CROPPED_IMG_NAME = "SampleCropImg";
     //    private UiHelper uiHelper = new UiHelper();
-    String currentPhotoPath = "";
+    private String currentPhotoPath = "";
 
     // .XML Components
     private ContentLoadingProgressBar progressBar;
@@ -90,9 +94,11 @@ public class AccountSettingsActivity extends AppCompatActivity {
     private TransitionButton readyButton;
 
     // Firebase instances
-    FirebaseAuth userAuthorization;
-    FirebaseFirestore cloudBaseDatabaseInstance;
-    StorageReference cloudStorageInstance;
+    private FirebaseAuth userAuthorization;
+    private FirebaseFirestore cloudBaseDatabaseInstance;
+    private StorageReference cloudStorageInstance;
+    private FirebaseDatabase realtimeDatabase;
+    private DatabaseReference realtimeDatabaseReference;
 
     // Java Objects;
     private boolean isTheUserChanged = false;
@@ -141,6 +147,8 @@ public class AccountSettingsActivity extends AppCompatActivity {
         userAuthorization = FirebaseAuth.getInstance();
         cloudBaseDatabaseInstance = FirebaseFirestore.getInstance();
         cloudStorageInstance = FirebaseStorage.getInstance().getReference();
+        realtimeDatabase = FirebaseDatabase.getInstance();
+        realtimeDatabaseReference = realtimeDatabase.getReference();
 
         // Instantiation of Java Objects
         userImageUri = null;
@@ -149,7 +157,13 @@ public class AccountSettingsActivity extends AppCompatActivity {
         Log.d("In account uid:", userId );// THIS WORKS
 
     }
-
+    private void _addToRealtimeDatabase(Map<String, Object> mapOfRealtimeDatabase) {
+        String notificationUri = UUID.randomUUID().toString();
+        realtimeDatabaseReference.child("Notifications")
+//                .child(userId)
+                .child(notificationUri)
+                .setValue(mapOfRealtimeDatabase);
+    }
     private void setUpTheImageForTheUser() {
         userImage.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -243,9 +257,7 @@ public class AccountSettingsActivity extends AppCompatActivity {
 
     @SuppressLint("CheckResult")
     private void _helperOfCreateTheUserDatabaseTable(Task<DocumentSnapshot> task) {
-        /*
-        Retrieve information on the User database table.
-         */
+        /*Retrieve information on the User database table.*/
 
         // Get user's profile image and nickname.
         String userProfileImage = task.getResult().getString("user_profile_image");
@@ -456,6 +468,18 @@ public class AccountSettingsActivity extends AppCompatActivity {
                                             userAddress,
                                             userGender,
                                             userAge);
+
+                                    DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
+                                    LocalDateTime now =LocalDateTime.now();
+                                    String date = dateTimeFormatter.format(now).toString();
+                                    NotificationsModel notificationsModel=new NotificationsModel();
+                                    notificationsModel.setUsername(String.valueOf(username));
+                                    notificationsModel.setUserId(userId);
+                                    notificationsModel.setDate(date);
+                                    notificationsModel.setUserProfileImageURI(downloadURICopy[0]);
+                                    notificationsModel.setNotificationText("Welcome "+username);
+                                    Map<String,Object> mapOfRealtimeDatabase=notificationsModel.realTimeDatabaseMap();
+                                    _addToRealtimeDatabase(mapOfRealtimeDatabase);
                                 }
                             });
                 }
