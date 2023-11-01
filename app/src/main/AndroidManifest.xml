@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.thewizard91.thejournal"
     tools:node="replace">
 
     <uses-sdk
@@ -43,13 +42,31 @@
         android:theme="@style/Theme.TheJournal"
         tools:ignore="AllowBackup,HardcodedDebugMode"
         tools:targetApi="p">
-<!--        <activity-->
-<!--            android:name=".SendCOmmentActiivity"-->
-<!--            android:exported="false">-->
-<!--            <meta-data-->
-<!--                android:name="android.app.lib_name"-->
-<!--                android:value="" />-->
-<!--        </activity>-->
+        <activity
+            android:name=".activities.UpdateAccountActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activities.sing_up_adds_on.CreateNewAccountActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activities.sing_up_adds_on.ui.CreateNewAccountActivity"
+            android:exported="false"
+            android:label="@string/title_activity_create_new_account"
+            android:theme="@style/Theme.TheJournal" />
+        <activity
+            android:name=".activities.sing_up_adds_on.UpdateAccountActivity"
+            android:exported="false"
+            android:label="@string/title_activity_update_account"
+            android:theme="@style/Theme.TheJournal" />
+        <activity
+            android:name=".AddMoreImagesToExistingGallery"
+            android:exported="false" /> <!-- <activity -->
+        <!-- android:name=".SendCOmmentActiivity" -->
+        <!-- android:exported="false"> -->
+        <!-- <meta-data -->
+        <!-- android:name="android.app.lib_name" -->
+        <!-- android:value="" /> -->
+        <!-- </activity> -->
         <activity android:name=".activities.NewPostActivity" />
         <activity android:name=".activities.sing_up_adds_on.AccountSettingsActivity" />
         <activity android:name=".activities.log_in_activities_adds_on.ForgotPasswordActivity" />
@@ -66,13 +83,7 @@
         <activity
             android:name=".activities.MainActivity"
             android:windowSoftInputMode="adjustPan" />
-        <activity
-            android:name=".activities.SearchResultsActivity"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.SEARCH" />
-            </intent-filter>
-        </activity> <!-- &lt;!&ndash;   Activity for ImageCrop API     &ndash;&gt; -->
+        <!-- &lt;!&ndash;   Activity for ImageCrop API     &ndash;&gt; -->
         <activity
             android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
             android:theme="@style/Base.Theme.AppCompat" /> <!-- <activity android:name="com.soundcloud.android.crop.CropImageActivity" -->

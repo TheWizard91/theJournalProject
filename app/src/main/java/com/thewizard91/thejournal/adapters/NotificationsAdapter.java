@@ -60,11 +60,11 @@ public class NotificationsAdapter extends RecyclerView.Adapter<RecyclerView.View
         String time = String.valueOf(listOfNotifications.get(position).getDate());
         String notificationText = listOfNotifications.get(position).getNotificationText();
 
-        Log.d("notificationId",notificationId);
-        Log.d("currentUserId",currentUserId);
-        Log.d("notificationUserId",notificationUserId);
-        Log.d("profileImageURI",profileImageURI);
-        Log.d("username",username);
+//        Log.d("notificationId",notificationId);
+//        Log.d("currentUserId",currentUserId);
+//        Log.d("notificationUserId",notificationUserId);
+//        Log.d("profileImageURI",profileImageURI);
+//        Log.d("username",username);
 
         if(listOfNotifications.get(position).getDate() !=null && !listOfNotifications.isEmpty()) {
             holderOfNotifications.setTime(time);

@@ -2,7 +2,6 @@
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:aapt="http://schemas.android.com/aapt"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
@@ -130,20 +129,19 @@
 
             </androidx.appcompat.widget.LinearLayoutCompat>
 
-<!--            <de.hdodenhof.circleimageview.CircleImageView-->
-<!--                android:id="@+id/comments_clear"-->
-<!--                android:background="@color/black"-->
-<!--                android:layout_width="wrap_content"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:src="@drawable/ic_clear"-->
-<!--                android:contentDescription="@string/comments_clear_description"-->
-<!--                app:civ_circle_background_color="@color/pastel_color_violet1"-->
-<!--                app:layout_constraintBottom_toTopOf="@+id/comment"-->
-<!--                app:layout_constraintEnd_toEndOf="parent"-->
-<!--                app:layout_constraintHorizontal_bias="0.929"-->
-<!--                app:layout_constraintStart_toEndOf="@+id/linear_layout_container1"-->
-<!--                app:layout_constraintTop_toTopOf="parent"-->
-<!--                app:layout_constraintVertical_bias="0.285"/>-->
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/comments_clear"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:background="@color/black"
+                android:contentDescription="@string/comments_clear_description"
+                android:src="@drawable/ic_clear"
+                app:civ_circle_background_color="@color/pastel_color_violet1"
+                app:layout_constraintBottom_toTopOf="@+id/comment"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.285" />
 
             <ImageView
                 android:id="@+id/comment_reply"

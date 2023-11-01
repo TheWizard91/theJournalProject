@@ -1,5 +1,11 @@
 package com.thewizard91.thejournal.activities.sing_up_adds_on;
 
+//import androidx.appcompat.app.AppCompatActivity;
+
+import android.os.Bundle;
+
+//import com.thewizard91.thejournal.R;
+
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -65,10 +71,14 @@ import id.zelory.compressor.Compressor;
 //import com.takusemba.cropme.*;
 
 import static java.io.File.createTempFile;
-import com.thewizard91.thejournal.models.notifications.NotificationsModel;
-public class AccountSettingsActivity extends AppCompatActivity {
 
-    //
+
+import static java.io.File.createTempFile;
+import com.thewizard91.thejournal.models.notifications.NotificationsModel;
+
+
+public class CreateNewAccountActivity extends AppCompatActivity {
+
     private static final int CAMERA_ACTION_PICK_REQUEST_CODE = 610;
     private static final int PICK_IMAGE_GALLERY_REQUEST_CODE = 609;
     public static final int CAMERA_STORAGE_REQUEST_CODE = 611;
@@ -82,7 +92,7 @@ public class AccountSettingsActivity extends AppCompatActivity {
     // .XML Components
     private ContentLoadingProgressBar progressBar;
     private AppCompatImageView userImage;
-//    private CropImageView userImage;
+    //    private CropImageView userImage;
     //    private CropView userImage;
 //    private CropLayout userImage;
     private EditText username;
@@ -113,19 +123,15 @@ public class AccountSettingsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_account_settings);
-
-        //
-        init();
-
-        // Create the User in Cloud Fire-store
-//        createTheUserDatabaseTable();
+        setContentView(R.layout.activity_create_new_account);
+//
+//        init();
 
         // Set up the user image
-        setUpTheImageForTheUser();
+//        setUpTheImageForTheUser();
 
         // Handle the ready button
-        triggerTheReadyTransactionButton();
+//        triggerTheReadyTransactionButton();
 
     }
 
@@ -173,13 +179,13 @@ public class AccountSettingsActivity extends AppCompatActivity {
 //                    openImagesDocument();
 //                    openCamera();
 ////                    _selectAndCropImage();
-//                    Toast.makeText(AccountSettingsActivity.this, "In if", Toast.LENGTH_SHORT).show();
-//                } else if (ContextCompat.checkSelfPermission(AccountSettingsActivity.this,
+//                    Toast.makeText(CreateNewAccountActivity.this, "In if", Toast.LENGTH_SHORT).show();
+//                } else if (ContextCompat.checkSelfPermission(CreateNewAccountActivity.this,
 //                        Manifest.permission.READ_EXTERNAL_STORAGE) != 0) {
-//                    ActivityCompat.requestPermissions(AccountSettingsActivity.this,
+//                    ActivityCompat.requestPermissions(CreateNewAccountActivity.this,
 //                            new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE},
 //                            CropImage.PICK_IMAGE_PERMISSIONS_REQUEST_CODE);
-//                    Toast.makeText(AccountSettingsActivity.this,
+//                    Toast.makeText(CreateNewAccountActivity.this,
 //                            "Permission Denied", Toast.LENGTH_LONG).show();
 //                } else {
 //                    openImagesDocument();
@@ -238,17 +244,17 @@ public class AccountSettingsActivity extends AppCompatActivity {
 //                        // Else, create one.
 //                        if (!task.isSuccessful()) {
 //
-//                            Toast.makeText(AccountSettingsActivity.this,
+//                            Toast.makeText(CreateNewAccountActivity.this,
 //                                    "FIREBASE RETRIEVE ERROR: " + ((Exception) Objects.requireNonNull(task.getException()))
 //                                            .getMessage(), Toast.LENGTH_LONG).show();
 //
 //                        } else if (task.getResult().exists()) {
 //
 //                            _helperOfCreateTheUserDatabaseTable(task);
-//                            Toast.makeText(AccountSettingsActivity.this, "Updating Account", Toast.LENGTH_LONG).show();
+//                            Toast.makeText(CreateNewAccountActivity.this, "Updating Account", Toast.LENGTH_LONG).show();
 //                        } else {
 //
-//                            Toast.makeText(AccountSettingsActivity.this, "Account Does Not Exists", Toast.LENGTH_LONG).show();
+//                            Toast.makeText(CreateNewAccountActivity.this, "Account Does Not Exists", Toast.LENGTH_LONG).show();
 //                        }
 //                        readyButton.setEnabled(true);
 //                    }
@@ -268,7 +274,7 @@ public class AccountSettingsActivity extends AppCompatActivity {
         // Replace the image chose by the user in the right place.
         RequestOptions placeHolderRequest = new RequestOptions();
         placeHolderRequest.placeholder(R.mipmap.baseline_account_circle_black_24dp);
-        Glide.with((FragmentActivity) AccountSettingsActivity.this)
+        Glide.with((FragmentActivity) CreateNewAccountActivity.this)
                 .setDefaultRequestOptions(placeHolderRequest)
                 .load(userProfileImage)
                 .into(userImage);
@@ -354,7 +360,7 @@ public class AccountSettingsActivity extends AppCompatActivity {
                 // as well as their image profile in.jpg format.
                 pathToTheUserProfileImageInFirebase.putFile(userImageUri)
                         .addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
-//                            @SuppressLint({"WrongConstant", "ShowToast"})
+                            //                            @SuppressLint({"WrongConstant", "ShowToast"})
                             @Override
                             public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
 
@@ -365,7 +371,7 @@ public class AccountSettingsActivity extends AppCompatActivity {
                                     try {
 
                                         // Compress the quality of the image
-                                        new Compressor(AccountSettingsActivity.this)
+                                        new Compressor(CreateNewAccountActivity.this)
                                                 .setMaxWidth(100)
                                                 .setMaxHeight(100)
                                                 .setQuality(2)
@@ -389,7 +395,7 @@ public class AccountSettingsActivity extends AppCompatActivity {
 
                                 } else {
 
-                                    Toast.makeText(AccountSettingsActivity.this,
+                                    Toast.makeText(CreateNewAccountActivity.this,
                                             "IMAGE ERROR: " + ((Exception) Objects.requireNonNull(task.getException()))
                                                     .getMessage(), Toast.LENGTH_LONG).show();
 
@@ -469,9 +475,18 @@ public class AccountSettingsActivity extends AppCompatActivity {
                                             userGender,
                                             userAge);
 
-                                    DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
-                                    LocalDateTime now =LocalDateTime.now();
-                                    String date = dateTimeFormatter.format(now).toString();
+                                    DateTimeFormatter dateTimeFormatter = null;
+                                    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+                                        dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
+                                    }
+                                    LocalDateTime now = null;
+                                    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+                                        now = LocalDateTime.now();
+                                    }
+                                    String date = null;
+                                    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+                                        date = dateTimeFormatter.format(now).toString();
+                                    }
                                     NotificationsModel notificationsModel=new NotificationsModel();
                                     notificationsModel.setUsername(String.valueOf(username));
                                     notificationsModel.setUserId(userId);
@@ -487,7 +502,7 @@ public class AccountSettingsActivity extends AppCompatActivity {
         }
 //        else {
 
-            downloadURI[0] = userImageUri.toString();
+        downloadURI[0] = userImageUri.toString();
 
 //        }
 
@@ -532,13 +547,13 @@ public class AccountSettingsActivity extends AppCompatActivity {
 
                             sendToLoginActivity();
 //                            sendToMainActivity();
-                            Toast.makeText(AccountSettingsActivity.this,
+                            Toast.makeText(CreateNewAccountActivity.this,
                                     "The user's settings are updated!",
                                     Toast.LENGTH_SHORT).show();
 
                         } else {
 
-                            Toast.makeText(AccountSettingsActivity.this,
+                            Toast.makeText(CreateNewAccountActivity.this,
                                     "FIRE-STORE ERROR" + ((Exception) Objects.requireNonNull(task.getException()))
                                             .getMessage(), Toast.LENGTH_SHORT).show();
 
@@ -739,7 +754,7 @@ public class AccountSettingsActivity extends AppCompatActivity {
     }
 }
 
-    // FROM HERE IS UCROP CODE
+// FROM HERE IS UCROP CODE
 //
 //    private void openCamera() {
 //        /*

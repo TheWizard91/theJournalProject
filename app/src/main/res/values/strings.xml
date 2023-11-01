@@ -71,7 +71,7 @@
     <string name="add_post_image">Add an image to the post you are sending.</string>
     <string name="new_post_description">Description of the new post.</string>
     <string name="new_post_recyclerview_image_text">Image of the new post.</string>
-    <string name="new_post_recyclerview_user_image_text">user\'s profile image on the corner of the post.</string>
+    <string name="new_post_recyclerview_user_image_text">User\'s profile image on the corner of the post.</string>
     <string name="new_post_recyclerview_likes_thumb_text">Description of the content.</string>
     <string name="new_post_recyclerview_like_text">User\'s text</string>
     <string name="new_post_location_thumbnail_description">The thumbnail button is here</string>
@@ -82,9 +82,9 @@
     <string name="new_post_recyclerview_username_text">displaying the user\'s name</string>
     <string name="new_post_recyclerview_date_text">Displaying the date of the post.</string>
     <string name="comments_space_hint_text">Add a comment..</string>
-    <string name="comments_title_text">Comments...</string>
+    <string name="comments_title_text">Comments…</string>
     <string name="button_to_send_a_comment">Button to send a comment</string>
-    <string name="thumb_up_image_description">Like for trhe comments</string>
+    <string name="thumb_up_image_description">Like for the comments</string>
     <string name="comment_thumb_up_likes_text">Likes</string>
     <string name="comment_text">Comment</string>
     <string name="comments_username_text">username</string>
@@ -102,10 +102,72 @@
     <string name="receiver_username">John Grady Cole</string>
     <string name="title_activity_comment_dragger">CommentDragger</string>
     <string name="add_comment">Add Comment</string>
-    <string name="enter_comment">Enter Comment...</string>
+    <string name="enter_comment">Enter Comment…</string>
     <string name="back_arrow">Back to Home Fragment</string>
     <string name="back">Back</string>
     <string name="back_arrow_description">Send User to Home Fragment</string>
     <string name="notificationsDate">DATE</string>
-    <string name="notificationsTextView">Comment from...</string>
+    <string name="notificationsTextView">Comment from…</string>
+    <string name="memories_album_description_text">Memories Photos Go Here</string>
+    <string name="album_name_title">Memories</string>
+    <string name="album_description_text">Description.</string>
+    <string name="delete_album_description">Delete album</string>
+    <string name="zoom_image">Description of the image to zoom in</string>
+
+    <!-- activity_add_more_images_to_existing_gallery-->
+    <string name="insert_name_of_existing_album">Insert Album Name…</string>
+    <string name="insert_image_for_existing_album">Insert Image</string>
+    <string name="_add_image_to_existing_album_progressbar">Add Image In Gallery</string>
+    <string name="insert_image_to_existing_album_description">Add image\n</string>
+    <string name="add_the_image_to_the_chosen_album">Send\n</string>
+    <string name="title_activity_update_account">UpdateAccountActivity</string>
+    <string name="title_activity_create_new_account">CreateNewAccountActivity</string>
+
+
+    <string name="fragment_account_email">email</string>
+    <string name="fragment_account_update_account">Update Account</string>
+    <string name="fragment_account_username_title">Username</string>
+
+    <string name="lorem_ipsum">
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam in scelerisque sem. Mauris
+        volutpat, dolor id interdum ullamcorper, risus dolor egestas lectus, sit amet mattis purus
+        dui nec risus. Maecenas non sodales nisi, vel dictum dolor. Class aptent taciti sociosqu ad
+        litora torquent per conubia nostra, per inceptos himenaeos. Suspendisse blandit eleifend
+        diam, vel rutrum tellus vulputate quis. Aliquam eget libero aliquet, imperdiet nisl a,
+        ornare ex. Sed rhoncus est ut libero porta lobortis. Fusce in dictum tellus.\n\n
+        Suspendisse interdum ornare ante. Aliquam nec cursus lorem. Morbi id magna felis. Vivamus
+        egestas, est a condimentum egestas, turpis nisl iaculis ipsum, in dictum tellus dolor sed
+        neque. Morbi tellus erat, dapibus ut sem a, iaculis tincidunt dui. Interdum et malesuada
+        fames ac ante ipsum primis in faucibus. Curabitur et eros porttitor, ultricies urna vitae,
+        molestie nibh. Phasellus at commodo eros, non aliquet metus. Sed maximus nisl nec dolor
+        bibendum, vel congue leo egestas.\n\n
+        Sed interdum tortor nibh, in sagittis risus mollis quis. Curabitur mi odio, condimentum sit
+        amet auctor at, mollis non turpis. Nullam pretium libero vestibulum, finibus orci vel,
+        molestie quam. Fusce blandit tincidunt nulla, quis sollicitudin libero facilisis et. Integer
+        interdum nunc ligula, et fermentum metus hendrerit id. Vestibulum lectus felis, dictum at
+        lacinia sit amet, tristique id quam. Cras eu consequat dui. Suspendisse sodales nunc ligula,
+        in lobortis sem porta sed. Integer id ultrices magna, in luctus elit. Sed a pellentesque
+        est.\n\n
+        Aenean nunc velit, lacinia sed dolor sed, ultrices viverra nulla. Etiam a venenatis nibh.
+        Morbi laoreet, tortor sed facilisis varius, nibh orci rhoncus nulla, id elementum leo dui
+        non lorem. Nam mollis ipsum quis auctor varius. Quisque elementum eu libero sed commodo. In
+        eros nisl, imperdiet vel imperdiet et, scelerisque a mauris. Pellentesque varius ex nunc,
+        quis imperdiet eros placerat ac. Duis finibus orci et est auctor tincidunt. Sed non viverra
+        ipsum. Nunc quis augue egestas, cursus lorem at, molestie sem. Morbi a consectetur ipsum, a
+        placerat diam. Etiam vulputate dignissim convallis. Integer faucibus mauris sit amet finibus
+        convallis.\n\n
+        Phasellus in aliquet mi. Pellentesque habitant morbi tristique senectus et netus et
+        malesuada fames ac turpis egestas. In volutpat arcu ut felis sagittis, in finibus massa
+        gravida. Pellentesque id tellus orci. Integer dictum, lorem sed efficitur ullamcorper,
+        libero justo consectetur ipsum, in mollis nisl ex sed nisl. Donec maximus ullamcorper
+        sodales. Praesent bibendum rhoncus tellus nec feugiat. In a ornare nulla. Donec rhoncus
+        libero vel nunc consequat, quis tincidunt nisl eleifend. Cras bibendum enim a justo luctus
+        vestibulum. Fusce dictum libero quis erat maximus, vitae volutpat diam dignissim.
+    </string>
+    <string name="account_settings_title">Basic Imformation</string>
+    <string name="logout_button">Logout</string>
+    <string name="description_of_cardview_in_fragment_account">Additional information for account update fragment.</string>
+    <string name="text_one">Description</string>
+    <string name="text_two">Detail</string>
+    <string name="description_in_list_row_two">Description</string>
 </resources>

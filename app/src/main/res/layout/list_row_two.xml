@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.flexbox.FlexboxLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:justifyContent="space_between">
+
+    <ImageView
+        android:id="@+id/photo_in_list_list_row_two"
+        android:layout_width="wrap_content"
+        android:layout_height="32dp"
+        android:src="@drawable/ic_baseline_insert_photo_24"/>
+    <!-- android:src="@drawable/ic_photo_library" -->
+
+    <TextView
+        android:id="@+id/text_view_in_list_row_two"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="16sp"
+        android:text="@string/description_in_list_row_two"/>
+
+    <ImageView
+        android:id="@+id/forward_arrow_in_list_row_two"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_arrow_forward"/>
+
+</com.google.android.flexbox.FlexboxLayout>

@@ -38,10 +38,10 @@
             android:layout_marginEnd="@dimen/layoutMarginRightAndLeft"
             android:autofillHints=""
             android:background="@drawable/my_text_view"
-            android:ems="10"
-            android:textColor="@color/black"
+            android:ems="12"
             android:hint="@string/emailHint"
             android:inputType="textEmailAddress"
+            android:textColor="@color/black"
             android:textColorHint="@color/darker_gray"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -57,11 +57,11 @@
             android:layout_marginStart="@dimen/layoutMarginRightAndLeft"
             android:layout_marginEnd="@dimen/layoutMarginRightAndLeft"
             android:autofillHints=""
-            android:textColor="@color/black"
             android:background="@drawable/my_text_view"
-            android:ems="10"
+            android:ems="12"
             android:hint="@string/password_hint"
             android:inputType="textPassword"
+            android:textColor="@color/black"
             android:textColorHint="@color/darker_gray"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -79,7 +79,7 @@
             android:autofillHints=""
             android:textColor="@color/black"
             android:background="@drawable/my_text_view"
-            android:ems="10"
+            android:ems="12"
             android:hint="@string/confirm_password"
             android:inputType="textPassword"
             android:textColorHint="@color/darker_gray"
@@ -95,7 +95,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/layoutMarginRightAndLeft"
-            android:layout_marginTop="28dp"
+            android:layout_marginTop="48dp"
             android:layout_marginEnd="@dimen/layoutMarginRightAndLeft"
             android:background="@drawable/background_layer"
             android:contentDescription="@string/sing_up_image_button_description"
@@ -103,8 +103,9 @@
             android:text="@string/sign_up_button"
             android:textColor="@color/pure_white"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/already_have_an_account_message_id" />
+            app:layout_constraintTop_toBottomOf="@+id/sign_password_confirmation_id" />
 
         <TextView
             android:id="@+id/welcome_message_id"
@@ -131,19 +132,20 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/welcome_message_id" />
 
-        <TextView
-            android:id="@+id/already_have_an_account_message_id"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="32dp"
-            android:layout_marginTop="12dp"
-            android:clickable="true"
-            android:focusable="true"
-            android:fontFamily="@font/poppins"
-            android:text="@string/already_have_an_account_button_text"
-            android:textColor="@color/shade_of_gray_for_darker_blue"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/sign_password_confirmation_id" />
+<!--        <TextView-->
+<!--            android:id="@+id/already_have_an_account_message_id"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginStart="32dp"-->
+<!--            android:layout_marginTop="16dp"-->
+<!--            android:clickable="true"-->
+<!--            android:focusable="true"-->
+<!--            android:fontFamily="@font/poppins"-->
+<!--            android:minHeight="48dp"-->
+<!--            android:text="@string/already_have_an_account_button_text"-->
+<!--            android:textColor="@color/shade_of_gray_for_darker_blue"-->
+<!--            app:layout_constraintStart_toStartOf="parent"-->
+<!--            app:layout_constraintTop_toBottomOf="@+id/sign_password_confirmation_id" />-->
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

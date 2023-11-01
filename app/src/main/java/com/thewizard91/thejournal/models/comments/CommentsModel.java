@@ -7,36 +7,37 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class CommentsModel extends CommentsModelId {
-    private String blogPostId;
-    private String commentReplyImageUri;
-    private String commentText;
-    private String commentsCount;
-    private String imageUri;
-    private String likesCount;
-    private String thumbsUpImageUri;
+    private String post_id;
+    private String comment_reply_image_uri;
+    private String comment_text;
+    private String comments_count;
+    private String image_uri;
+    private String likes_count;
+    private String thumbs_image_uri;
     private Date timestamp;
     private FieldValue time;
-    private String userId;
+    private String user_id;
     private String username;
-    private String userProfileImageUri;
+    private String user_profile_image_uri;
 
     public CommentsModel() {}
-    public CommentsModel(String blogPostId, String commentReplyImageUri,
-                         String commentText, String commentsCount,
-                         String imageUri, String likesCount,
-                         String thumbsUpImageUri, FieldValue time,
-                         String userId, String username, String userProfileImageUri) {
-        this.blogPostId = blogPostId;
-        this.commentReplyImageUri = commentReplyImageUri;
-        this.commentText = commentText;
-        this.commentsCount = commentsCount;
-        this.imageUri = imageUri;
-        this.likesCount = likesCount;
-        this.thumbsUpImageUri = thumbsUpImageUri;
+    public CommentsModel(String post_id, String comment_reply_image_uri,
+                         String comment_text, String comments_count,
+                         String image_uri, String likes_count,
+                         String thumbs_image_uri, FieldValue time,
+                         String user_id, String username, String user_profile_image_uri) {
+
+        this.post_id = post_id;
+        this.comment_reply_image_uri = comment_reply_image_uri;
+        this.comment_text = comment_text;
+        this.comments_count = comments_count;
+        this.image_uri = image_uri;
+        this.likes_count = likes_count;
+        this.thumbs_image_uri = thumbs_image_uri;
         this.time = time;
-        this.userId = userId;
+        this.user_id = user_id;
         this.username = username;
-        this.userProfileImageUri = userProfileImageUri;
+        this.user_profile_image_uri = user_profile_image_uri;
     }
 
     public String getUsername() {
@@ -48,15 +49,15 @@ public class CommentsModel extends CommentsModelId {
     }
 
     public String getImageUri() {
-        return this.imageUri;
+        return image_uri;
     }
 
-    public void setImageUri(String imageUri) {
-        this.imageUri = imageUri;
+    public void setImageUri(String image_uri) {
+        this.image_uri = image_uri;
     }
 
     public Date getTimestamp() {
-        return this.timestamp;
+        return timestamp;
     }
 
     public void setTimestamp(Date timestamp) {
@@ -64,73 +65,73 @@ public class CommentsModel extends CommentsModelId {
     }
 
     public String getCommentText() {
-        return this.commentText;
+        return comment_text;
     }
 
-    public void setCommentText(String commentText) {
-        this.commentText = commentText;
+    public void setCommentText(String comment_text) {
+        this.comment_text = comment_text;
     }
 
     public String getLikesCount() {
-        return this.likesCount;
+        return this.likes_count;
     }
 
-    public void setLikesCount(String likesCount) {
-        this.likesCount = likesCount;
+    public void setLikesCount(String likes_count) {
+        this.likes_count = likes_count;
     }
 
     public String getThumbsUpImageUri() {
-        return this.thumbsUpImageUri;
+        return thumbs_image_uri;
     }
 
-    public void setThumbsUpImageUri(String thumbsUpImageUri) {
-        this.thumbsUpImageUri = thumbsUpImageUri;
+    public void setThumbsUpImageUri(String thumbs_image_uri) {
+        this.thumbs_image_uri = thumbs_image_uri;
     }
 
     public String getCommentReplyImageUri() {
-        return this.commentReplyImageUri;
+        return comment_reply_image_uri;
     }
 
-    public void setCommentReplyImageUri(String commentReplyImageUri) {
-        this.commentReplyImageUri = commentReplyImageUri;
+    public void setCommentReplyImageUri(String comment_reply_image_uri) {
+        this.comment_reply_image_uri = comment_reply_image_uri;
     }
 
     public String getCommentsCount() {
-        return this.commentsCount;
+        return this.comments_count;
     }
 
-    public void setCommentsCount(String commentsCount) {
-        this.commentsCount = commentsCount;
+    public void setCommentsCount(String comments_count) {
+        this.comments_count = comments_count;
     }
 
     public String getUserId() {
-        return this.userId;
+        return this.user_id;
     }
 
-    public void setUserId(String userId) {
-        this.userId = userId;
+    public void setUserId(String user_id) {
+        this.user_id = user_id;
     }
 
     public String getUserProfileImageUri() {
-        return userProfileImageUri;
+        return user_profile_image_uri;
     }
 
-    public void setUserProfileImageUri(String userProfileImageUri) {
-        this.userProfileImageUri = userProfileImageUri;
+    public void setUserProfileImageUri(String user_profile_image_uri) {
+        this.user_profile_image_uri = user_profile_image_uri;
     }
     public Map<String,Object> firebaseDatabaseMap() {
         Map<String,Object> commentsMap = new HashMap<>();
-        commentsMap.put("blogPostId",blogPostId);
-        commentsMap.put("commentReplyImageUri",commentReplyImageUri);
-        commentsMap.put("commentText",commentText);
-        commentsMap.put("commentsCount",commentsCount);
-        commentsMap.put("imageUri",imageUri);
-        commentsMap.put("likesCount",likesCount);
-        commentsMap.put("thumbsUpImageUri",thumbsUpImageUri);
+        commentsMap.put("postId",post_id);
+        commentsMap.put("commentReplyImageUri",comment_reply_image_uri);
+        commentsMap.put("commentText",comment_text);
+        commentsMap.put("commentsCount",comments_count);
+        commentsMap.put("imageURI",image_uri);
+        commentsMap.put("likesCount",likes_count);
+        commentsMap.put("thumbsImageURI",thumbs_image_uri);
         commentsMap.put("timestamp",time);
-        commentsMap.put("userId",userId);
+        commentsMap.put("userId",user_id);
         commentsMap.put("username",username);
-        commentsMap.put("userProfileImageUri",userProfileImageUri);
+        commentsMap.put("userProfileImageURI",user_profile_image_uri);
 
         return commentsMap;
     }

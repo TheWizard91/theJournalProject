@@ -1,139 +1,194 @@
 package com.thewizard91.thejournal.fragments;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.widget.Toolbar;
+
 import androidx.fragment.app.Fragment;
+
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
 import com.thewizard91.thejournal.R;
+import com.thewizard91.thejournal.activities.LogInActivity;
+import com.thewizard91.thejournal.activities.UpdateAccountActivity;
+import com.thewizard91.thejournal.adapters.ListOneAdapter;
+import com.thewizard91.thejournal.adapters.ListTwoAdapter;
+import com.thewizard91.thejournal.models.listOne.ListenItemInListOne;
+import com.thewizard91.thejournal.models.listTwo.ListenItemInListTwo;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Objects;
+
 import de.hdodenhof.circleimageview.CircleImageView;
+
 //
 public class AccountFragment extends Fragment {
-//
-//    public TextView aboutUser;
-//    public Context accountContext;
-//    private FirebaseUser currentUser;
-//    private FirebaseAuth firebaseAuth;
-//    private FirebaseFirestore firebaseFirestore;
-//    private FirebaseStorage firebaseStorage;
-//    private FloatingActionButton heartFloatingActionButton;
-//    private ActionBar mainActivityActionBar;
-//    private Toolbar mainActivityToolBar;
-//    private FloatingActionButton messageFloatingActionButton;
-//    private NavigationView navigationView;
-//    private TextView recentPhotosAddedByTheUser;
-//    private StorageReference storageReference;
-//    public TextView userDescription;
-//    public CircleImageView userProfileImage;
-//    private String userProfileImageURI;
-//    public TextView username;
-//    private FloatingActionButton videoChatFloatingActionButton;
-//
-//    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-//        View view = inflater.inflate(R.layout.fragment_account, container, false);
-//        this.accountContext = container.getContext();
-//        this.userProfileImage = (CircleImageView) view.findViewById(R.id.account_fragment_user_image);
-////        this.username = (TextView) view.findViewById(C2521R.C2524id.account_fragment_username);
-////        this.recentPhotosAddedByTheUser = (TextView) view.findViewById(C2521R.C2524id.photo_added_counter_text_view_id);
-////        this.messageFloatingActionButton = (FloatingActionButton) view.findViewById(C2521R.C2524id.chat_floating_button);
-////        this.videoChatFloatingActionButton = (FloatingActionButton) view.findViewById(C2521R.C2524id.video_chat_floating_button);
-////        this.heartFloatingActionButton = (FloatingActionButton) view.findViewById(C2521R.C2524id.heart_floating_button);
-////        this.aboutUser = (TextView) view.findViewById(C2521R.C2524id.about_user_text);
-////        this.userDescription = (TextView) view.findViewById(C2521R.C2524id.about_user_description_id);
-//        this.firebaseFirestore = FirebaseFirestore.getInstance();
-//        FirebaseAuth instance = FirebaseAuth.getInstance();
-//        this.firebaseAuth = instance;
-//        FirebaseUser currentUser2 = instance.getCurrentUser();
-//        this.currentUser = currentUser2;
-//        if (currentUser2 != null) {
-//            String currentUserId = currentUser2.getUid();
-//            this.storageReference = FirebaseStorage.getInstance().getReference();
-//            setUserProfileImageAndUsername(currentUserId);
-//            setMessageFloatingActionButtonFunction();
-//            setVideoChatFloatingActionButton();
-//            setHeartFloatingActionButton();
-//            setAboutUser(currentUserId);
-//            return view;
-//        }
-//        throw new AssertionError();
-//    }
-//
-//    private void setAboutUser(String currentUserId) {
-//        this.firebaseFirestore.collection("Users").document(currentUserId).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-//            public void onComplete(Task<DocumentSnapshot> task) {
-//                DocumentSnapshot userInformation = task.getResult();
-//                AccountFragment.this.aboutUser.setText("About " + userInformation.getString("profile_name_of") + ":");
-//                AccountFragment.this.userDescription.setText(userInformation.getString("user_description"));
-//            }
-//        });
-//    }
-//
-//    private void setHeartFloatingActionButton() {
-//        this.heartFloatingActionButton.setOnClickListener(new View.OnClickListener() {
-//            public void onClick(View view) {
-//                Toast.makeText(AccountFragment.this.accountContext, "HeartFragment", 0).show();
-//            }
-//        });
-//    }
-//
-//    private void setVideoChatFloatingActionButton() {
-//        this.videoChatFloatingActionButton.setOnClickListener(new View.OnClickListener() {
-//            public void onClick(View view) {
-//                Toast.makeText(AccountFragment.this.accountContext, "VideoCharFunction", 0).show();
-//            }
-//        });
-//    }
-//
-//    private void setMessageFloatingActionButtonFunction() {
-//        this.messageFloatingActionButton.setOnClickListener(new View.OnClickListener() {
-//            public void onClick(View view) {
-//                Toast.makeText(AccountFragment.this.accountContext, "MessageFragment", 0).show();
-//            }
-//        });
-//    }
-//
-//    private void setUserProfileImageAndUsername(String currentUserId) {
-//        this.firebaseFirestore.collection("Users").document(currentUserId).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-//            public void onComplete(Task<DocumentSnapshot> task) {
-//                Map<String, Object> map;
-//                DocumentSnapshot documentSnapshot = task.getResult();
-//                AccountFragment.this.username.setText(task.getResult().getString("profile_name_of"));
-//                if (documentSnapshot.exists() && (map = documentSnapshot.getData()) != null) {
-//                    for (Map.Entry<String, Object> entry : map.entrySet()) {
-//                        if ("profile_image".equals(entry.getKey())) {
-//                            String currentHolderImageURI = entry.getValue().toString();
-//                            RequestOptions placeholderOption = new RequestOptions();
-//                            placeholderOption.placeholder((int) R.drawable.ic_account_circle);
-//                            Glide.with(AccountFragment.this.accountContext).applyDefaultRequestOptions(placeholderOption).load(currentHolderImageURI).into((ImageView) AccountFragment.this.userProfileImage);
-//                            return;
-//                        }
-//                    }
-//                }
-//            }
-//        });
-//    }
-//
-//    public void onStart() {
-//        super.onStart();
-//    }
+//    https://www.tutlane.com/tutorial/android/android-listview-with-examples
+//    https://stackoverflow.com/questions/27293979/android-listview-with-multiple-views
+    public Context accountContext;
+    private FirebaseFirestore firebaseFirestore;
+    private FirebaseAuth userAuthorized;
+    public CircleImageView userProfileImage;
+    public TextView username;
+    private TextView email;
+
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_account, container, false);
+        accountContext = container.getContext();
+        userAuthorized = FirebaseAuth.getInstance();
+        FirebaseUser currentUser = userAuthorized.getCurrentUser();
+        userProfileImage = view.findViewById(R.id.fragment_account_user_image);
+        username = view.findViewById(R.id.username_title_in_fragment_account);
+        email = view.findViewById(R.id.user_email_text_in_fragment_account);
+        firebaseFirestore = FirebaseFirestore.getInstance();
+
+        if (currentUser != null) {
+            String currentUser_id = Objects.requireNonNull(userAuthorized.getCurrentUser()).getUid();
+            setUserProfileImageAndUsername(currentUser_id);
+            setEmail(currentUser.getEmail());
+            setListViewOne(view);
+            setListViewTwo(view);
+            return view;
+        }
+        throw new AssertionError();
+    }
+
+    private void setListViewTwo(View myView) {
+        final String[] arrayOfListViewTwo = {"Edit Profile","Logout"};
+        final int[] drawablesImage = {R.drawable.ic_person_pin,R.drawable.ic_logout};
+        final int[] drawableArrow = {R.drawable.ic_arrow_forward,R.drawable.ic_arrow_forward};
+        final ListenItemInListTwo[] rows = new ListenItemInListTwo[]{new ListenItemInListTwo(), new ListenItemInListTwo()};
+        ArrayList listTwo = getListTwoData(arrayOfListViewTwo,drawablesImage,drawableArrow,rows);
+        final ListView listViewTwo = myView.findViewById(R.id.fragment_account_listview_two);
+        listViewTwo.setAdapter(new ListTwoAdapter(myView.getContext(), listTwo));
+        listViewTwo.setOnItemClickListener((adapterView, view12, i, l) -> {
+            ListenItemInListTwo listenItemInListTwo = (ListenItemInListTwo) listViewTwo.getItemAtPosition(i);
+            Toast.makeText(getContext(), "Selected " + " " + listenItemInListTwo.getDescription(), Toast.LENGTH_SHORT).show();
+            if (Objects.equals(listenItemInListTwo.getDescription(), "Logout")) {
+                userAuthorized.signOut();
+                sendToLoginActivity();
+            } else {
+                Intent intent = new Intent(getActivity(), UpdateAccountActivity.class);
+                startActivity(intent);
+                (requireActivity()).overridePendingTransition(0,0);
+            }
+        });
+    }
+
+    private void setListViewOne(View myView) {
+        final String[] arrayOfListViewOne = {"Posts","Favorite","Comments"};
+        final int[] drawables = {R.drawable.ic_baseline_insert_photo_24,R.drawable.ic_favorite,R.drawable.ic_forum};
+        final ListenItemInListOne[] rows = new ListenItemInListOne[]{new ListenItemInListOne(), new ListenItemInListOne(), new ListenItemInListOne()};
+        ArrayList listOne = getListOfData(arrayOfListViewOne, drawables, rows);
+        final ListView listViewOne = myView.findViewById(R.id.fragment_account_listview_one);
+        listViewOne.setAdapter(new ListOneAdapter(myView.getContext(), listOne));
+        listViewOne.setOnItemClickListener((adapterView, view1, i, l) -> {
+            ListenItemInListOne listenItemInListOne = (ListenItemInListOne) listViewOne.getItemAtPosition(i);
+            Toast.makeText(getContext(), "Selected: " + " " + listenItemInListOne.getDescription(),Toast.LENGTH_SHORT).show();
+        });
+    }
+
+    @SuppressLint("UseCompatLoadingForDrawables")
+    private ArrayList getListTwoData(String[] arrayOfListViewTwo, int[] drawablesImage, int[] drawableArrows, ListenItemInListTwo[] rows) {
+
+        ArrayList<ListenItemInListTwo> results = new ArrayList<>();
+
+        for (int i = 0; i < arrayOfListViewTwo.length; i++) {
+            rows[i].setImageUri(getResources().getDrawable(drawablesImage[i]));
+            rows[i].setDescription(arrayOfListViewTwo[i]);
+            rows[i].setForwardArrowImage(getResources().getDrawable(drawableArrows[i]));
+            results.add(rows[i]);
+        }
+
+        return results;
+    }
+
+    @SuppressLint("UseCompatLoadingForDrawables")
+    private ArrayList getListOfData(String[] arrayOfListViewOne, int[] drawables, ListenItemInListOne[] rows) {
+
+        ArrayList<ListenItemInListOne> results = new ArrayList<>();
+
+        for (int i = 0 ; i < arrayOfListViewOne.length; i++) {
+            rows[i].setImage(getResources().getDrawable(drawables[i]));
+            rows[i].setDescription(arrayOfListViewOne[i]);
+            rows[i].setNumberOfElementsInSection(String.valueOf(i));
+            results.add(rows[i]);
+        }
+
+        return results;
+    }
+
+    private void sendToLoginActivity () {
+        // Start the Login Activity
+        Intent intent = new Intent(getActivity(), LogInActivity.class);
+        startActivity(intent);
+        (requireActivity()).overridePendingTransition(0,0);
+    }
+    private void setEmail (String e) {
+        email.setText(e);
+    }
+    @SuppressLint("CheckResult")
+    private void setUserProfileImageAndUsername(String currentUserId) {
+        firebaseFirestore.collection("Users")
+                .document(currentUserId)
+                .get()
+                .addOnCompleteListener(task -> {
+                    Map<String, Object> map;
+                    DocumentSnapshot documentSnapshot = task.getResult();
+                    username.setText(task.getResult().getString("username"));
+                    if (documentSnapshot.exists() && (map = documentSnapshot.getData()) != null) {
+                        for (Map.Entry<String, Object> entry : map.entrySet()) {
+                            if ("userProfileImageURI".equals(entry.getKey())) {
+                                String currentHolderImageURI = entry.getValue().toString();
+                                RequestOptions placeholderOption = new RequestOptions();
+                                placeholderOption.placeholder(R.drawable.ic_account_circle);
+                                Glide.with(accountContext)
+                                        .applyDefaultRequestOptions(placeholderOption)
+                                        .load(currentHolderImageURI)
+                                        .into(userProfileImage);
+                            }
+                        }
+                    }
+                });
+    }
+
+    public void onStart() {
+        super.onStart();
+    }
+
+    private class StableArrayAdapter extends ArrayAdapter<String> {
+//        https://www.vogella.com/tutorials/AndroidListView/article.html
+        HashMap<String, Integer> mIdMap = new HashMap<String, Integer>();
+
+        public StableArrayAdapter(Context context, int textViewResourceId, List<String> objects) {
+            super(context, textViewResourceId, objects);
+            for (int i = 0; i < objects.size(); i++) {
+                mIdMap.put(objects.get(i), i);
+            }
+        }
+        @Override
+        public long getItemId (int position) {
+            String item = getItem(position);
+            return mIdMap.get(item);
+        }
+        @Override
+        public boolean hasStableIds() {
+            return true;
+        }
+    }
 }

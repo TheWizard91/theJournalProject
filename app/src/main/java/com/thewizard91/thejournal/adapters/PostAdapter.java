@@ -1,5 +1,6 @@
 package com.thewizard91.thejournal.adapters;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.text.format.DateFormat;
 import android.util.Log;
@@ -9,6 +10,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
 import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
@@ -16,7 +19,6 @@ import com.bumptech.glide.request.RequestOptions;
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -27,17 +29,14 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-import com.google.type.Date;
 import com.stfalcon.frescoimageviewer.ImageViewer;
-//import com.thewizard91.thealbumproject.C2521RC2521R;
-//import com.thewizard91.thealbumproject.fragments.maps.MapsFragment;
 import com.thewizard91.thejournal.R;
 import com.thewizard91.thejournal.fragments.HomeFragment;
-import com.thewizard91.thejournal.fragments.MapsFragment;
 import com.thewizard91.thejournal.models.post.PostModel;
 
 import java.util.ArrayList;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -50,72 +49,66 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     public List<PostModel> listOfPosts;
     public Context context;
     private FirebaseAuth firebaseAuth;
-    public FirebaseFirestore firebaseFirestore;
+    public FirebaseFirestore firebasefirestore;
     private StorageReference storageReference;
     public interface CallBackMethodHelperForSetCurrentHolderImageURICallback {
         void onCallback(String str);
     }
 
     public PostAdapter(List<PostModel> blogPostImageModels) {
-        this.listOfPosts = blogPostImageModels;
+        listOfPosts = blogPostImageModels;
     }
 
+    @NonNull
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View myView = LayoutInflater.from(parent.getContext()).inflate(R.layout.posts_row, parent, false);
         myView.setLayoutParams(new RecyclerView.LayoutParams(-1, -2));
-        this.context = parent.getContext();
-        this.firebaseFirestore = FirebaseFirestore.getInstance();
-        this.firebaseAuth = FirebaseAuth.getInstance();
-        this.storageReference = FirebaseStorage.getInstance().getReference();
-        return new ViewHolderOfBlogPost(myView);
+        context = parent.getContext();
+        firebasefirestore = FirebaseFirestore.getInstance();
+        firebaseAuth = FirebaseAuth.getInstance();
+        storageReference = FirebaseStorage.getInstance().getReference();
+        return new ViewHolderOfPost(myView);
     }
 
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         holder.setIsRecyclable(false);
-        ViewHolderOfBlogPost holderOfBlogPost = (ViewHolderOfBlogPost) holder;
-        String blogPostId = listOfPosts.get(position).PostId;
+        ViewHolderOfPost holderOfPost = (ViewHolderOfPost) holder;
+        String postId = listOfPosts.get(position).PostId;
         String currentUserId = ((FirebaseUser) Objects.requireNonNull(firebaseAuth.getCurrentUser())).getUid();
-        String postsUserId = listOfPosts.get(position).getUserId();
+        String posts_user_id = listOfPosts.get(position).getUserId();
         String time = String.valueOf(listOfPosts.get(position).getTimestamp());
-        String imageURI = listOfPosts.get(position).getImageURI();
-//        String thumbnailURI = listOfPosts.get(position).getThumbnailURI();
+        String image_uri = listOfPosts.get(position).getImageURI();
+        String thumbnailURI = listOfPosts.get(position).getThumbnailURI();
         String description = listOfPosts.get(position).getDescription();
         String username = listOfPosts.get(position).getUsername();
-        String userProfileImageUri = listOfPosts.get(position).getUserProfileImageURI();
+        String user_profile_image_uri = listOfPosts.get(position).getUserProfileImageURI();
 
-//        holderOfBlogPost.setUserProfileImageURI(userImageUri);
-        holderOfBlogPost.setTime(time);
-        holderOfBlogPost.setUsername(username);
-        holderOfBlogPost.setDescription(description);
-        holderOfBlogPost.setImageURI(imageURI);
-        holderOfBlogPost.setUserProfileImageURI(userProfileImageUri);
-//        setUsernameAndImage(holderOfBlogPost, postsUserId);
+        holderOfPost.setUserProfileImageURI(user_profile_image_uri);
+        holderOfPost.setTime(time);
+        holderOfPost.setUsername(username);
+        holderOfPost.setDescription(description);
+        holderOfPost.setImageURI(image_uri);
+        holderOfPost.setUserProfileImageURI(user_profile_image_uri);
+//        setUsernameAndImage(holderOfPost, posts_user_id);
 //        holderOfBlogPost.setImageURIAndThumbnailURI(imageURI, thumbnailURI);
-//        Log.d("BFlistOfPosts", String.valueOf(listOfPosts.get(position).getTimestamp()));
-        Log.d("BFimageuri", imageURI);
-        Log.d("BFblogpostId", blogPostId);
-        Log.d("BFtime", time);
-        Log.d("BFpostUsderId", postsUserId);
-        Log.d("BFusername", username);
-        Log.d("BFuserImageUri",userProfileImageUri);
-        if (listOfPosts.get(position).getTimestamp() != null && !listOfPosts.isEmpty()) {
-            holderOfBlogPost.setTime(time);//listOfPosts.get(position).getTimestamp() String.valueOf(DateFormat.format("MM/dd/yyyy", new Date(listOfPosts.get(position).getTimestamp().getTime())))
-        } else {
-            holderOfBlogPost.setTime("set time");
-        }
-        setLikesCount(holderOfBlogPost, blogPostId);
-        setLikes(holderOfBlogPost, blogPostId, currentUserId);
-        addOrDeleteLikes(holderOfBlogPost, blogPostId, currentUserId, description);
-        clickOnCommentsImage(holderOfBlogPost, blogPostId, currentUserId);
+//        if (listOfPosts.get(position).getTimestamp() != null && !listOfPosts.isEmpty()) {
+//            holderOfPost.setTime(time);//listOfPosts.get(position).getTimestamp(), String.valueOf(DateFormat.format("MM/dd/yyyy", new Date(listOfPosts.get(position).getTimestamp().getTime())))
+//        } else {
+//            holderOfPost.setTime("set time");
+//        }
+        setLikesCount(holderOfPost, postId);
+        setLikes(holderOfPost, postId, currentUserId);
+        addOrDeleteLikes(holderOfPost, postId, currentUserId, description);
+        clickOnCommentsImage(holderOfPost, postId, currentUserId);
 //        clickOnLocationImage(holderOfBlogPost, blogPostId);
 //        setLocation(holderOfBlogPost, blogPostId);
 //        clickOnDeletePostImage(holderOfBlogPost, blogPostId);
-        setCommentsCount(holderOfBlogPost, blogPostId);
-        holderOfBlogPost.zoom(position);
+        setCommentsCount(holderOfPost, postId);
+        holderOfPost.zoom(position);
     }
 
 //    private void setLocation(final ViewHolderOfBlogPost holderOfBlogPost, String blogPostId) {
-//        this.firebaseFirestore.collection("Posts").document(blogPostId).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+//        this.firebasefirestore.collection("Posts").document(blogPostId).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
 //            public void onComplete(Task<DocumentSnapshot> task) {
 //                Map<String, Object> map;
 //                DocumentSnapshot documentSnapshot = task.getResult();
@@ -133,9 +126,9 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 //    }
 
 //    private void clickOnLocationImage(ViewHolderOfBlogPost holderOfBlogPost, final String blogPostId) {
-//        holderOfBlogPost.blogLocationButtonView.setOnClickListener(new View.OnClickListener() {
+//        holderOfBlogPost.location_button_view.setOnClickListener(new View.OnClickListener() {
 //            public void onClick(View view) {
-//                firebaseFirestore.collection("Post").document(blogPostId).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+//                firebasefirestore.collection("Post").document(blogPostId).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
 //                    public void onComplete(Task<DocumentSnapshot> task) {
 //                        if (task.isSuccessful()) {
 //                            Toast.makeText(context, "This Post Does Not Contain A Location, Sorry.", Toast.LENGTH_SHORT).show();
@@ -148,23 +141,22 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 //        });
 //    }
 
-    private void setCommentsCount(final ViewHolderOfBlogPost holderOfBlogPost, String blogPostId) {
-        this.firebaseFirestore.collection("Posts").document(blogPostId).collection("Comments").addSnapshotListener(new EventListener<QuerySnapshot>() {
-
-            public void onEvent(QuerySnapshot queryDocumentSnapshots, FirebaseFirestoreException e) {
-                if (queryDocumentSnapshots == null) {
-                    throw new AssertionError();
-                } else if (!queryDocumentSnapshots.isEmpty()) {
-                    holderOfBlogPost.updateCommentsCount(queryDocumentSnapshots.size());
-                } else {
-                    holderOfBlogPost.updateCommentsCount(0);
-                }
-            }
-        });
+    private void setCommentsCount(final ViewHolderOfPost holderOfBlogPost, String blogPostId) {
+        firebasefirestore.collection("Posts")
+                .document(blogPostId).collection("Comments")
+                .addSnapshotListener((queryDocumentSnapshots, e) -> {
+                    if (queryDocumentSnapshots == null) {
+                        throw new AssertionError();
+                    } else if (!queryDocumentSnapshots.isEmpty()) {
+                        holderOfBlogPost.updateCommentsCount(queryDocumentSnapshots.size());
+                    } else {
+                        holderOfBlogPost.updateCommentsCount(0);
+                    }
+                });
     }
 
 //    private void clickOnDeletePostImage(ViewHolderOfBlogPost holderOfBlogPost, final String blogPostId) {
-//        holderOfBlogPost.deletePostView.setOnClickListener(new View.OnClickListener() {
+//        holderOfBlogPost.delete_post_view.setOnClickListener(new View.OnClickListener() {
 //            public void onClick(View view) {
 //                setCurrentHolderImageURI(blogPostId, new CallBackMethodHelperForSetCurrentHolderImageURICallback() {
 //                    public void onCallback(String postImageURI) {
@@ -180,12 +172,10 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 //        });
 //    }
 
-    /* access modifiers changed from: private */
-    public void deleteImageFromFirebaseFirestone(String blogPostId) {
-        firebaseFirestore.collection("Posts").document(blogPostId).delete();
+    public void deleteImageFromFirebaseFirestone(String postId) {
+        firebasefirestore.collection("Posts").document(postId).delete();
     }
 
-    /* access modifiers changed from: private */
     public void deleteImageFromFirebaseStoreForUserAccessOnly(String postImageURI) {
         storageReference.child("storage_of: t/").child("post_images").child(postImageURI).delete();
     }
@@ -196,29 +186,26 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     }
 
     public void setCurrentHolderImageURI(String blogPostId, final CallBackMethodHelperForSetCurrentHolderImageURICallback callBackMethodHelperForSetCurrentHolderImageURICallback) {
-        firebaseFirestore.collection("Posts")
+        firebasefirestore.collection("Posts")
                 .document(blogPostId)
                 .get()
-                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-
-                    public void onComplete(Task<DocumentSnapshot> task) {
-                        Map<String, Object> map;
-                        DocumentSnapshot documentSnapshot = task.getResult();
-                        if (documentSnapshot.exists() && (map = documentSnapshot.getData()) != null) {
-                            for (Map.Entry<String, Object> entry : map.entrySet()) {
-                                if ("imageURI".equals(entry.getKey())) {
-                                    String currentHolderImageURI = entry.getValue().toString();
-                                    String imageIdJPG = currentHolderImageURI.substring(currentHolderImageURI.indexOf("%2Fpost_images%2F"));
-                                    callBackMethodHelperForSetCurrentHolderImageURICallback.onCallback(imageIdJPG.substring(17, imageIdJPG.indexOf("?")));
-                                }
+                .addOnCompleteListener(task -> {
+                    Map<String, Object> map;
+                    DocumentSnapshot documentSnapshot = task.getResult();
+                    if (documentSnapshot.exists() && (map = documentSnapshot.getData()) != null) {
+                        for (Map.Entry<String, Object> entry : map.entrySet()) {
+                            if ("image_uri".equals(entry.getKey())) {
+                                String currentHolderImageURI = entry.getValue().toString();
+                                String imageIdJPG = currentHolderImageURI.substring(currentHolderImageURI.indexOf("%2Fpost_images%2F"));
+                                callBackMethodHelperForSetCurrentHolderImageURICallback.onCallback(imageIdJPG.substring(17, imageIdJPG.indexOf("?")));
                             }
                         }
                     }
-        });
+                });
     }
 
 //    public void setCurrentHolderProfileImageURI (String blogPID, final CallBackMethodHelperForSetCurrentHolderImageURICallback callBackMethodHelperForSetCurrentHolderImageURICallback) {
-//        firebaseFirestore.collection("Post")
+//        firebasefirestore.collection("Post")
 //                .document()
 //    }
 
@@ -227,82 +214,70 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 //        new PostAdapter(listOfPosts2).notifyDataSetChanged();
 //    }
 
+    @SuppressLint("NotifyDataSetChanged")
     public void refreshAdapter(List<PostModel> listPM) {
         new PostAdapter(listPM).notifyDataSetChanged();
     }
 
-    private void clickOnCommentsImage(ViewHolderOfBlogPost holderOfBlogPost, final String blogPostId, final String currentUserId) {
-        holderOfBlogPost.blogCommentButtonView.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View view) {
-                sendToCommentsFragment(view, blogPostId, currentUserId);
-            }
-        });
+    private void clickOnCommentsImage(ViewHolderOfPost holderOfBlogPost, final String blogPostId, final String currentUserId) {
+        holderOfBlogPost.commentButtonView.setOnClickListener(view -> sendToCommentsFragment(view, blogPostId, currentUserId));
     }
 
     /* access modifiers changed from: private */
-    public void sendToCommentsFragment(View view, String blogPostId, String currentUserId) {
-        new HomeFragment().switchFragment(view, blogPostId, currentUserId);
+    public void sendToCommentsFragment(View view, String idOfPost, String currentUserId) {
+        new HomeFragment().switchFragment(view, idOfPost, currentUserId);
     }
 
-    private void addOrDeleteLikes(ViewHolderOfBlogPost holderOfBlogPost, final String blogPostId, final String currentUserId, final String description) {
-        holderOfBlogPost.blogLikeButtonView.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View view) {
-                firebaseFirestore.collection("Posts").document(blogPostId).collection("Likes").document(currentUserId).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                    public void onComplete(Task<DocumentSnapshot> task) {
-                        if (!task.getResult().exists()) {
-                            Map<String, Object> likestMap = new HashMap<>();
-                            likestMap.put("timestamp", FieldValue.serverTimestamp().toString());
-                            firebaseFirestore.collection("Posts").document(blogPostId).collection("Likes").document(currentUserId).set(likestMap);
-                            Toast.makeText(context, "Added a like to " + description, Toast.LENGTH_LONG).show();
-                            return;
-                        }
-                        firebaseFirestore.collection("Posts").document(blogPostId).collection("Likes").document(currentUserId).delete();
-                        Toast.makeText(context, "Removed a like to " + description, Toast.LENGTH_LONG).show();
+    private void addOrDeleteLikes(ViewHolderOfPost holderOfPost, final String postId, final String currentUserId, final String description) {
+        holderOfPost.likesButtonView.setOnClickListener(view -> firebasefirestore.collection("Posts").document(postId).collection("Likes").document(currentUserId).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (!task.getResult().exists()) {
+                    Map<String, Object> likestMap = new HashMap<>();
+                    likestMap.put("timestamp", FieldValue.serverTimestamp().toString());
+                    firebasefirestore.collection("Posts").document(postId).collection("Likes").document(currentUserId).set(likestMap);
+                    Toast.makeText(context, "Added a like to " + description, Toast.LENGTH_LONG).show();
+                    return;
+                }
+                firebasefirestore.collection("Posts").document(postId).collection("Likes").document(currentUserId).delete();
+                Toast.makeText(context, "Removed a like to " + description, Toast.LENGTH_LONG).show();
+            }
+        }));
+    }
+
+    @SuppressLint("UseCompatLoadingForDrawables")
+    private void setLikes(final ViewHolderOfPost h, String idOfPost, String idOfCurrentUser) {
+        firebasefirestore.collection("Posts")
+                .document(idOfPost)
+                .collection("Likes")
+                .document(idOfCurrentUser)
+                .addSnapshotListener((documentSnapshot, e) -> {
+                    if (documentSnapshot == null) {
+                        throw new AssertionError();
+                    } else if (documentSnapshot.exists()) {
+                        h.likesButtonView.setImageDrawable(context.getDrawable(R.drawable.ic_favorite_full));
+                    } else {
+                        h.likesButtonView.setImageDrawable(context.getDrawable(R.drawable.ic_favorite_border));
                     }
                 });
-            }
-        });
     }
 
-    private void setLikes(final ViewHolderOfBlogPost h, String blogPostId, String currentUserId) {
-        firebaseFirestore.collection("Posts")
+    private void setLikesCount(final ViewHolderOfPost h, String blogPostId) {
+        firebasefirestore.collection("Posts")
                 .document(blogPostId)
                 .collection("Likes")
-                .document(currentUserId)
-                .addSnapshotListener(new EventListener<DocumentSnapshot>() {
-
-            public void onEvent(DocumentSnapshot documentSnapshot, FirebaseFirestoreException e) {
-                if (documentSnapshot == null) {
-                    throw new AssertionError();
-                } else if (documentSnapshot.exists()) {
-                    h.blogLikeButtonView.setImageDrawable(context.getDrawable(R.drawable.ic_favorite_full));
-                } else {
-                    h.blogLikeButtonView.setImageDrawable(context.getDrawable(R.drawable.ic_favorite_border));
-                }
-            }
-        });
+                .addSnapshotListener((queryDocumentSnapshots, e) -> {
+                    if (queryDocumentSnapshots == null) {
+                        throw new AssertionError();
+                    } else if (!queryDocumentSnapshots.isEmpty()) {
+                        h.updateLikesCount(queryDocumentSnapshots.size());
+                    } else {
+                        h.updateLikesCount(0);
+                    }
+                });
     }
 
-    private void setLikesCount(final ViewHolderOfBlogPost h, String blogPostId) {
-        firebaseFirestore.collection("Posts")
-                .document(blogPostId)
-                .collection("Likes")
-                .addSnapshotListener(new EventListener<QuerySnapshot>() {
-
-            public void onEvent(QuerySnapshot queryDocumentSnapshots, FirebaseFirestoreException e) {
-                if (queryDocumentSnapshots == null) {
-                    throw new AssertionError();
-                } else if (!queryDocumentSnapshots.isEmpty()) {
-                    h.updateLikesCount(queryDocumentSnapshots.size());
-                } else {
-                    h.updateLikesCount(0);
-                }
-            }
-        });
-    }
-
-//    private void setUsernameAndImage(final ViewHolderOfBlogPost h, String postsUserId) {
-//        this.firebaseFirestore.collection("Users").document(String.valueOf(postsUserId)).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+//    private void setUsernameAndImage(final ViewHolderOfPost h, String postsUserId) {
+//        this.firebasefirestore.collection("Users").document(String.valueOf(postsUserId)).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
 //            public void onComplete(Task<DocumentSnapshot> task) {
 //                if (task.isSuccessful()) {
 //                    h.setUsernameAndUserProfileImage(task.getResult().getString("profile_name_of"), task.getResult().getString("profile_image"));
@@ -312,27 +287,27 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 //    }
 
     public int getItemCount() {
-        return this.listOfPosts.size();
+        return listOfPosts.size();
     }
 
-    private class ViewHolderOfBlogPost extends RecyclerView.ViewHolder {
+    private class ViewHolderOfPost extends RecyclerView.ViewHolder {
 
-        public ImageView blogCommentButtonView;
-        public ImageView blogLikeButtonView;
-        public ImageView blogLocationButtonView;
-        public CircleImageView deletePostView;
-        public CircleImageView upi;
+        public ImageView commentButtonView;
+        public ImageView likesButtonView;
+        public ImageView location_button_view;
+        public CircleImageView delete_post_view;
+        public CircleImageView userProfileImage;
         private View view;
 
-        public ViewHolderOfBlogPost(View v) {
+        public ViewHolderOfPost(View v) {
             super(v);
             view = v;
-//            Log.d("vIs:",view.toString());
-            blogCommentButtonView = view.findViewById(R.id.new_post_comment);
-//            blogLocationButtonView = view.findViewById(R.id.new_post_location_thumbnail);
-//            deletePostView = view.findViewById(R.id.post_clear);
-            blogLikeButtonView = view.findViewById(R.id.new_post_likes_thumb);
-            upi = view.findViewById(R.id.new_post_user_image);
+            commentButtonView = view.findViewById(R.id.new_post_comment);
+            Log.d("commentButtonView",commentButtonView.toString());
+//            location_button_view = view.findViewById(R.id.new_post_location_thumbnail);
+//            delete_post_view = view.findViewById(R.id.post_clear);
+            likesButtonView = view.findViewById(R.id.new_post_likes_thumb);
+            userProfileImage = view.findViewById(R.id.new_post_user_image);
             Fresco.initialize(context);
         }
 
@@ -348,6 +323,7 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             ((TextView) view.findViewById(R.id.new_post_username_text)).setText(userName);
         }
 
+        @SuppressLint("SetTextI18n")
         public void updateLikesCount(int count) {
             ((TextView) view.findViewById(R.id.new_post_likes)).setText(count + "");
         }
@@ -361,10 +337,11 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 //                    .thumbnail(Glide.with(context).load(thumbnailURI)).into((ImageView) view.findViewById(R.id.new_post_image));
 //        }
 
+        @SuppressLint("CheckResult")
         public void setImageURI(String image_uri) {
+//            Log.d("setImageURIHere",String.valueOf(image_uri));
             RequestOptions placeholderOption = new RequestOptions();
             placeholderOption.placeholder(R.drawable.image_placeholder);
-            Log.d("image_uri",image_uri);
             Glide.with(context)
                     .applyDefaultRequestOptions(placeholderOption)
                     .load(image_uri)
@@ -389,25 +366,24 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         }
 
         public void zoom(final int position) {
-            ((ImageView) view.findViewById(R.id.new_post_image)).setOnClickListener(new View.OnClickListener() {
-                public void onClick(View view) {
-                    List<String> uris = new ArrayList<>();
-                    for (int i = 0; i < listOfPosts.size(); i++) {
-                        uris.add(((PostModel) listOfPosts.get(i)).getImageURI());
-                    }
-                    new ImageViewer.Builder(context, uris).setStartPosition(position).hideStatusBar(false).allowZooming(true).allowSwipeToDismiss(true).show();
+            ((ImageView) view.findViewById(R.id.new_post_image)).setOnClickListener(view -> {
+                List<String> uris = new ArrayList<>();
+                for (int i = 0; i < listOfPosts.size(); i++) {
+                    uris.add(((PostModel) listOfPosts.get(i)).getImageURI());
                 }
+                new ImageViewer.Builder(context, uris).setStartPosition(position).hideStatusBar(false).allowZooming(true).allowSwipeToDismiss(true).show();
             });
         }
 
-        public void sendUserToMapFragment(final String location) {
-            blogLocationButtonView.setOnClickListener(new View.OnClickListener() {
-                public void onClick(View view) {
-                    ((FragmentActivity) view.getContext()).getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, new MapsFragment(location)).commit();
-                }
-            });
-        }
+//        public void sendUserToMapFragment(final String location) {
+//            location_button_view.setOnClickListener(new View.OnClickListener() {
+//                public void onClick(View view) {
+//                    ((FragmentActivity) view.getContext()).getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, new MapsFragment(location)).commit();
+//                }
+//            });
+//        }
 
+        @SuppressLint("SetTextI18n")
         public void updateCommentsCount(int numberOfComments) {
             ((TextView) view.findViewById(R.id.post_blog_comments_counter)).setText(numberOfComments + "");
         }

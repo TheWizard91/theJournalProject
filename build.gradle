@@ -5,27 +5,33 @@ buildscript {
         jcenter()
         // For Glide
         mavenCentral()
+        // PhotoView
         maven {
             url "https://jitpack.io"
         }
+//        ext {
+//            compose_compiler = '1.5.3'        //compiler
+//            compose_version = '1.2.1'         //stable compose dependencies
+//            compose_material3 = '1.1.2'  //M3 releases
+//        }
     }
     dependencies {
         // Downgrading gradle version in order to fix error in build process.
 //        classpath 'com.android.tools.build:gradle:4.2.0-beta02'
-        classpath 'com.android.tools.build:gradle:7.4.2'
+        classpath 'com.android.tools.build:gradle:8.0.2'
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
-        classpath 'com.google.gms:google-services:4.3.10'
+        classpath 'com.google.gms:google-services:4.4.0'
 
         // For Apache licence
-        classpath 'com.google.android.gms:oss-licenses-plugin:0.10.4'
+        classpath 'com.google.android.gms:oss-licenses-plugin:0.10.6'
 
-        classpath 'com.android.tools.build:gradle:7.4.2'
+        classpath 'org.jetbrains.kotlin:kotlin-gradle-plugin:1.7.20'
 
-//        // Side Menu
-//        classpath ('com.github.ozodrukh:CircularReveal:2.0.1@aar') {
-//            transitive = true;
-//        }
+        // Side Menu
+        classpath ('com.github.ozodrukh:CircularReveal:2.0.1@aar') {
+            transitive = true;
+        }
     }
 }
 
@@ -36,11 +42,15 @@ allprojects {
         // For Glide
         mavenCentral()
 
-        //
+        // PhotoView
         maven { url "https://jitpack.io" }
     }
 }
 
 task clean(type: Delete) {
     delete rootProject.buildDir
+}
+ext {
+    roomVersion = '2.4.2'
+    coroutines = '1.4.3'
 }

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,7 +19,6 @@ import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 //import com.thewizard91.thealbumproject.C2521R;
-import com.google.android.exoplayer2.util.Log;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -49,64 +49,63 @@ import java.time.format.DateTimeFormatter;
 import java.time.LocalDateTime;
 
 public class CommentsFragment extends Fragment {
-    private String blogPostId;
-    public String commentId;
-    public TextView commentTextView;
-    public CommentsAdapter commentsAdapter;
-    private RecyclerView commentsListView;
-    public CommentsModel commentsModel;
-    public List<CommentsModel> commentsModelList;
+    private String post_id;
+    public String comments_id;
+    public TextView comment_text_view;
+    public CommentsAdapter comments_adapter;
+    private RecyclerView comments_list_view;
+    public CommentsModel comments_model;
+    public List<CommentsModel> comments_model_list;
     public Context context;
-    public String currentUserId;
-    private FirebaseFirestore firebaseFirestore;
-    private FirebaseDatabase realtimeDatabase;
-    private DatabaseReference realtimeDatabaseReference;
-    private StorageReference dataServerStorage;
-    public Boolean isTheFirstPageOfCommentsLoaded = true;
-    public DocumentSnapshot lastVisibleComment;
+    public String current_user_id;
+    private FirebaseFirestore firebasefirestore;
+    private FirebaseDatabase realtime_database;
+    private DatabaseReference realtime_database_reference;
+    public Boolean is_the_first_load_of_comments_loaded = true;
+    public DocumentSnapshot last_visible_comment;
     public  String username;
-    public String userProfileImageUri;
-    private int size=0;
+    public String user_profile_image_uri;
+    private int size = 0;
     private int currentSize;
     private View view;
     private MainActivity activity;
-    private Button sendCommentButtonView;
+    private Button send_comment_button;
 
     public CommentsFragment() {}
-    public CommentsFragment(String blogPostId, String currentUserId) {
-        this.blogPostId = blogPostId;
-        this.currentUserId = currentUserId;
+    public CommentsFragment(String post_id, String current_user_id) {
+        this.post_id = post_id;
+        this.current_user_id = current_user_id;
         Log.d("can I refresh?","yes");
     }
-/*TODO: When the query is empty and I add a comment by pressing the send button, the comment info is stored on th bd.
-*  However, as soon as I scroll down, the app crashes. One way to fix this is by refreshing the fragment.*/
+
+    /*TODO: When the query is empty and I add a comment by pressing the send button, the comment info is stored on the bd.
+    *  However, as soon as I scroll down, the app crashes. One way to fix this is by refreshing the fragment.*/
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_comments, container, false);
-        commentsListView = view.findViewById(R.id.comments_recyclerview);
-        commentTextView = view.findViewById(R.id.comment_edittext);
-        commentsListView = view.findViewById(R.id.comments_recyclerview);
-        sendCommentButtonView = view.findViewById(R.id.comment_button);
+        comments_list_view = view.findViewById(R.id.comments_recyclerview);
+        comment_text_view = view.findViewById(R.id.comment_edittext);
+        comments_list_view = view.findViewById(R.id.comments_recyclerview);
+        send_comment_button = view.findViewById(R.id.comment_button);
         context = container.getContext();
-        commentsModelList = new ArrayList();
-        commentsAdapter = new CommentsAdapter(commentsModelList, blogPostId);
-        commentsListView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        commentsListView.setAdapter(commentsAdapter);
-        firebaseFirestore = FirebaseFirestore.getInstance();
+        comments_model_list = new ArrayList();
+        comments_adapter = new CommentsAdapter(comments_model_list, post_id);
+        comments_list_view.setLayoutManager(new LinearLayoutManager(getActivity()));
+        comments_list_view.setAdapter(comments_adapter);
+        firebasefirestore = FirebaseFirestore.getInstance();
         FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
-        FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
+        FirebaseFirestore firebasefirestore = FirebaseFirestore.getInstance();
         FirebaseUser currentUser = firebaseAuth.getCurrentUser();
-        realtimeDatabase = FirebaseDatabase.getInstance();
-        realtimeDatabaseReference = realtimeDatabase.getReference();
-        currentUserId = firebaseAuth.getCurrentUser().getUid();
-//        Log.d("idOfUser",currentUserId);
+        realtime_database = FirebaseDatabase.getInstance();
+        realtime_database_reference = realtime_database.getReference();
+        current_user_id = firebaseAuth.getCurrentUser().getUid();
         username = currentUser.getDisplayName();
         getUserImageProfileUri();
 
         // Getting rid of navigation button at the bottom.
         activity = (MainActivity) getActivity();
-        activity.addFloatingButton.setVisibility(View.INVISIBLE);
+        activity.addFloatingActionButton.setVisibility(View.INVISIBLE);
         activity.bottomAppBar.setVisibility(View.INVISIBLE);
-        activity.sendBackFloatingActionButton.setVisibility(View.VISIBLE);
+        activity.backFloatingActionButton.setVisibility(View.VISIBLE);
 
         if (FirebaseAuth.getInstance().getCurrentUser() != null) {
 
@@ -116,7 +115,7 @@ public class CommentsFragment extends Fragment {
             createTheFirstQuery();
 
             sendToHomeFragment ();
-            //TODO: DO NOT TOUCH THIS.
+            // DO NOT TOUCH THIS.
 //            loadMoreCommentsAsTheUserScrollsDown();
 //            if (size > 1) Log.d("now load","yes");
             return view;
@@ -141,13 +140,13 @@ public class CommentsFragment extends Fragment {
 //    }
 
     private void getUserImageProfileUri() {
-        firebaseFirestore.collection("Users")
-                .document(currentUserId)
+        firebasefirestore.collection("Users")
+                .document(current_user_id)
                 .get()
                 .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                     @Override
                     public void onSuccess(DocumentSnapshot documentSnapshot) {
-                        userProfileImageUri = (String) documentSnapshot.get("userProfileImageUri");
+                        user_profile_image_uri = (String) documentSnapshot.get("userProfileImageURI");
                         username = (String) documentSnapshot.get("username");
                     }
                 });
@@ -155,15 +154,21 @@ public class CommentsFragment extends Fragment {
 
     private void loadMoreCommentsAsTheUserScrollsDown() {
         /**It uses the help of loadMoreComments to load more content on the adapter, as the user scroll down.**/
-        commentsListView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+        comments_list_view.addOnScrollListener(new RecyclerView.OnScrollListener() {
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
             }
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
                 if (!recyclerView.canScrollVertically(1)) {
-                    Toast.makeText(context, "Reached bottom " + lastVisibleComment.getString("commentText"), Toast.LENGTH_SHORT).show();
-                    isTheFirstPageOfCommentsLoaded = true;
+                    Toast.makeText(context, "Reached bottom " + last_visible_comment.getString("commentText"), Toast.LENGTH_SHORT).show();
+                    is_the_first_load_of_comments_loaded = true;
+                    /*TODO: The following method is supposed to load more comments from the database,
+                     * but an issues has occurred please get it fixed. I don't know that the issue is since
+                     * I did not code in this project for months and found it in this state. However, there
+                     * was an error that I fixed (could not access comments_id from the model's id class).It was
+                     * a casting issue.
+                     */
 //                    loadMoreComments();
                 }
             }
@@ -172,33 +177,33 @@ public class CommentsFragment extends Fragment {
 
     public void loadMoreComments() {
         /**Helper of loadMoreCommentsAsTheUserScrollsDown, it load more content on the adapter.**/
-        firebaseFirestore.collection("Posts")
-                .document(blogPostId)
+        firebasefirestore.collection("Posts")
+                .document(post_id)
                 .collection("Comments")
                 .orderBy("timestamp", Query.Direction.ASCENDING)
-                .startAfter(lastVisibleComment)
-                .limit(5)
+                .startAfter(last_visible_comment)
+                .limit(5) // loading up to five comments at time.
                 .addSnapshotListener(new EventListener<QuerySnapshot>() {
 
                     public void onEvent(QuerySnapshot queryDocumentSnapshots, FirebaseFirestoreException e) {
                         if (queryDocumentSnapshots == null) {
                             throw new AssertionError();
                         } else if (!queryDocumentSnapshots.isEmpty()) {
-                            if (isTheFirstPageOfCommentsLoaded.booleanValue()) {
-                                lastVisibleComment = queryDocumentSnapshots.getDocuments()
+                            if (is_the_first_load_of_comments_loaded.booleanValue()) {
+                                last_visible_comment = queryDocumentSnapshots.getDocuments()
                                         .get(queryDocumentSnapshots.size() - 1);
-                                Log.d("lastVisibleComment",lastVisibleComment.getTimestamp("timestamp").toString());
+                                Log.d("last_visible_comment",last_visible_comment.getTimestamp("timestamp").toString());
                             }
                             for (DocumentChange documents : queryDocumentSnapshots.getDocumentChanges()) {
                                 if (documents.getType() == DocumentChange.Type.ADDED) {
-                                    commentId = documents.getDocument().getId();
-                                    commentsModel = (CommentsModel) ((CommentsModel) documents.getDocument().toObject(CommentsModel.class)).withId(commentId);
-                                    commentsModelList.add(commentsModelList.size(), commentsModel);
-                                    commentsAdapter.notifyDataSetChanged();
-//                                    lastVisibleComment = queryDocumentSnapshots.getDocuments().get(queryDocumentSnapshots.size() - 1);
+                                    comments_id = documents.getDocument().getId();
+                                    comments_model = documents.getDocument().toObject(CommentsModel.class).withId(comments_id);
+                                    comments_model_list.add(comments_model_list.size(), comments_model);
+                                    comments_adapter.notifyDataSetChanged();
+//                                    last_visible_comment = queryDocumentSnapshots.getDocuments().get(queryDocumentSnapshots.size() - 1);
                                 }
                             }
-                            isTheFirstPageOfCommentsLoaded = false;
+                            is_the_first_load_of_comments_loaded = false;
                         }
                     }
                 });
@@ -206,8 +211,8 @@ public class CommentsFragment extends Fragment {
 
     private void createTheFirstQuery() {
         /**Create the first query, plus, display it.**/
-        firebaseFirestore.collection("Posts")
-                .document(blogPostId)
+        firebasefirestore.collection("Posts")
+                .document(post_id)
                 .collection("Comments")
                 .orderBy("timestamp", Query.Direction.ASCENDING)
                 .limit(100)
@@ -218,17 +223,17 @@ public class CommentsFragment extends Fragment {
                         } else if (queryDocumentSnapshots.isEmpty()) {
                             Toast.makeText(context, "No comments on this post yet so be the first to comment!", Toast.LENGTH_SHORT).show();
                         } else {
-                            lastVisibleComment = queryDocumentSnapshots.getDocuments().get(queryDocumentSnapshots.size() - 1);
-                            Log.d("There is a comment","yes");
+                            last_visible_comment = queryDocumentSnapshots.getDocuments().get(queryDocumentSnapshots.size() - 1);
+//                            Log.d("There is a comment","yes");
                             for (DocumentChange document : queryDocumentSnapshots.getDocumentChanges()) {
                                 if (document.getType() == DocumentChange.Type.ADDED) {
-                                    commentId = document.getDocument().getId();
-                                    Log.d("commentId",commentId);
-                                    commentsModel = document.getDocument().toObject(CommentsModel.class).withId(commentId);
-                                    Log.d("commentsModel",commentsModel.toString());
-                                    commentsModelList.add(commentsModel);
-                                    Log.d("commentsModelList",commentsModelList.toString());
-                                    commentsAdapter.notifyDataSetChanged();
+                                    comments_id = document.getDocument().getId();
+//                                    Log.d("comments_id",comments_id);
+                                    comments_model = document.getDocument().toObject(CommentsModel.class).withId(comments_id);
+//                                    Log.d("comments_model",comments_model.toString());
+                                    comments_model_list.add(comments_model);
+//                                    Log.d("comments_model_list",comments_model_list.toString());
+                                    comments_adapter.notifyDataSetChanged();
                                 }
                             }
                         }
@@ -243,7 +248,7 @@ public class CommentsFragment extends Fragment {
     }
 
     private void sendToHomeFragment () {
-        activity.sendBackFloatingActionButton.setOnClickListener(new View.OnClickListener() {
+        activity.backFloatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 ((FragmentActivity) view.getContext())
@@ -257,51 +262,52 @@ public class CommentsFragment extends Fragment {
 
     private void sendCommentToDatabase() {
         /**Extracting the information from(by element fields) the user so the map can be made**/
-        sendCommentButtonView.setOnClickListener(new View.OnClickListener() {
+        send_comment_button.setOnClickListener(new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.O)
             public void onClick(View view) {
-                String comment = commentTextView.getText().toString();
+                String comment = comment_text_view.getText().toString();
                 if (!TextUtils.isEmpty(comment)) {
                     FieldValue time = FieldValue.serverTimestamp();
-                    CommentsModel commentsModel = new CommentsModel(blogPostId,userProfileImageUri,comment,
+                    CommentsModel comments_model = new CommentsModel(post_id,user_profile_image_uri,comment,
                                                 "","","","",time,
-                                                currentUserId,username,userProfileImageUri);
+                                                current_user_id,username,user_profile_image_uri);
                     // Firestore database.
-                    String commentId = UUID.randomUUID().toString();
-                    Map<String,Object> newCommentMap = commentsModel.firebaseDatabaseMap();
+                    String comments_id = UUID.randomUUID().toString();
+                    Map<String,Object> newCommentMap = comments_model.firebaseDatabaseMap();
                     Log.d("newCommentMap",newCommentMap.toString());
-                    makeTheDatabase(commentId,newCommentMap);
+                    makeTheDatabase(comments_id,newCommentMap);
+
                     // Create post map and create the database in realtime database.
                     DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
                     LocalDateTime now =LocalDateTime.now();
                     String date = dateTimeFormatter.format(now).toString();
-                    NotificationsModel notificationsModel = new NotificationsModel(username,currentUserId,
-                            date,userProfileImageUri,username+" has just posted a comment.");
+                    NotificationsModel notificationsModel = new NotificationsModel(username,current_user_id,
+                            date,user_profile_image_uri,username+" has just posted a comment.");
                     Map<String,Object> mapOfRealtimeDatabase = notificationsModel.realTimeDatabaseMap();
-                    addToRealtimeDatabase(mapOfRealtimeDatabase,commentId);
-//                    Log.d("myImageUri",userProfileImageUri);
-                    new CommentsAdapter(commentsModelList);
+                    addToRealtimeDatabase(mapOfRealtimeDatabase,comments_id);
+//                    Log.d("myImageUri",user_profile_image_uri);
+                    new CommentsAdapter(comments_model_list);
                 }
             }
         });
     }
-    private void addToRealtimeDatabase(Map<String, Object> mapOfRealtimeDatabase, String commentId) {
-        realtimeDatabaseReference.child("Notifications")
-                .child(commentId)
+    private void addToRealtimeDatabase(Map<String, Object> mapOfRealtimeDatabase, String comments_id) {
+        realtime_database_reference.child("Notifications")
+                .child(comments_id)
                 .setValue(mapOfRealtimeDatabase);
     }
     public void makeTheDatabase(String commentUID,Map<String,Object> map) {
         /**Making the map that will populate the database.*/
-        firebaseFirestore.collection("Posts/" + blogPostId + "/Comments")
-                .document(currentUserId + ":" + commentUID)
+        firebasefirestore.collection("Posts/" + post_id + "/Comments")
+                .document(current_user_id + ":" + commentUID)
                 .set(map).addOnCompleteListener(new OnCompleteListener<Void>() {
             public void onComplete(@NonNull Task<Void> task) {
                 if (!task.isSuccessful()) {
                     Toast.makeText(context, "There Was An Error Posting The Comment: " + task.getException(), Toast.LENGTH_SHORT).show();
                 }
-                commentTextView.setText("");
+                comment_text_view.setText("");
                 Toast.makeText(context, "Comment sent", Toast.LENGTH_SHORT).show();
-                Log.d("lastVisibleComment",lastVisibleComment.toString());
+                Log.d("last_visible_comment",last_visible_comment.toString());
             }
         });
     }

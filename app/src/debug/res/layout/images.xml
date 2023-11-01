@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.LinearLayoutCompat
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:gravity="center">
+
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/flex_box_shapeable_image_view"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:clickable="true"
+        android:contentDescription="@string/memories_album_description_text"
+        android:focusable="true"
+        android:cropToPadding="true"
+        app:srcCompat="@drawable/image_placeholder"
+        tools:ignore="ImageContrastCheck,TouchTargetSizeCheck"
+        android:scaleType="center"
+        app:strokeWidth="5dp"
+        android:padding="5dp"
+        app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.Material3.Chip"/>
+
+</androidx.appcompat.widget.LinearLayoutCompat>
+    <!--<com.google.android.flexbox.FlexboxLayout-->
+    <!--    xmlns:android="http://schemas.android.com/apk/res/android"-->
+    <!--    xmlns:app="http://schemas.android.com/apk/res-auto"-->
+    <!--    android:layout_width="match_parent"-->
+    <!--    android:layout_height="wrap_content"-->
+    <!--    android:padding="20dp"-->
+    <!--    app:flexDirection="row"-->
+    <!--    app:flexWrap="wrap"-->
+    <!--    app:layout_flexGrow="1"-->
+    <!--    app:justifyContent="space_between">-->
+
+    <!--    <androidx.cardview.widget.CardView-->
+    <!--        android:id = "@+id/cardView_of_image_one"-->
+    <!--        android:clipToPadding ="true"-->
+    <!--        android:layout_width = "150dp"-->
+    <!--        android:layout_height = "150dp"-->
+    <!--        android:minWidth = "0dp"-->
+    <!--        android:minHeight = "0dp"-->
+    <!--        app:cardCornerRadius="20dp"-->
+    <!--        app:layout_constraintHorizontal_bias = "1"-->
+    <!--        app:layout_constraintVertical_bias = "0.161">-->
+
+    <!--            <ImageView-->
+    <!--                android:id = "@+id/image_one"-->
+    <!--                android:focusable = "true"-->
+    <!--                android:clickable = "true"-->
+    <!--                android:layout_width = "match_parent"-->
+    <!--                android:layout_height = "match_parent"-->
+    <!--                android:contentDescription = "@string/memories_album_description_text"-->
+    <!--                app:layout_constraintHorizontal_bias = "0"-->
+    <!--                app:layout_constraintVertical_bias = "0"-->
+    <!--                app:srcCompat="@drawable/image_placeholder"/>-->
+
+    <!--    </androidx.cardview.widget.CardView>-->
+
+    <!--    <androidx.cardview.widget.CardView-->
+    <!--        android:id = "@+id/cardView_of_image_two"-->
+    <!--        android:clipToPadding ="true"-->
+    <!--        android:layout_width = "150dp"-->
+    <!--        android:layout_height = "150dp"-->
+    <!--        android:minWidth = "0dp"-->
+    <!--        android:minHeight = "0dp"-->
+    <!--        app:cardCornerRadius="20dp"-->
+    <!--        app:layout_constraintHorizontal_bias = "1"-->
+    <!--        app:layout_constraintVertical_bias = "0.161">-->
+
+    <!--        <ImageView-->
+    <!--            android:id = "@+id/image_two"-->
+    <!--            android:focusable = "true"-->
+    <!--            android:clickable = "true"-->
+    <!--            android:layout_width = "match_parent"-->
+    <!--            android:layout_height = "match_parent"-->
+    <!--            android:contentDescription = "@string/memories_album_description_text"-->
+    <!--            app:layout_constraintHorizontal_bias = "0"-->
+    <!--            app:layout_constraintVertical_bias = "0"-->
+    <!--            app:srcCompat="@drawable/image_placeholder"/>-->
+
+    <!--    </androidx.cardview.widget.CardView>-->
+
+    <!--</com.google.android.flexbox.FlexboxLayout>-->

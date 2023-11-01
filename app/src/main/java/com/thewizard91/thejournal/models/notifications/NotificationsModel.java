@@ -15,7 +15,6 @@ public class NotificationsModel extends NotificationId implements Serializable {
     private String userId;
     private String userProfileImageURI;
     private String notificationText;
-
     public NotificationsModel() {}
     public NotificationsModel(String username,
                               String userId,
@@ -30,18 +29,18 @@ public class NotificationsModel extends NotificationId implements Serializable {
         this.notificationText = notificationText;
     }
     public void setUsername(String username) {this.username = username;}
-    public String getUsername() {return this.username;}
-    public void setDate(String timestamp) {this.date = timestamp;}
-    public String getDate() {return this.date;}
+    public String getUsername() {return username;}
+    public void setDate(String date) {this.date = date;}
+    public String getDate() {return date;}
 //    public void setTime(FieldValue time) {this.time= time;}
 //    public FieldValue getTime() {return time;}
 //    public void setComment(String comment) {this.comment = comment;}
 //    public String getComment() {return this.comment;}
     public void setUserId(String uId) {this.userId = uId;}
-    public String getUserId() {return this.userId;}
+    public String getUserId() {return userId;}
     public void setUserProfileImageURI(String userProfileImageURI) {this.userProfileImageURI = userProfileImageURI;}
     public String getUserProfileImageURI() {
-        return this.userProfileImageURI;
+        return userProfileImageURI;
     }
     public String getNotificationText() {
         return notificationText;
@@ -52,7 +51,7 @@ public class NotificationsModel extends NotificationId implements Serializable {
     @Exclude
     public Map<String,Object> realTimeDatabaseMap() {
         HashMap<String,Object> realtimePostMap = new HashMap<>();
-        realtimePostMap.put("username",username);
+        realtimePostMap.put("username", username);
         realtimePostMap.put("date",date);
 //        realtimePostMap.put("time",time.toString());
 //        realtimePostMap.put("comment",comment);

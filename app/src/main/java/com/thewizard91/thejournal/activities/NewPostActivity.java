@@ -1,27 +1,24 @@
 package com.thewizard91.thejournal.activities;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.AppCompatImageView;
-
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.Handler;
 import android.text.TextUtils;
 import android.util.Log;
-import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.AppCompatImageView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
@@ -33,27 +30,20 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.royrodriguez.transitionbutton.TransitionButton;
+import com.thewizard91.thejournal.R;
+import com.thewizard91.thejournal.models.image.ImageModel;
 import com.thewizard91.thejournal.models.notifications.NotificationsModel;
 import com.thewizard91.thejournal.models.post.PostModel;
-import com.thewizard91.thejournal.R;
 import com.yalantis.ucrop.UCrop;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.UUID;
-import java.time.format.DateTimeFormatter;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Map;
+import java.util.UUID;
 
-import github.com.st235.lib_expandablebottombar.ExpandableBottomBar;
 import id.zelory.compressor.Compressor;
-
-import static java.io.File.createTempFile;
 
 public class NewPostActivity extends AppCompatActivity {
 
@@ -64,21 +54,15 @@ public class NewPostActivity extends AppCompatActivity {
     private EditText postDescription;
     private TransitionButton sendButton;
     private FirebaseFirestore cloudFirebaseDatabaseInstance;
-    private FirebaseDatabase realtimeDatabase;
     private DatabaseReference realtimeDatabaseReference;
     private StorageReference dataServerStorage;
-    public String randomName;
     private String userId;
     private String username;
-    // GBet APi to locate the user
-    private String location;
-    private Bitmap compressedImageFile;
     private Uri newPostImageURI;
-    private Uri userImageURI;
+    private Uri image_uri;
     private String userProfileImageUri;
     String randomNameForTheNewPostImage;
 
-    private MainActivity mainActivity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,7 +81,7 @@ public class NewPostActivity extends AppCompatActivity {
 
         dataServerStorage = FirebaseStorage.getInstance().getReference();
         cloudFirebaseDatabaseInstance = FirebaseFirestore.getInstance();
-        realtimeDatabase = FirebaseDatabase.getInstance();
+        FirebaseDatabase realtimeDatabase = FirebaseDatabase.getInstance();
         realtimeDatabaseReference = realtimeDatabase.getReference();
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
 
@@ -108,42 +92,26 @@ public class NewPostActivity extends AppCompatActivity {
             selectImageToPost();
             sendNewPost();
         }
+
     }
 
-    private void sendNewPost(){
-        /**Sending data to the database upon click*/
-        sendButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                retrieveUserData();
-                sendButton.startAnimation();
-                final Handler handler = new Handler();
-                handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        boolean isSuccessful = true;
-                        if (isSuccessful) {
-                            sendButton.stopAnimation(TransitionButton.StopAnimationStyle.EXPAND,
-                                    new TransitionButton.OnAnimationStopEndListener() {
-                                        @Override
-                                        public void onAnimationStopEnd() {
-                                            Intent intent = new Intent(getBaseContext(), MainActivity.class);
-                                            intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                                            startActivity(intent);
-                                        }
-                                    });
-                        } else {
-                            sendButton.stopAnimation(TransitionButton.StopAnimationStyle.SHAKE, null);
-                        }
-                    }
-                }, 2000);
-            }
+    private void sendNewPost () {
+        sendButton.setOnClickListener(v -> {
+            retrieveUserData();
+            sendButton.startAnimation();
+            final Handler handler = new Handler();
+            handler.postDelayed(() -> {
+                sendButton.stopAnimation(TransitionButton.StopAnimationStyle.EXPAND,
+                        () -> {
+                            Intent intent = new Intent(getBaseContext(), MainActivity.class);
+                            intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                            startActivity(intent);
+                        });
+            }, 2000);
         });
     }
 
     private void retrieveUserData() {
-        /**Get the information inserted from the user and create a database table for it.
-         * That way (creating the database (the map) we store it into firebase database.*/
 
         // Retrieve info as the user is typing title and description.
         final String insertTitle = postTitle.getText().toString();
@@ -181,8 +149,8 @@ public class NewPostActivity extends AppCompatActivity {
                                 // Calling helper method for storing data in storage database.
                                 storeTheInfoInsertedByTheUserInDatabase(task,
                                         insertTitle,
-                                        insertDescription,
-                                        randomNameForTheNewPostImage);
+                                        insertDescription
+                                );
                             }
                         }
                     });
@@ -190,39 +158,48 @@ public class NewPostActivity extends AppCompatActivity {
 
         storeTheInfoInsertedByTheUserInDatabase(null,
                 insertTitle,
-                insertDescription,
-                randomNameForTheNewPostImage);
+                insertDescription
+        );
     }
 
-    private void storeTheInfoInsertedByTheUserInDatabase(Task<UploadTask.TaskSnapshot> task, String insertTitle, String insertDescription, String i) {
+    private void storeTheInfoInsertedByTheUserInDatabase(Task<UploadTask.TaskSnapshot> task, String insertTitle, String insertDescription) {
 
         final String[] downloadURI = {null};
 
-        if (task!=null) {
+        if (task != null) {
             task.addOnSuccessListener(taskSnapshot -> taskSnapshot.getStorage()
                     .getDownloadUrl()
                     .addOnSuccessListener(new OnSuccessListener<Uri>() {
                         @Override
                         public void onSuccess(Uri uri) {
-                            downloadURI[0] = uri.toString();
+                            downloadURI[0] = uri.toString();// for image uri
                             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                                userImageURI = uri.parse(downloadURI[0]);
+                                image_uri = Uri.parse(downloadURI[0]);
+                                Log.d("userImageURI:",image_uri.toString());
                                 FieldValue time = FieldValue.serverTimestamp();
 
+                                // Create post object.
+                                PostModel post_model = new PostModel(image_uri.toString(),
+                                        userId,time,username,insertTitle,insertDescription,
+                                        userProfileImageUri);
                                 //
-                                PostModel postModel = new PostModel(downloadURI[0],userId,time,username,insertTitle,insertDescription,userProfileImageUri);
-                                Map<String,Object>postMap = postModel.firebaseDatabaseMap();
+                                Map<String, Object>post_map = post_model.postFirebaseDatabaseMap();
+                                Log.d("post_model",String.valueOf(post_model));
+                                //
+                                addPostToEveryUserFirebaseFireStoreSpace(post_map);
 
-                                //
-                                addPostToEveryUserFirebaseFireStoreSpace(postMap);
+                                ImageModel image_model = new ImageModel(insertDescription,insertTitle,downloadURI[0],time);
+                                Map<String, Object> image_map = image_model.imageFirebaseDatabaseMap();
+                                Log.d("image_model",String.valueOf(image_model));
 
                                 // Creating a database and store info in there for the user
                                 // it will show his own post only
-                                addPostToUniqueUserFirebaseFireStoreSpace(postMap);
+                                addPostToUniqueUserFirebaseFireStoreSpace(image_map);
 
                                 DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
                                 LocalDateTime now =LocalDateTime.now();
                                 String date = dateTimeFormatter.format(now).toString();
+
                                 // Create model for a notification regarding the latest post.
                                 NotificationsModel notificationsModel = new NotificationsModel(username,userId,
                                         date,userProfileImageUri,username+" has just posted.");
@@ -240,40 +217,28 @@ public class NewPostActivity extends AppCompatActivity {
 
     private void addToRealtimeDatabase(Map<String, Object> mapOfRealtimeDatabase) {
         realtimeDatabaseReference.child("Notifications")
-//                .child(userId)
                 .child(randomNameForTheNewPostImage)
                 .setValue(mapOfRealtimeDatabase);
     }
 
-    private void addPostToUniqueUserFirebaseFireStoreSpace(Map<String, Object> postMap) {
+    private void addPostToUniqueUserFirebaseFireStoreSpace(Map<String, Object> image_map) {
         cloudFirebaseDatabaseInstance
                 .collection("Gallery")
-                .document("gallery_document_of:" + userId)
-                .collection("gallery_collection_of:" + userId)
-                .document("images_from_posts")
-                .collection("posts")
-                .add(postMap);
-
-        cloudFirebaseDatabaseInstance
-                .collection("Gallery")
-                .document("gallery_document_of:" + userId)
+                .document(userId)
                 .collection("images")
-                .add(postMap);
+                .add(image_map);
     }
 
-    private void addPostToEveryUserFirebaseFireStoreSpace(Map<String, Object> postMap) {
+    private void addPostToEveryUserFirebaseFireStoreSpace(Map<String, Object> post_map) {
         cloudFirebaseDatabaseInstance.collection("Posts")
                 .document(randomNameForTheNewPostImage)
-                .set(postMap)
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        if(task.isSuccessful()){
-                            Toast.makeText(NewPostActivity.this, "The Post was Sent", Toast.LENGTH_SHORT).show();
-                        } else {
-                            Log.d("taskError",task.toString());
-                            Toast.makeText(NewPostActivity.this, "FIRE-STORE ERROR"+task.getException(), Toast.LENGTH_SHORT).show();
-                        }
+                .set(post_map)
+                .addOnCompleteListener(task -> {
+                    if(task.isSuccessful()){
+                        Toast.makeText(NewPostActivity.this, "The Post was Sent", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Log.d("taskError",task.toString());
+                        Toast.makeText(NewPostActivity.this, "FIRE-STORE ERROR"+task.getException(), Toast.LENGTH_SHORT).show();
                     }
                 });
     }
@@ -282,36 +247,23 @@ public class NewPostActivity extends AppCompatActivity {
         cloudFirebaseDatabaseInstance.collection("Users")
                 .document(userId)
                 .get()
-                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                        DocumentSnapshot documentSnapshot = task.getResult();
-                        if(task.isSuccessful()) { //documentSnapshot.exists()
-                            DocumentSnapshot document = task.getResult();
-                            if (document.exists()) {
-//                                Log.d("Here in if", String.valueOf(document.getData()));
-                                List<String> list = new ArrayList<>();
-                                Map<String, Object> map = documentSnapshot.getData();
-                                if(map!=null) {
-                                    for(Map.Entry<String, Object> entry: map.entrySet()) {
-                                        list.add(entry.getValue().toString());
-//                                        Log.d("entry123",entry.getKey());
-                                        String entry_key = entry.getKey();
-                                        if ("userProfileImageUri".equals(entry_key)) {
-//                                            Log.d("entry_key==pi","yes");
-                                            userProfileImageUri = entry.getValue().toString();
-                                        }
-                                        if ("username".equals(entry_key)) {
-//                                            Log.d("entry_key==un","yes");
-                                            username = entry.getValue().toString();
-                                        }
+                .addOnCompleteListener(task -> {
+                    DocumentSnapshot documentSnapshot = task.getResult();
+                    if(task.isSuccessful()) {
+                        DocumentSnapshot document = task.getResult();
+                        if (document.exists()) {
+                            Map<String, Object> map = documentSnapshot.getData();
+                            if(map!=null) {
+                                for(Map.Entry<String, Object> entry: map.entrySet()) {
+                                    String entry_key = entry.getKey();
+                                    if ("userProfileImageURI".equals(entry_key)) {
+                                        userProfileImageUri = entry.getValue().toString();
+                                    }
+                                    if ("username".equals(entry_key)) {
+                                        username = entry.getValue().toString();
                                     }
                                 }
-                            } else {
-//                                Log.d("Here in else", "error");
                             }
-                        } else {
-//                            Log.d("in else 2,", String.valueOf(task.getException()));
                         }
                     }
                 });
@@ -319,12 +271,7 @@ public class NewPostActivity extends AppCompatActivity {
 
     private void selectImageToPost() {
 
-        image.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivityForResult(new Intent().setAction(Intent.ACTION_GET_CONTENT).setType("image/*"), CODE_IMAGE_GALLERY);
-            }
-        });
+        image.setOnClickListener(v -> startActivityForResult(new Intent().setAction(Intent.ACTION_GET_CONTENT).setType("image/*"), CODE_IMAGE_GALLERY));
     }
 
     private void startCrop(@NonNull Uri uri) {
@@ -346,10 +293,10 @@ public class NewPostActivity extends AppCompatActivity {
 
     public UCrop.Options getOptions() {
         UCrop.Options options = new UCrop.Options();
-//        options.setCompressionQuality(70);
+        options.setCompressionQuality(70);
         // CompressType
-//        options.setCompressionFormat(Bitmap.CompressFormat.PNG);
-//        options.setCompressionFormat(Bitmap.CompressFormat.PNG);
+        options.setCompressionFormat(Bitmap.CompressFormat.PNG);
+        options.setCompressionFormat(Bitmap.CompressFormat.PNG);
 
         // Ui
         options.setHideBottomControls(false);
@@ -360,26 +307,6 @@ public class NewPostActivity extends AppCompatActivity {
         options.setToolbarTitle("Choose The Image For Your Profile!");
 
         return options;
-    }
-
-    private File getImageFile() {
-        /*
-          Returns a new File in the external storage directory with .jpg extension
-         */
-        String imageFileName = "/JPEG_" + System.currentTimeMillis() + "_";
-        File storageDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM), "Camera");
-
-        File file = null;
-        try {
-            file = createTempFile(imageFileName, ".jpg", new File("C:" + storageDir.getAbsolutePath()));
-        } catch (IOException e) {
-            e.printStackTrace();
-            Log.d("ErrorDetected:", e.toString());
-        }
-
-        // currentPhotoPath is where the image is stored ones taken by the user.
-        String currentPhotoPath = "file:" + Objects.requireNonNull(file).getAbsolutePath();
-        return file;
     }
 
     @Override

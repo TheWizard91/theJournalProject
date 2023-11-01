@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+<!--    <include-->
+<!--        android:id="@+id/main_toolbar"-->
+<!--        app:layout_constraintBottom_toBottomOf="0"-->
+<!--        app:layout_constraintEnd_toEndOf="0"-->
+<!--        app:layout_constraintHorizontal_bias="1"-->
+<!--        app:layout_constraintStart_toStartOf="0"-->
+<!--        app:layout_constraintTop_toTopOf="0"-->
+<!--        layout="@layout/toolbar_main"/>-->
+
+<!--    <ProgressBar-->
+<!--        android:id="@+id/add_new_content_progressbar"-->
+<!--        android:background="@color/pastel_violet"-->
+<!--        android:visibility="invisible"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:indeterminate="true"-->
+<!--        android:progressDrawable="@color/floating_bottom_color_border"-->
+<!--        app:layout_constraintBottom_toBottomOf="@+id/main_toolbar"-->
+<!--        app:layout_constraintEnd_toEndOf="0"-->
+<!--        app:layout_constraintStart_toStartOf="0"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/main_toolbar"-->
+<!--        style="?android:attr/progressBarStyleHorizontal"/>-->
+
+<!--    <EditText-->
+<!--        android:id="@+id/new_album_name"-->
+<!--        android:layout_width="0dp"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:hint="@string/create_a_new_album_name_the_new_album_text"-->
+<!--        android:ems="10"-->
+<!--        android:inputType="textPersonName"-->
+<!--        android:layout_marginStart="8dp"-->
+<!--        android:layout_marginEnd="8dp"-->
+<!--        app:layout_constraintBottom_toBottomOf="0"-->
+<!--        app:layout_constraintEnd_toEndOf="0"-->
+<!--        app:layout_constraintHorizontal_bias="0.472"-->
+<!--        app:layout_constraintStart_toStartOf="0"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/create_a_new_album_insert_image_place_holder"-->
+<!--        app:layout_constraintVertical_bias="0.105"/>-->
+
+<!--    <ImageView-->
+<!--        android:id="@+id/create_a_new_album_insert_image_place_holder"-->
+<!--        android:layout_width="200sp"-->
+<!--        android:layout_height="200sp"-->
+<!--        android:contentDescription="@string/description_of_create_a_new_album"-->
+<!--        app:layout_constraintBottom_toBottomOf="0"-->
+<!--        app:layout_constraintEnd_toEndOf="0"-->
+<!--        app:layout_constraintHorizontal_bias="0.497"-->
+<!--        app:layout_constraintStart_toStartOf="0"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/add_new_content_progressbar"-->
+<!--        app:layout_constraintVertical_bias="0.103"-->
+<!--        app:srcCompat="@drawable/image_placeholder"/>-->
+
+<!--    <Button-->
+<!--        android:id="@+id/create_a_new_album_button"-->
+<!--        android:background="@color/pastel_green"-->
+<!--        android:layout_width="0dp"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:text="@string/create_a_new_album_button_text"-->
+<!--        android:layout_marginStart="8dp"-->
+<!--        android:layout_marginEnd="8dp"-->
+<!--        app:layout_constraintBottom_toBottomOf="0"-->
+<!--        app:layout_constraintEnd_toEndOf="0"-->
+<!--        app:layout_constraintHorizontal_bias="1"-->
+<!--        app:layout_constraintStart_toStartOf="0"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/new_album_name"-->
+<!--        app:layout_constraintVertical_bias="0.318"/>-->
+
+<!--    <EditText-->
+<!--        android:textSize="18sp"-->
+<!--        android:id="@+id/create_a_new_album_description"-->
+<!--        android:layout_width="0dp"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:hint="@string/create_a_new_album_description_text"-->
+<!--        android:inputType="text"-->
+<!--        android:layout_marginStart="8dp"-->
+<!--        android:layout_marginEnd="8dp"-->
+<!--        app:layout_constraintBottom_toTopOf="@+id/create_a_new_album_button"-->
+<!--        app:layout_constraintEnd_toEndOf="0"-->
+<!--        app:layout_constraintHorizontal_bias="0"-->
+<!--        app:layout_constraintStart_toStartOf="0"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/new_album_name"-->
+<!--        app:layout_constraintVertical_bias="0.469"/>-->
+
+<!--    <Button-->
+<!--        android:id="@+id/or_add_new_images_to_existing_album"-->
+<!--        android:background="@color/pastel_violet"-->
+<!--        android:layout_width="0dp"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:text="@string/add_new_images_to_existing_album"-->
+<!--        android:layout_marginStart="8dp"-->
+<!--        android:layout_marginEnd="8dp"-->
+<!--        app:layout_constraintBottom_toBottomOf="0"-->
+<!--        app:layout_constraintEnd_toEndOf="0"-->
+<!--        app:layout_constraintHorizontal_bias="0.498"-->
+<!--        app:layout_constraintStart_toStartOf="0"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/create_a_new_album_button"-->
+<!--        app:layout_constraintVertical_bias="1"/>-->
+
+</androidx.constraintlayout.widget.ConstraintLayout>
