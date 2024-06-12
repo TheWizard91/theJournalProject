@@ -2,7 +2,6 @@ package com.thewizard91.thejournal.adapters;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,21 +11,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.facebook.drawee.backends.pipeline.Fresco;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.EventListener;
-import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreException;
-import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.stfalcon.frescoimageviewer.ImageViewer;
@@ -36,7 +28,6 @@ import com.thewizard91.thejournal.models.post.PostModel;
 
 import java.util.ArrayList;
 
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -74,6 +65,7 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         holder.setIsRecyclable(false);
         ViewHolderOfPost holderOfPost = (ViewHolderOfPost) holder;
         String postId = listOfPosts.get(position).PostId;
+        Log.d("pID",postId);
         String currentUserId = ((FirebaseUser) Objects.requireNonNull(firebaseAuth.getCurrentUser())).getUid();
         String posts_user_id = listOfPosts.get(position).getUserId();
         String time = String.valueOf(listOfPosts.get(position).getTimestamp());
@@ -81,14 +73,15 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         String thumbnailURI = listOfPosts.get(position).getThumbnailURI();
         String description = listOfPosts.get(position).getDescription();
         String username = listOfPosts.get(position).getUsername();
-        String user_profile_image_uri = listOfPosts.get(position).getUserProfileImageURI();
+        String userProfileImageURI = listOfPosts.get(position).getUserProfileImageURI();
 
-        holderOfPost.setUserProfileImageURI(user_profile_image_uri);
+        // Holder's methods.
+        holderOfPost.setUserProfileImageURI(userProfileImageURI);
         holderOfPost.setTime(time);
         holderOfPost.setUsername(username);
         holderOfPost.setDescription(description);
         holderOfPost.setImageURI(image_uri);
-        holderOfPost.setUserProfileImageURI(user_profile_image_uri);
+        holderOfPost.setUserProfileImageURI(userProfileImageURI);
 //        setUsernameAndImage(holderOfPost, posts_user_id);
 //        holderOfBlogPost.setImageURIAndThumbnailURI(imageURI, thumbnailURI);
 //        if (listOfPosts.get(position).getTimestamp() != null && !listOfPosts.isEmpty()) {
@@ -96,9 +89,11 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 //        } else {
 //            holderOfPost.setTime("set time");
 //        }
+
+        // Class' methods.
         setLikesCount(holderOfPost, postId);
-        setLikes(holderOfPost, postId, currentUserId);
-        addOrDeleteLikes(holderOfPost, postId, currentUserId, description);
+        setLikesVisibility(holderOfPost, postId, currentUserId);
+        setOrRemoveLikesInDatabase(holderOfPost, postId, currentUserId, description);
         clickOnCommentsImage(holderOfPost, postId, currentUserId);
 //        clickOnLocationImage(holderOfBlogPost, blogPostId);
 //        setLocation(holderOfBlogPost, blogPostId);
@@ -143,7 +138,8 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private void setCommentsCount(final ViewHolderOfPost holderOfBlogPost, String blogPostId) {
         firebasefirestore.collection("Posts")
-                .document(blogPostId).collection("Comments")
+                .document(blogPostId)
+                .collection("Comments")
                 .addSnapshotListener((queryDocumentSnapshots, e) -> {
                     if (queryDocumentSnapshots == null) {
                         throw new AssertionError();
@@ -214,38 +210,54 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 //        new PostAdapter(listOfPosts2).notifyDataSetChanged();
 //    }
 
-    @SuppressLint("NotifyDataSetChanged")
-    public void refreshAdapter(List<PostModel> listPM) {
-        new PostAdapter(listPM).notifyDataSetChanged();
-    }
-
     private void clickOnCommentsImage(ViewHolderOfPost holderOfBlogPost, final String blogPostId, final String currentUserId) {
         holderOfBlogPost.commentButtonView.setOnClickListener(view -> sendToCommentsFragment(view, blogPostId, currentUserId));
     }
 
-    /* access modifiers changed from: private */
     public void sendToCommentsFragment(View view, String idOfPost, String currentUserId) {
         new HomeFragment().switchFragment(view, idOfPost, currentUserId);
     }
 
-    private void addOrDeleteLikes(ViewHolderOfPost holderOfPost, final String postId, final String currentUserId, final String description) {
-        holderOfPost.likesButtonView.setOnClickListener(view -> firebasefirestore.collection("Posts").document(postId).collection("Likes").document(currentUserId).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if (!task.getResult().exists()) {
-                    Map<String, Object> likestMap = new HashMap<>();
-                    likestMap.put("timestamp", FieldValue.serverTimestamp().toString());
-                    firebasefirestore.collection("Posts").document(postId).collection("Likes").document(currentUserId).set(likestMap);
-                    Toast.makeText(context, "Added a like to " + description, Toast.LENGTH_LONG).show();
-                    return;
-                }
-                firebasefirestore.collection("Posts").document(postId).collection("Likes").document(currentUserId).delete();
-                Toast.makeText(context, "Removed a like to " + description, Toast.LENGTH_LONG).show();
-            }
-        }));
+    private void setOrRemoveLikesInDatabase(ViewHolderOfPost holderOfPost, final String postId, final String currentUserId, final String description) {
+        holderOfPost.likesButtonView.setOnClickListener(
+                view -> firebasefirestore
+                .collection("Posts")
+                .document(postId)
+                .collection("Likes")
+                .document(currentUserId)
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (!task.getResult().exists()) {
+                        addLikes(postId, currentUserId, description);
+                    } else {
+                        removeLikes(postId, currentUserId, description);
+                    }
+                }));
+    }
+
+    private void removeLikes(String postId, String currentUserId, String description) {
+        firebasefirestore
+                .collection("Posts")
+                .document(postId)
+                .collection("Likes")
+                .document(currentUserId)
+                .delete();
+        Toast.makeText(context, "Removed a like to " + description, Toast.LENGTH_LONG).show();
+    }
+
+    private void addLikes(String postId, String currentUserId, String description) {
+        Map<String, Object> likestMap = new HashMap<>();
+        firebasefirestore
+                .collection("Posts")
+                .document(postId)
+                .collection("Likes")
+                .document(currentUserId)
+                .set(likestMap);
+        Toast.makeText(context, "Added a like to " + description, Toast.LENGTH_LONG).show();
     }
 
     @SuppressLint("UseCompatLoadingForDrawables")
-    private void setLikes(final ViewHolderOfPost h, String idOfPost, String idOfCurrentUser) {
+    private void setLikesVisibility(final ViewHolderOfPost h, String idOfPost, String idOfCurrentUser) {
         firebasefirestore.collection("Posts")
                 .document(idOfPost)
                 .collection("Likes")
@@ -254,7 +266,7 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                     if (documentSnapshot == null) {
                         throw new AssertionError();
                     } else if (documentSnapshot.exists()) {
-                        h.likesButtonView.setImageDrawable(context.getDrawable(R.drawable.ic_favorite_full));
+                        h.likesButtonView.setImageDrawable(context.getDrawable(R.drawable.ic_favorite_animated));
                     } else {
                         h.likesButtonView.setImageDrawable(context.getDrawable(R.drawable.ic_favorite_border));
                     }
@@ -297,7 +309,7 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         public ImageView location_button_view;
         public CircleImageView delete_post_view;
         public CircleImageView userProfileImage;
-        private View view;
+        private final View view;
 
         public ViewHolderOfPost(View v) {
             super(v);
@@ -339,7 +351,6 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
         @SuppressLint("CheckResult")
         public void setImageURI(String image_uri) {
-//            Log.d("setImageURIHere",String.valueOf(image_uri));
             RequestOptions placeholderOption = new RequestOptions();
             placeholderOption.placeholder(R.drawable.image_placeholder);
             Glide.with(context)
@@ -355,6 +366,7 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 //            Glide.with(context).applyDefaultRequestOptions(placeholderOption).load(userProfileImage).into((ImageView) (CircleImageView) view.findViewById(R.id.new_post_user_image));
 //        }
 
+        @SuppressLint("CheckResult")
         public void setUserProfileImageURI(String user_profile_image) {
             RequestOptions placeholderOption = new RequestOptions();
             placeholderOption.placeholder(R.drawable.ic_account_circle);

@@ -1,10 +1,8 @@
 package com.thewizard91.thejournal.models.notifications;
 
 import com.google.firebase.database.Exclude;
-import com.google.firebase.firestore.FieldValue;
 
 import java.io.Serializable;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -51,10 +49,8 @@ public class NotificationsModel extends NotificationId implements Serializable {
     @Exclude
     public Map<String,Object> realTimeDatabaseMap() {
         HashMap<String,Object> realtimePostMap = new HashMap<>();
-        realtimePostMap.put("username", username);
+        realtimePostMap.put("username",username);
         realtimePostMap.put("date",date);
-//        realtimePostMap.put("time",time.toString());
-//        realtimePostMap.put("comment",comment);
         realtimePostMap.put("userId",userId);
         realtimePostMap.put("userProfileImageURI",userProfileImageURI);
         realtimePostMap.put("notificationText",notificationText);

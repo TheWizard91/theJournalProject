@@ -9,26 +9,26 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.thewizard91.thejournal.R;
-import com.thewizard91.thejournal.models.listOne.ListenItemInListOne;
+import com.thewizard91.thejournal.models.listOne.ListOneModel;
 
 import java.util.ArrayList;
 
 public class ListOneAdapter extends BaseAdapter {
-    private ArrayList<ListenItemInListOne> listOneData;
+    private ArrayList<ListOneModel> listOneModelData;
     private LayoutInflater layoutInflater;
-    public ListOneAdapter(Context myContest, ArrayList<ListenItemInListOne> listOneData) {
-        this.listOneData = listOneData;
+    public ListOneAdapter(Context myContest, ArrayList<ListOneModel> listOneModelData) {
+        this.listOneModelData = listOneModelData;
         layoutInflater = LayoutInflater.from(myContest);
     }
 
     @Override
     public int getCount() {
-        return listOneData.size();
+        return listOneModelData.size();
     }
 
     @Override
     public Object getItem(int i) {
-        return listOneData.get(i);
+        return listOneModelData.get(i);
     }
 
     @Override
@@ -49,9 +49,9 @@ public class ListOneAdapter extends BaseAdapter {
         } else {
             holder = (ViewHolder) view.getTag();
         }
-        holder.hImage.setImageDrawable(listOneData.get(i).getImage());
-        holder.hDescription.setText(listOneData.get(i).getDescription());
-        holder.hNumberOfElementsInSection.setText(listOneData.get(i).getNumberOfElementsInSection());
+        holder.hImage.setImageDrawable(listOneModelData.get(i).getImage());
+        holder.hDescription.setText(listOneModelData.get(i).getDescription());
+        holder.hNumberOfElementsInSection.setText(listOneModelData.get(i).getNumberOfElementsInSection());
         return view;
     }
 

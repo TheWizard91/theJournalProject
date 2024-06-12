@@ -132,7 +132,8 @@
                 android:contentDescription="@string/button_to_send_a_comment"
                 android:src="@drawable/ic_arrow_back"
                 android:outlineSpotShadowColor="@color/dark_blue"
-                android:layout_marginEnd="16dp"/>
+                android:layout_marginEnd="16dp"
+                tools:ignore="UnusedAttribute" />
 
             <github.com.st235.lib_expandablebottombar.ExpandableBottomBar
                 android:id="@+id/main_bottom_nav"

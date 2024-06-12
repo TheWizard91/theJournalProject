@@ -9,14 +9,14 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.thewizard91.thejournal.R;
-import com.thewizard91.thejournal.models.listTwo.ListenItemInListTwo;
+import com.thewizard91.thejournal.models.listTwo.ListTwo;
 
 import java.util.ArrayList;
 
 public class ListTwoAdapter extends BaseAdapter {
-    private ArrayList<ListenItemInListTwo> listTwoData;
+    private ArrayList<ListTwo> listTwoData;
     private LayoutInflater layoutInflater;
-    public ListTwoAdapter(Context myContext, ArrayList<ListenItemInListTwo> listTwoData) {
+    public ListTwoAdapter(Context myContext, ArrayList<ListTwo> listTwoData) {
         this.listTwoData = listTwoData;
         layoutInflater = LayoutInflater.from(myContext);
     }

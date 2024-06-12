@@ -32,32 +32,78 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
 
-        <EditText
-            android:id="@+id/comment_edittext"
+        <androidx.cardview.widget.CardView
+            android:id="@+id/reply_comment_space_card_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_marginStart="0dp"
-            android:background="@android:color/transparent"
-            android:hint="@string/enter_comment"
-            android:inputType="textCapSentences|textAutoCorrect|textMultiLine"
-            android:maxLines="6"
-            android:minHeight="48dp"
-            android:textColor="@color/black"
-            android:textColorHint="#0277BD"
-            tools:ignore="Autofill,TextContrastCheck" />
+            android:background="@color/white"
+            android:backgroundTint="@color/white"
+            android:backgroundTintMode="screen"
+            app:cardBackgroundColor="@color/white"
+            app:cardCornerRadius="2dp"
+            android:visibility="gone">
 
-        <Button
-            android:id="@+id/comment_button"
-            android:layout_width="64dp"
-            android:layout_height="48dp"
-            android:layout_alignParentEnd="true"
-            android:layout_marginEnd="0dp"
-            android:background="?attr/selectableItemBackground"
-            android:contentDescription="@string/back_arrow_description"
-            android:text="@string/send"
-            android:textColor="#0277BD"
-            tools:ignore="SpeakableTextPresentCheck,TextContrastCheck" />
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:gravity="center">
+
+                <TextView
+                    android:id="@+id/reply_to_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="16sp"
+                    android:text="@string/reply_to"
+                    android:textColor="#1DB954"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="30dp"
+                    android:layout_margin="8dp"/>
+
+            </androidx.appcompat.widget.LinearLayoutCompat>
+
+        </androidx.cardview.widget.CardView>
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:id="@+id/new_comment_linear_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/reply_comment_space_card_view"
+            android:orientation="horizontal"
+            android:gravity="center">
+
+            <EditText
+                android:id="@+id/comment_edittext"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_marginStart="0dp"
+                android:background="@android:color/transparent"
+                android:hint="@string/enter_comment"
+                android:inputType="textCapSentences|textAutoCorrect|textMultiLine"
+                android:maxLines="6"
+                android:minHeight="48dp"
+                android:textColor="@color/black"
+                android:textColorHint="#0277BD"
+                tools:ignore="Autofill,TextContrastCheck"
+                android:layout_weight="1"/>
+
+            <Button
+                android:id="@+id/comment_button"
+                android:layout_width="64dp"
+                android:layout_height="48dp"
+                android:layout_alignParentEnd="true"
+                android:layout_marginEnd="0dp"
+                android:background="?attr/selectableItemBackground"
+                android:contentDescription="@string/back_arrow_description"
+                android:text="@string/send"
+                android:textColor="#0277BD"
+                tools:ignore="SpeakableTextPresentCheck,TextContrastCheck" />
+
+        </androidx.appcompat.widget.LinearLayoutCompat>
 
     </RelativeLayout>
 

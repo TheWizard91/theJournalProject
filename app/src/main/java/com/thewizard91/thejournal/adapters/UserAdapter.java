@@ -61,22 +61,20 @@ public class UserAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         public TextView email_view;
         public ListView listOneView;
         public ListView listTwoView;
-        private View innerView;
-        private final String[] array_of_list_one = {"Number of Posts","Favorite","Location"};
-        private final String[] array_of_list_two = {"Edit Profile","Logout"};
 
         public UserProfileViewHolder(@NonNull View itemView) {
             super(itemView);
-            innerView = itemView;
-            ListView list_one = innerView.findViewById(R.id.fragment_account_listview_one);
-            ListView list_two = innerView.findViewById(R.id.fragment_account_listview_two);
+            ListView list_one = itemView.findViewById(R.id.fragment_account_listview_one);
+            ListView list_two = itemView.findViewById(R.id.fragment_account_listview_two);
             ArrayAdapter<String> arr_one;
-            arr_one = new ArrayAdapter<>(innerView.getContext(),
+            String[] array_of_list_one = {"Number of Posts", "Favorite", "Location"};
+            arr_one = new ArrayAdapter<>(itemView.getContext(),
                     R.layout.support_simple_spinner_dropdown_item,
                     array_of_list_one);
             list_one.setAdapter(arr_one);
             ArrayAdapter<String> arr_two;
-            arr_two = new ArrayAdapter<>(innerView.getContext(),
+            String[] array_of_list_two = {"Edit Profile", "Logout"};
+            arr_two = new ArrayAdapter<>(itemView.getContext(),
                     R.layout.support_simple_spinner_dropdown_item,
                     array_of_list_two);
             list_two.setAdapter(arr_two);

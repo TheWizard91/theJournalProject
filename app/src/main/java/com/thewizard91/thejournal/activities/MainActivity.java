@@ -60,6 +60,7 @@ public class MainActivity extends AppCompatActivity implements AppBarLayout.OnOf
          setContentView(R.layout.activity_main);
          init();
      }
+
      @RequiresApi(api = Build.VERSION_CODES.M)
      @SuppressLint({"ObsoleteSdkInt", "CutPasteId"})
      private void init() {
@@ -102,7 +103,7 @@ public class MainActivity extends AppCompatActivity implements AppBarLayout.OnOf
              AddANewPost();
 
          }
-         appBarLayout.addOnOffsetChangedListener((AppBarLayout.OnOffsetChangedListener) this);
+         appBarLayout.addOnOffsetChangedListener(this);
      }
 
      @Override

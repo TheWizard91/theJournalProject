@@ -1,5 +1,6 @@
 package com.thewizard91.thejournal.adapters;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -66,7 +67,7 @@ public class NotificationsAdapter extends RecyclerView.Adapter<RecyclerView.View
 //        Log.d("profileImageURI",profileImageURI);
 //        Log.d("username",username);
 
-        if(listOfNotifications.get(position).getDate() !=null && !listOfNotifications.isEmpty()) {
+        if(listOfNotifications.get(position).getDate() != null && !listOfNotifications.isEmpty()) {
             holderOfNotifications.setTime(time);
         } else {
             holderOfNotifications.setTime("set time");
@@ -93,6 +94,7 @@ public class NotificationsAdapter extends RecyclerView.Adapter<RecyclerView.View
             date = view.findViewById(R.id.notificationsDate);
             notification = view.findViewById(R.id.notificationsTextView);
         }
+        @SuppressLint("CheckResult")
         public void setUserProfileImage(String user_profile_image_uri) {
             Log.d("notAdapter",user_profile_image_uri);
             RequestOptions placeholderOption = new RequestOptions();

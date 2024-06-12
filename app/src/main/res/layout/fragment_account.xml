@@ -61,7 +61,6 @@
                         app:cardBackgroundColor="@color/white" />
                     <!--android:layout_weight="1"-->
 
-
                     <Space
                         android:layout_width="30dp"
                         android:layout_height="match_parent" />

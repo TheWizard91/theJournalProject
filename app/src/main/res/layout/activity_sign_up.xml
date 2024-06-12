@@ -30,65 +30,98 @@
         app:layout_constraintTop_toTopOf="parent"
         android:background="@drawable/background_layer">
 
-        <EditText
-            android:id="@+id/sign_up_mail_address_text_view_id"
-            android:layout_width="0dp"
-            android:layout_height="@dimen/layoutHeightDimension"
-            android:layout_marginStart="@dimen/layoutMarginRightAndLeft"
-            android:layout_marginEnd="@dimen/layoutMarginRightAndLeft"
-            android:autofillHints=""
-            android:background="@drawable/my_text_view"
-            android:ems="12"
-            android:hint="@string/emailHint"
-            android:inputType="textEmailAddress"
-            android:textColor="@color/black"
-            android:textColorHint="@color/darker_gray"
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/em_text_input_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/please_sign_up_message_id"
-            app:layout_constraintVertical_bias="0.083" />
+            app:layout_constraintVertical_bias="0.083"
+            app:startIconDrawable="@drawable/ic_email"
+            app:startIconContentDescription="Enter Email..."
+            app:mtf_animationDuration="1000"
+            app:mtf_openKeyboardOnFocus="true">
 
-        <EditText
-            android:id="@+id/sign_up_password_text_view_id"
-            android:layout_width="0dp"
-            android:layout_height="@dimen/layoutHeightDimension"
-            android:layout_marginStart="@dimen/layoutMarginRightAndLeft"
-            android:layout_marginEnd="@dimen/layoutMarginRightAndLeft"
-            android:autofillHints=""
-            android:background="@drawable/my_text_view"
-            android:ems="12"
-            android:hint="@string/password_hint"
-            android:inputType="textPassword"
-            android:textColor="@color/black"
-            android:textColorHint="@color/darker_gray"
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/sign_up_mail_address_text_view_id"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:autofillHints=""
+                android:ems="12"
+                android:text=""
+                android:hint="@string/emailHint"
+                android:inputType="textEmailAddress"
+                android:textColor="@color/black"
+                android:textColorHint="@color/darker_gray" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/ps_text_input_text_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/sign_up_mail_address_text_view_id"
-            app:layout_constraintVertical_bias="0.06" />
+            app:layout_constraintTop_toBottomOf="@+id/em_text_input_layout"
+            app:layout_constraintVertical_bias="0.06"
+            app:startIconDrawable="@drawable/ic_password"
+            app:startIconContentDescription="Enter Password..."
+            app:mtf_animationDuration="1000"
+            app:mtf_openKeyboardOnFocus="true">
 
-        <EditText
-            android:id="@+id/sign_password_confirmation_id"
-            android:layout_width="0dp"
-            android:layout_height="@dimen/layoutHeightDimension"
-            android:layout_marginStart="@dimen/layoutMarginRightAndLeft"
-            android:layout_marginEnd="@dimen/layoutMarginRightAndLeft"
-            android:autofillHints=""
-            android:textColor="@color/black"
-            android:background="@drawable/my_text_view"
-            android:ems="12"
-            android:hint="@string/confirm_password"
-            android:inputType="textPassword"
-            android:textColorHint="@color/darker_gray"
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/sign_up_password_text_view_id"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:autofillHints=""
+                android:ems="12"
+                android:text=""
+                android:hint="@string/password_hint"
+                android:inputType="textPassword"
+                android:textColor="@color/black"
+                android:textColorHint="@color/darker_gray"/>
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/confirm_ps_text_input_text_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/sign_up_password_text_view_id"
-            app:layout_constraintVertical_bias="0.086" />
+            app:layout_constraintTop_toBottomOf="@+id/ps_text_input_text_layout"
+            app:layout_constraintVertical_bias="0.086"
+            app:startIconDrawable="@drawable/ic_password"
+            app:startIconContentDescription="Confirm Password..."
+            app:mtf_animationDuration="1000"
+            app:mtf_openKeyboardOnFocus="true">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/sign_password_confirmation_id"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:autofillHints=""
+                android:textColor="@color/black"
+                android:ems="12"
+                android:text=""
+                android:hint="@string/confirm_password"
+                android:inputType="textPassword"
+                android:textColorHint="@color/darker_gray" />
+
+        </com.google.android.material.textfield.TextInputLayout>
 
         <com.royrodriguez.transitionbutton.TransitionButton
             android:id="@+id/sign_up_button_id"
@@ -105,7 +138,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/sign_password_confirmation_id" />
+            app:layout_constraintTop_toBottomOf="@+id/confirm_ps_text_input_text_layout" />
 
         <TextView
             android:id="@+id/welcome_message_id"
@@ -131,21 +164,6 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/welcome_message_id" />
-
-<!--        <TextView-->
-<!--            android:id="@+id/already_have_an_account_message_id"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_marginStart="32dp"-->
-<!--            android:layout_marginTop="16dp"-->
-<!--            android:clickable="true"-->
-<!--            android:focusable="true"-->
-<!--            android:fontFamily="@font/poppins"-->
-<!--            android:minHeight="48dp"-->
-<!--            android:text="@string/already_have_an_account_button_text"-->
-<!--            android:textColor="@color/shade_of_gray_for_darker_blue"-->
-<!--            app:layout_constraintStart_toStartOf="parent"-->
-<!--            app:layout_constraintTop_toBottomOf="@+id/sign_password_confirmation_id" />-->
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

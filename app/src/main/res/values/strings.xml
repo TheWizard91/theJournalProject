@@ -170,4 +170,23 @@
     <string name="text_one">Description</string>
     <string name="text_two">Detail</string>
     <string name="description_in_list_row_two">Description</string>
+    <string name="enter_edit">Enter Edit…</string>
+    <string name="reply_to">Replying to</string>
+    <string name="new_username">New Username</string>
+    <string name="new_email">New Email</string>
+    <string name="edit_profile">Edit Profile</string>
+    <string name="change_your_info">Change your Info.</string>
+    <string name="enter_a_new_name">Enter a New Name...</string>
+    <string name="enter_new_email">Enter New Email</string>
+    <string name="enter_a_new_password">Enter a New Password...</string>
+    <string name="enter_a_new_phone_number">Enter a New Phone Number...</string>
+    <string name="save">SAVE</string>
+    <string name="enter_a_new_address">Enter a New Address...</string>
+    <string name="update_image_for_user">Update Image For User...</string>
+    <string name="info">info</string>
+    <string name="forgot_password">Forgot Password.</string>
+    <string name="enter_your_email">Enter your email</string>
+    <string name="please_change_the_password_here">Please change the password here.</string>
+    <string name="enter_new_password">Enter New Password...</string>
+    <string name="enter_old_password">Enter Old Password.</string>
 </resources>

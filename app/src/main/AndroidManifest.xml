@@ -5,13 +5,13 @@
 
     <uses-sdk
         android:minSdkVersion="21"
-        android:targetSdkVersion="30"
+        android:targetSdkVersion="33"
         tools:ignore="GradleOverrides" />
-
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"
+        android:maxSdkVersion="32" />
     <uses-permission
         android:name="android.permission.WRITE_EXTERNAL_STORAGE"
         android:maxSdkVersion="21"
@@ -43,36 +43,26 @@
         tools:ignore="AllowBackup,HardcodedDebugMode"
         tools:targetApi="p">
         <activity
-            android:name=".activities.UpdateAccountActivity"
+            android:name="com.thewizard91.thejournal.activities.sing_up_adds_on.UCropperActivity"
             android:exported="false" />
+
         <activity
-            android:name=".activities.sing_up_adds_on.CreateNewAccountActivity"
-            android:exported="false" />
-        <activity
-            android:name=".activities.sing_up_adds_on.ui.CreateNewAccountActivity"
-            android:exported="false"
+            android:name="com.thewizard91.thejournal.activities.sing_up_adds_on.CreateNewAccountActivity"
+            android:exported="true"
             android:label="@string/title_activity_create_new_account"
             android:theme="@style/Theme.TheJournal" />
+
         <activity
-            android:name=".activities.sing_up_adds_on.UpdateAccountActivity"
+            android:name="com.thewizard91.thejournal.activities.UpdateAccountActivity"
             android:exported="false"
             android:label="@string/title_activity_update_account"
-            android:theme="@style/Theme.TheJournal" />
+            android:theme="@style/Theme.TheJournal"
+            tools:ignore="DuplicateActivity" />
+        <activity android:name="com.thewizard91.thejournal.activities.NewPostActivity" />
+        <activity android:name="com.thewizard91.thejournal.activities.log_in_activities_adds_on.ForgotPasswordActivity" />
+        <activity android:name="com.thewizard91.thejournal.activities.SignUpActivity" />
         <activity
-            android:name=".AddMoreImagesToExistingGallery"
-            android:exported="false" /> <!-- <activity -->
-        <!-- android:name=".SendCOmmentActiivity" -->
-        <!-- android:exported="false"> -->
-        <!-- <meta-data -->
-        <!-- android:name="android.app.lib_name" -->
-        <!-- android:value="" /> -->
-        <!-- </activity> -->
-        <activity android:name=".activities.NewPostActivity" />
-        <activity android:name=".activities.sing_up_adds_on.AccountSettingsActivity" />
-        <activity android:name=".activities.log_in_activities_adds_on.ForgotPasswordActivity" />
-        <activity android:name=".activities.SignUpActivity" />
-        <activity
-            android:name=".activities.LogInActivity"
+            android:name="com.thewizard91.thejournal.activities.LogInActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -81,9 +71,8 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activities.MainActivity"
-            android:windowSoftInputMode="adjustPan" />
-        <!-- &lt;!&ndash;   Activity for ImageCrop API     &ndash;&gt; -->
+            android:name="com.thewizard91.thejournal.activities.MainActivity"
+            android:windowSoftInputMode="adjustPan" /> <!-- &lt;!&ndash;   Activity for ImageCrop API     &ndash;&gt; -->
         <activity
             android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
             android:theme="@style/Base.Theme.AppCompat" /> <!-- <activity android:name="com.soundcloud.android.crop.CropImageActivity" -->

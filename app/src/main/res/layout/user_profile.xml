@@ -8,12 +8,27 @@
     android:gravity="center"
     android:orientation="vertical">
 
+<!--    todo: The following lines are needed for the cardview right color
+            android:background="@color/white"
+            android:backgroundTint="@color/white"
+            android:backgroundTintMode="screen"
+            app:cardBackgroundColor="@color/white"
+
+
+        android:backgroundTint="#B8E0F6"
+        android:backgroundTintMode="screen"
+        android:background="#B8E0F6"
+        app:cardBackgroundColor="#B8E0F6"-->
+
     <androidx.cardview.widget.CardView
         android:id="@+id/user_info"
         android:layout_width="350dp"
         android:layout_height="460dp"
         app:cardCornerRadius="10dp"
-        app:cardBackgroundColor="#B8E0F6"
+        android:background="@drawable/background_layer"
+        app:cardBackgroundColor="@color/white"
+        android:backgroundTint="@color/white"
+        android:backgroundTintMode="screen"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -21,7 +36,7 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent" >
+            android:layout_height="match_parent">
 
             <TextView
                 android:id="@+id/textView"
@@ -41,7 +56,6 @@
                 android:layout_height="50dp"
                 android:layout_marginTop="16dp"
                 android:src="@drawable/ic_account_circle"
-                app:cardBackgroundColor="@color/white"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.176"
                 app:layout_constraintStart_toStartOf="parent"

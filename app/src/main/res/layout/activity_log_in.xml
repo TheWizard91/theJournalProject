@@ -8,16 +8,6 @@
     android:background="@color/darker_blue"
     tools:context=".activities.LogInActivity">
 
-    <ProgressBar
-        android:id="@+id/log_in_progress_bar_id"
-        style="?android:attr/progressBarStyleHorizontal"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:visibility="invisible"/>
-
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/content_frame"
         android:layout_width="350dp"
@@ -56,43 +46,67 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/greeting_in_log_in_activity_id" />
 
-        <EditText
-            android:id="@+id/log_in_enter_email_or_username_text_view_id"
-            android:layout_width="300dp"
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/email_text_input_layout"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
-            android:autofillHints=""
-            android:background="@drawable/my_text_view"
-            android:ems="10"
-            android:fontFamily="@font/poppins"
-            android:hint="@string/emailHint"
-            android:inputType="textEmailAddress"
-            android:minHeight="48dp"
-            android:textColor="@color/black"
-            android:textColorHint="#5C6BC0"
-            android:textSize="18sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/please_log_in_into_your_account_id" />
+            android:layout_marginTop="24dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            app:layout_constraintTop_toBottomOf="@+id/please_log_in_into_your_account_id"
+            app:mtf_animationDuration="1000"
+            app:startIconDrawable="@drawable/ic_email"
+            app:startIconContentDescription="Enter Email..."
+            app:mtf_openKeyboardOnFocus="true">
 
-        <EditText
-            android:id="@+id/log_in_enter_your_password_text_view_id"
-            android:layout_width="300dp"
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/log_in_enter_email_or_username_text_view_id"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:autofillHints=""
+                android:ems="10"
+                android:fontFamily="@font/poppins"
+                android:hint="@string/emailHint"
+                android:inputType="textEmailAddress"
+                android:minHeight="48dp"
+                android:textColor="@color/black"
+                android:textColorHint="#5C6BC0"
+                android:textSize="18sp"/>
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/password_text_input_text_layout"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
-            android:autofillHints=""
-            android:background="@drawable/my_text_view"
-            android:ems="10"
-            android:fontFamily="@font/poppins"
-            android:hint="@string/password_hint"
-            android:inputType="textPassword"
-            android:minHeight="48dp"
-            android:textColor="@color/black"
-            android:textColorHint="#757575"
-            android:textSize="18sp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/log_in_enter_email_or_username_text_view_id" />
+            app:layout_constraintTop_toBottomOf="@+id/email_text_input_layout"
+            app:mtf_openKeyboardOnFocus="true"
+            app:startIconDrawable="@drawable/ic_password"
+            app:startIconContentDescription="Enter Email...">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/log_in_enter_your_password_text_view_id"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:autofillHints=""
+                android:ems="10"
+                android:text=""
+                android:fontFamily="@font/poppins"
+                android:hint="@string/password_hint"
+                android:inputType="textPassword"
+                android:minHeight="48dp"
+                android:textColor="@color/black"
+                android:textColorHint="#757575"
+                android:textSize="18sp"/>
+
+        </com.google.android.material.textfield.TextInputLayout>
 
         <TextView
             android:id="@+id/log_in_forgot_password_id"
@@ -107,7 +121,7 @@
             android:text="@string/forgot_password_text_view"
             android:textColor="@color/pastel_gray"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/log_in_enter_your_password_text_view_id" />
+            app:layout_constraintTop_toBottomOf="@+id/password_text_input_text_layout" />
 
         <TextView
             android:id="@+id/log_in_new_account_id"
@@ -120,7 +134,7 @@
             android:text="@string/new_account_text_view"
             android:textColor="#283593"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/log_in_enter_your_password_text_view_id" />
+            app:layout_constraintTop_toBottomOf="@+id/password_text_input_text_layout" />
 
         <com.royrodriguez.transitionbutton.TransitionButton
             android:id="@+id/log_in_image_button_id"
@@ -135,7 +149,7 @@
             android:textColor="#82B1FF"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/log_in_enter_your_password_text_view_id"
+            app:layout_constraintTop_toBottomOf="@+id/password_text_input_text_layout"
             app:loaderColor="@color/my_orange" />
 
         <TextView

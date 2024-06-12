@@ -16,7 +16,7 @@
     <item
         android:id="@+id/info"
         android:orderInCategory="200"
-        android:title="info"
+        android:title="@string/info"
         app:showAsAction="ifRoom"
         android:icon="@android:drawable/ic_dialog_info" />
 </menu>

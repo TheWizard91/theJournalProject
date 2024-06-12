@@ -2,14 +2,14 @@ package com.thewizard91.thejournal.models.listTwo;
 
 import android.graphics.drawable.Drawable;
 
-public class ListenItemInListTwo {
+public class ListTwo {
     private String description;
     private Drawable imageUri;
     private Drawable forwardArrow;
 
-    public ListenItemInListTwo() {}
+    public ListTwo() {}
 
-    public ListenItemInListTwo(String description, Drawable imageUri, Drawable forwardArrow) {
+    public ListTwo(String description, Drawable imageUri, Drawable forwardArrow) {
         this.description = description;
         this.imageUri = imageUri;
         this.forwardArrow = forwardArrow;

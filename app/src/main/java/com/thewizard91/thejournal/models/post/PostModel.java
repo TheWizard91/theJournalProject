@@ -17,30 +17,29 @@ public class PostModel extends PostId implements Serializable {
     private String description;
     private String image;
     private String comments;
-    private String delete_thumbnail_uri;
+    private String deleteThumbnailURI;
     private String imageURI;
     private String likes;
     private String location;
-    private String thumbnail_uri;
-    @ServerTimestamp
-    private Date timestamp;
-//    private FieldValue timestamp;
-    private String user_uri;
+    private String thumbnailURI;
+//    @ServerTimestamp
+    private String timestamp;
+    private String userId;
     private String userProfileImageURI;
     private String username;
 
     public PostModel() {}
     public PostModel(String imageURI,
-                     String user_uri,
-                     FieldValue timestamp,
+                     String userId,
+                     String timestamp,
                      String username,
                      String title,
                      String description,
                      String userProfileImageURI) {
 
         this.imageURI = imageURI;
-        this.user_uri = user_uri;
-//        this.timestamp = timestamp;
+        this.userId = userId;
+        this.timestamp = timestamp;
         this.username = username;
         this.title = title;
         this.description = description;
@@ -68,9 +67,9 @@ public class PostModel extends PostId implements Serializable {
         this.comments = comments;
     }
     public String getDeletePostThumbnailUri() {
-        return delete_thumbnail_uri;
+        return deleteThumbnailURI;
     }
-    public void setDeletePostThumbnailUri(String delete_thumbnail_uri) { this.delete_thumbnail_uri = delete_thumbnail_uri; }
+    public void setDeletePostThumbnailUri(String deleteThumbnailURI) { this.deleteThumbnailURI = deleteThumbnailURI; }
     public String getImageURI() {
 //        Log.d("im_uri",imageURI);
         return imageURI; }
@@ -90,18 +89,18 @@ public class PostModel extends PostId implements Serializable {
         this.location = location;
     }
     public String getThumbnailURI() {
-        return thumbnail_uri;
+        return thumbnailURI;
     }
-    public void setThumbnailURI(String thumbnail_uri) {
-        this.thumbnail_uri = thumbnail_uri;
+    public void setThumbnailURI(String thumbnailURI) {
+        this.thumbnailURI = thumbnailURI;
     }
     public String getTimestamp() { return String.valueOf(timestamp); }
 //    public void setTimestamp(FieldValue timestamp) { this.timestamp = timestamp; }
     public String getUserId() {
-        return user_uri;
+        return userId;
     }
-    public void setUserId(String user_uri) {
-        this.user_uri = user_uri;
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
     public String getUserProfileImageURI() {
         return userProfileImageURI;
@@ -120,8 +119,8 @@ public class PostModel extends PostId implements Serializable {
         Map<String, Object> postMap = new HashMap<>();
         postMap.put("imageURI", imageURI);
         postMap.put("likes", "0");
-        postMap.put("thumbnail_uri", "download_thumb_uri");
-        postMap.put("user_uri", user_uri);
+        postMap.put("thumbnailURI", "download_thumb_uri");
+        postMap.put("userId", userId);
         postMap.put("timestamp", timestamp);
         postMap.put("username", username);
         postMap.put("title", title);

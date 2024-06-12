@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +13,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import com.bumptech.glide.Glide;
@@ -25,8 +27,8 @@ import com.thewizard91.thejournal.activities.LogInActivity;
 import com.thewizard91.thejournal.activities.UpdateAccountActivity;
 import com.thewizard91.thejournal.adapters.ListOneAdapter;
 import com.thewizard91.thejournal.adapters.ListTwoAdapter;
-import com.thewizard91.thejournal.models.listOne.ListenItemInListOne;
-import com.thewizard91.thejournal.models.listTwo.ListenItemInListTwo;
+import com.thewizard91.thejournal.models.listOne.ListOneModel;
+import com.thewizard91.thejournal.models.listTwo.ListTwo;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -36,22 +38,26 @@ import java.util.Objects;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-//
 public class AccountFragment extends Fragment {
 //    https://www.tutlane.com/tutorial/android/android-listview-with-examples
 //    https://stackoverflow.com/questions/27293979/android-listview-with-multiple-views
     public Context accountContext;
     private FirebaseFirestore firebaseFirestore;
     private FirebaseAuth userAuthorized;
+    private FirebaseUser currentUser;
     public CircleImageView userProfileImage;
     public TextView username;
     private TextView email;
+    private String numberOfPosts;
+    private String numberOfLikes;
+    private String numberOfComments;
+    private View view;
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_account, container, false);
+        view = inflater.inflate(R.layout.fragment_account, container, false);
         accountContext = container.getContext();
         userAuthorized = FirebaseAuth.getInstance();
-        FirebaseUser currentUser = userAuthorized.getCurrentUser();
+        currentUser = userAuthorized.getCurrentUser();
         userProfileImage = view.findViewById(R.id.fragment_account_user_image);
         username = view.findViewById(R.id.username_title_in_fragment_account);
         email = view.findViewById(R.id.user_email_text_in_fragment_account);
@@ -61,23 +67,46 @@ public class AccountFragment extends Fragment {
             String currentUser_id = Objects.requireNonNull(userAuthorized.getCurrentUser()).getUid();
             setUserProfileImageAndUsername(currentUser_id);
             setEmail(currentUser.getEmail());
-            setListViewOne(view);
+            useCallback();
             setListViewTwo(view);
             return view;
         }
         throw new AssertionError();
     }
 
+    private void useCallback () {
+        getUserInfo(e -> firebaseFirestore.collection("Users")
+                .document(currentUser.getUid())
+                .get()
+                .addOnSuccessListener(documentSnapshot -> {
+                    numberOfPosts = (String) documentSnapshot.get("numberOfPosts");
+                    numberOfLikes = (String) documentSnapshot.get("numberOfLikes");
+                    numberOfComments = (String) documentSnapshot.get("numberOfComments");
+                    Log.d("numberOfPosts",numberOfPosts);
+                    Log.d("numberOfLikes",numberOfLikes);
+                    Log.d("numberOfComments",numberOfComments);
+                    final String[] arrayOfFirebaseData = new String[] {numberOfPosts,numberOfLikes,numberOfComments};
+                    setListViewOne(view,arrayOfFirebaseData);
+                })
+        );
+    }
+    private void getUserInfo (getUserInfoCallback myCallback) {
+        myCallback.onGetUserInfo("");
+    }
+    private interface getUserInfoCallback {
+        void onGetUserInfo(String info);
+    }
+
     private void setListViewTwo(View myView) {
         final String[] arrayOfListViewTwo = {"Edit Profile","Logout"};
         final int[] drawablesImage = {R.drawable.ic_person_pin,R.drawable.ic_logout};
         final int[] drawableArrow = {R.drawable.ic_arrow_forward,R.drawable.ic_arrow_forward};
-        final ListenItemInListTwo[] rows = new ListenItemInListTwo[]{new ListenItemInListTwo(), new ListenItemInListTwo()};
-        ArrayList listTwo = getListTwoData(arrayOfListViewTwo,drawablesImage,drawableArrow,rows);
+        final ListTwo[] rows = new ListTwo[]{new ListTwo(), new ListTwo()};
+        ArrayList<ListTwo> listTwo = getListTwoData(arrayOfListViewTwo,drawablesImage,drawableArrow,rows);
         final ListView listViewTwo = myView.findViewById(R.id.fragment_account_listview_two);
         listViewTwo.setAdapter(new ListTwoAdapter(myView.getContext(), listTwo));
         listViewTwo.setOnItemClickListener((adapterView, view12, i, l) -> {
-            ListenItemInListTwo listenItemInListTwo = (ListenItemInListTwo) listViewTwo.getItemAtPosition(i);
+            ListTwo listenItemInListTwo = (ListTwo) listViewTwo.getItemAtPosition(i);
             Toast.makeText(getContext(), "Selected " + " " + listenItemInListTwo.getDescription(), Toast.LENGTH_SHORT).show();
             if (Objects.equals(listenItemInListTwo.getDescription(), "Logout")) {
                 userAuthorized.signOut();
@@ -90,23 +119,24 @@ public class AccountFragment extends Fragment {
         });
     }
 
-    private void setListViewOne(View myView) {
+    private void setListViewOne(@NonNull View myView, String[] arrayOfFirebaseData) {
         final String[] arrayOfListViewOne = {"Posts","Favorite","Comments"};
+//        final String[] arrayOfFirebaseData = new String[] {numberOfPosts,numberOfLikes,numberOfComments};
         final int[] drawables = {R.drawable.ic_baseline_insert_photo_24,R.drawable.ic_favorite,R.drawable.ic_forum};
-        final ListenItemInListOne[] rows = new ListenItemInListOne[]{new ListenItemInListOne(), new ListenItemInListOne(), new ListenItemInListOne()};
-        ArrayList listOne = getListOfData(arrayOfListViewOne, drawables, rows);
+        final ListOneModel[] rows = new ListOneModel[]{new ListOneModel(), new ListOneModel(), new ListOneModel()};
+        ArrayList<ListOneModel> listOneModel = getListOfData(arrayOfListViewOne, arrayOfFirebaseData, drawables, rows);
         final ListView listViewOne = myView.findViewById(R.id.fragment_account_listview_one);
-        listViewOne.setAdapter(new ListOneAdapter(myView.getContext(), listOne));
+        listViewOne.setAdapter(new ListOneAdapter(myView.getContext(), listOneModel));
         listViewOne.setOnItemClickListener((adapterView, view1, i, l) -> {
-            ListenItemInListOne listenItemInListOne = (ListenItemInListOne) listViewOne.getItemAtPosition(i);
-            Toast.makeText(getContext(), "Selected: " + " " + listenItemInListOne.getDescription(),Toast.LENGTH_SHORT).show();
+            ListOneModel listenItemInListOneModel = (ListOneModel) listViewOne.getItemAtPosition(i);
+            Toast.makeText(getContext(), "Selected: " + " " + listenItemInListOneModel.getDescription(),Toast.LENGTH_SHORT).show();
         });
     }
 
     @SuppressLint("UseCompatLoadingForDrawables")
-    private ArrayList getListTwoData(String[] arrayOfListViewTwo, int[] drawablesImage, int[] drawableArrows, ListenItemInListTwo[] rows) {
+    private ArrayList<ListTwo> getListTwoData(String[] arrayOfListViewTwo, int[] drawablesImage, int[] drawableArrows, ListTwo[] rows) {
 
-        ArrayList<ListenItemInListTwo> results = new ArrayList<>();
+        ArrayList<ListTwo> results = new ArrayList<>();
 
         for (int i = 0; i < arrayOfListViewTwo.length; i++) {
             rows[i].setImageUri(getResources().getDrawable(drawablesImage[i]));
@@ -119,14 +149,14 @@ public class AccountFragment extends Fragment {
     }
 
     @SuppressLint("UseCompatLoadingForDrawables")
-    private ArrayList getListOfData(String[] arrayOfListViewOne, int[] drawables, ListenItemInListOne[] rows) {
+    private ArrayList<ListOneModel> getListOfData(String[] arrayOfListViewOne, String[] arrayOfFirebaseData, int[] drawables, ListOneModel[] rows) {
 
-        ArrayList<ListenItemInListOne> results = new ArrayList<>();
+        ArrayList<ListOneModel> results = new ArrayList<>();
 
         for (int i = 0 ; i < arrayOfListViewOne.length; i++) {
             rows[i].setImage(getResources().getDrawable(drawables[i]));
             rows[i].setDescription(arrayOfListViewOne[i]);
-            rows[i].setNumberOfElementsInSection(String.valueOf(i));
+            rows[i].setNumberOfElementsInSection(arrayOfFirebaseData[i]);
             results.add(rows[i]);
         }
 
@@ -171,9 +201,9 @@ public class AccountFragment extends Fragment {
         super.onStart();
     }
 
-    private class StableArrayAdapter extends ArrayAdapter<String> {
+    private static class StableArrayAdapter extends ArrayAdapter<String> {
 //        https://www.vogella.com/tutorials/AndroidListView/article.html
-        HashMap<String, Integer> mIdMap = new HashMap<String, Integer>();
+        HashMap<String, Integer> mIdMap = new HashMap<>();
 
         public StableArrayAdapter(Context context, int textViewResourceId, List<String> objects) {
             super(context, textViewResourceId, objects);

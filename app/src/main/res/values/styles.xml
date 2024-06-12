@@ -23,4 +23,22 @@
         <item name="android:windowAnimationStyle">@null</item>
     </style>
 
+    <style name="MatButton" parent="Theme.MaterialComponents">
+        <item name="colorOnPrimary">@android:color/holo_red_light</item>
+        <item name="colorPrimary">@android:color/holo_orange_dark</item>
+        <item name="colorOnSurface">@android:color/holo_orange_light</item>
+    </style>
+
+    <style name="counterText">
+        <item name="android:textColor">#aa5353cc</item>
+    </style>
+
+    <style name="counterOverride">
+        <item name="android:textColor">#ff0000</item>
+    </style>
+
+    <style name="ShapeAppearanceOverlay.App.rounded" parent="">
+        <item name="cornerSize">50%</item>
+    </style>
+
 </resources>

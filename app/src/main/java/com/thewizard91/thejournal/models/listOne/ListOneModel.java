@@ -2,13 +2,12 @@ package com.thewizard91.thejournal.models.listOne;
 
 import android.graphics.drawable.Drawable;
 
-public class ListenItemInListOne {
+public class ListOneModel {
     private Drawable image;
     private String description;
     private String numberOfElementsInSection;
 
-    public ListenItemInListOne() {}
-
+    public ListOneModel() {}
     public void setImage(Drawable image) { this.image = image; }
     public Drawable getImage() { return image; }
     public void setDescription(String description) { this.description = description; }

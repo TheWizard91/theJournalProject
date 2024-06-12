@@ -8,23 +8,23 @@ import java.util.Map;
 public class ImageModel extends ImageId {
     private String description;
     private String title;
-    private String image_uri;
+    private String imageURI;
 //    private Date timestamp;
-    private FieldValue server_timestamp;
+    private String time;
 
     public ImageModel() {}
-    public ImageModel(String description, String title, String image_uri, FieldValue server_timestamp)  {
+    public ImageModel(String description, String title, String imageURI, String time)  {
         this.description = description;
         this.title = title;
-        this.image_uri = image_uri;
-        this.server_timestamp = server_timestamp;
+        this.imageURI = imageURI;
+        this.time = time;
     }
 //    public void setDescription (String description) {this.description = description;}
 //    public String getDescription () {return description;}
 //    public void setTitle () {this.title = title;}
 //    public String getTitle () {return title;}
-    public void setImageURI (String image_uri) {this.image_uri = image_uri;}
-    public String getImageURI () {return image_uri;}
+    public void setImageURI (String imageURI) {this.imageURI = imageURI;}
+    public String getImageURI () {return imageURI;}
 //    public void seTimestamp (Date timestamp) {this.timestamp = timestamp;}
 //    public Date getTimestamp () {return timestamp;}
 
@@ -32,8 +32,8 @@ public class ImageModel extends ImageId {
         Map<String, Object> image_map = new HashMap<>();
         image_map.put("description", description);
         image_map.put("title", title);
-        image_map.put("imageURI", image_uri);
-        image_map.put("timestamp", server_timestamp);
+        image_map.put("imageURI", imageURI);
+        image_map.put("timestamp", time);
         return image_map;
     }
 }

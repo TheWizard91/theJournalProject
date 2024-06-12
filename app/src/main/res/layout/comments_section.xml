@@ -4,175 +4,287 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:animateLayoutChanges="true"
+    app:el_parallax="0.5"
+    app:el_duration="1000"
+    app:el_expanded="true">
 
-    <androidx.cardview.widget.CardView
-        android:id="@+id/comments_card_view"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="8dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0">
+<!--    <net.cachapa.expandablelayout.ExpandableLayout-->
+<!--        android:id="@+id/constraint_layout_in_expandable_layout"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content">-->
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/comments_constraint"
+        <androidx.cardview.widget.CardView
+            android:id="@+id/comments_card_view"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            app:cardCornerRadius="10dp"
+            app:cardBackgroundColor="#B8E0F6"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0">
 
-            <androidx.appcompat.widget.LinearLayoutCompat
-                android:orientation="horizontal"
-                android:id="@+id/linear_layout_of_likes_and_replies"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="8dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.022"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/comment"
-                app:layout_constraintVertical_bias="0.087">
-
-                <ImageView
-                    android:id="@+id/thumb_up"
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:background="@color/black"
-                    android:clickable="true"
-                    android:contentDescription="@string/thumb_up_image_description"
-                    android:focusable="true"
-                    android:src="@drawable/ic_favorite_border"
-                    tools:ignore="TouchTargetSizeCheck" />
-
-                <TextView
-                    android:textColor="@color/black"
-                    android:id="@+id/thumb_up_like_count"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/comment_thumb_up_likes_text"
-                    android:layout_marginStart="8dp" />
-
-            </androidx.appcompat.widget.LinearLayoutCompat>
-
-            <TextView
-                android:textColor="@color/black"
-                android:id="@+id/comment"
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/comments_constraint"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:text="@string/comment_text"
-                android:layout_marginStart="8dp"
-                android:layout_marginEnd="8dp"
-                app:layout_constraintBottom_toTopOf="@+id/linear_layout_of_likes_and_replies"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.036"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/linear_layout_container1"/>
+                android:layout_height="match_parent">
 
-            <androidx.appcompat.widget.LinearLayoutCompat
-                android:orientation="horizontal"
-                android:id="@+id/linear_layout_container1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:layout_marginStart="16dp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
-
-                <de.hdodenhof.circleimageview.CircleImageView
-                    android:layout_gravity="start"
-                    android:background="@color/black"
-                    android:id="@+id/comments_user_image"
-                    android:layout_width="48dp"
-                    android:layout_height="48dp"
-                    android:layout_marginTop="0dp"
-                    android:src="@drawable/ic_account_circle"
-                    android:layout_marginStart="0dp"
+                <RelativeLayout
+                    android:id="@+id/buttons_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"/>
+                    app:layout_constraintTop_toBottomOf="@+id/comments_layout">
+
+                    <androidx.appcompat.widget.LinearLayoutCompat
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center">
+
+                        <androidx.appcompat.widget.LinearLayoutCompat
+                            android:id="@+id/linear_layout_of_likes_and_replies"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:layout_marginBottom="8dp"
+                            android:orientation="horizontal"
+                            android:layout_weight="1">
+
+                            <ImageView
+                                android:id="@+id/thumb_up"
+                                android:layout_width="32dp"
+                                android:layout_height="32dp"
+                                android:layout_marginStart="8dp"
+                                android:layout_marginEnd="8dp"
+                                android:clickable="true"
+                                android:contentDescription="@string/thumb_up_image_description"
+                                android:focusable="true"
+                                android:src="@drawable/ic_favorite_border"
+                                tools:ignore="TouchTargetSizeCheck" />
+
+                            <TextView
+                                android:id="@+id/thumb_up_like_count"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="8dp"
+                                android:text="@string/comment_thumb_up_likes_text"
+                                android:textColor="@color/black" />
+
+                        </androidx.appcompat.widget.LinearLayoutCompat>
+
+                        <ImageButton
+                            android:id="@+id/comment_reply"
+                            android:layout_width="32dp"
+                            android:layout_height="32dp"
+                            android:clickable="true"
+                            android:contentDescription="@string/comment_reply_description"
+                            android:focusable="true"
+                            app:srcCompat="@drawable/ic_reply"
+                            tools:ignore="TouchTargetSizeCheck"
+                            android:background="@drawable/circle"
+                            android:layout_alignParentEnd="true"
+                            android:backgroundTintMode="screen"
+                            android:hapticFeedbackEnabled="true"
+                            android:backgroundTint="#afc7ce"/>
+
+                    </androidx.appcompat.widget.LinearLayoutCompat>
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/comments_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/linear_layout_container1"
+                    android:orientation="vertical">
+
+                    <androidx.appcompat.widget.LinearLayoutCompat
+                        android:id="@+id/comment_text_layout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginEnd="8dp"
+                        android:layout_marginStart="8dp"
+                        android:gravity="center"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/comment"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:layout_marginBottom="8dp"
+                            android:text="@string/comment_text"
+                            android:textColor="@color/black"
+                            android:layout_weight="1"
+                            android:textSize="16sp" />
+
+                        <ImageView
+                            android:id="@+id/comment_edit"
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:layout_alignParentEnd="true"
+                            android:clickable="true"
+                            android:contentDescription="@string/comments_edit_text_description"
+                            android:focusable="true"
+                            app:srcCompat="@drawable/ic_edit"
+                            tools:ignore="TouchTargetSizeCheck"
+                            android:visibility="visible"/>
+
+                    </androidx.appcompat.widget.LinearLayoutCompat>
+
+                    <androidx.appcompat.widget.LinearLayoutCompat
+                        android:id="@+id/edit_comment_layout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/comment_text_layout"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginEnd="8dp"
+                        android:layout_marginBottom="8dp"
+                        android:visibility="gone"
+                        android:gravity="bottom">
+
+                        <com.github.florent37.materialtextfield.MaterialTextField
+                            android:id="@+id/material_text_field"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:visibility="visible"
+                            android:animateLayoutChanges="true"
+                            android:focusable="true"
+                            android:clickable="true">
+
+                            <EditText
+                                android:id="@+id/edit_comment"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:background="@color/white"
+                                android:ems="8"
+                                android:textAlignment="textStart"
+                                android:textColor="@color/black"
+                                android:textColorHint="@color/darker_gray"
+                                android:hint="@string/enter_edit"
+                                android:inputType="textCapSentences|textMultiLine"
+                                android:minHeight="480dp"
+                                android:maxHeight="1000dp"
+                                android:maxLines="30"
+                                android:lines="3"
+                                android:textSize="18sp"
+                                android:autofillHints=""
+                                android:focusable="true"
+                                android:imeOptions="actionSend"
+                                android:scrollHorizontally="false"
+                                android:scrollbarAlwaysDrawVerticalTrack="true"
+                                android:scrollbarStyle="insideInset"
+                                android:scrollbars="vertical"
+                                android:overScrollMode="always"/>
+
+                        </com.github.florent37.materialtextfield.MaterialTextField>
+
+                        <ImageButton
+                            android:id="@+id/upload_button"
+                            android:layout_width="32dp"
+                            android:layout_height="32dp"
+                            android:background="@drawable/circle"
+                            android:layout_alignParentEnd="true"
+                            android:clickable="true"
+                            android:backgroundTintMode="screen"
+                            android:hapticFeedbackEnabled="true"
+                            android:backgroundTint="#afc7ce"
+                            android:contentDescription="@string/comments_edit_text_description"
+                            android:focusable="true"
+                            app:srcCompat="@drawable/ic_upload"
+                            tools:ignore="TouchTargetSizeCheck"/>
+
+                    </androidx.appcompat.widget.LinearLayoutCompat>
+
+                </RelativeLayout>
 
                 <androidx.appcompat.widget.LinearLayoutCompat
-                    android:orientation="vertical"
-                    android:id="@+id/inner_layout_for_text"
+                    android:orientation="horizontal"
+                    android:id="@+id/linear_layout_container1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp">
+                    android:layout_marginTop="16dp"
+                    android:layout_marginStart="16dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
 
-                    <TextView
-                        android:textColor="@color/black"
-                        android:id="@+id/comments_username"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                    <de.hdodenhof.circleimageview.CircleImageView
+                        android:layout_gravity="start"
+                        android:id="@+id/comments_user_image"
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
                         android:layout_marginTop="0dp"
-                        android:text="@string/comments_username_text"
+                        android:src="@drawable/ic_account_circle"
                         android:layout_marginStart="0dp"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintHorizontal_bias="0"
-                        app:layout_constraintStart_toEndOf="@+id/circleImageView"
+                        app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"/>
 
-                    <TextView
-                        android:textColor="@color/black"
-                        android:id="@+id/comments_date"
+                    <androidx.appcompat.widget.LinearLayoutCompat
+                        android:orientation="vertical"
+                        android:id="@+id/inner_layout_for_text"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/comments_date_text"
-                        android:layout_marginStart="0dp"
-                        app:layout_constraintStart_toEndOf="@+id/comments_user_image"
-                        app:layout_constraintTop_toBottomOf="@+id/comments_username"/>
+                        android:layout_marginStart="8dp">
+
+                        <TextView
+                            android:textColor="@color/black"
+                            android:id="@+id/comments_username"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="0dp"
+                            android:text="@string/comments_username_text"
+                            android:layout_marginStart="0dp"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintHorizontal_bias="0"
+                            app:layout_constraintStart_toEndOf="@+id/circleImageView"
+                            app:layout_constraintTop_toTopOf="parent"/>
+
+                        <TextView
+                            android:textColor="@color/black"
+                            android:id="@+id/comments_date"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/comments_date_text"
+                            android:layout_marginStart="0dp"
+                            app:layout_constraintStart_toEndOf="@+id/comments_user_image"
+                            app:layout_constraintTop_toBottomOf="@+id/comments_username"/>
+
+                    </androidx.appcompat.widget.LinearLayoutCompat>
 
                 </androidx.appcompat.widget.LinearLayoutCompat>
 
-            </androidx.appcompat.widget.LinearLayoutCompat>
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/comments_clear"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:contentDescription="@string/comments_clear_description"
+                    android:src="@drawable/ic_clear"
+                    app:civ_circle_background_color="#afc7ce"
+                    app:layout_constraintBottom_toTopOf="@+id/comments_layout"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.285" />
 
-            <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/comments_clear"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="8dp"
-                android:background="@color/black"
-                android:contentDescription="@string/comments_clear_description"
-                android:src="@drawable/ic_clear"
-                app:civ_circle_background_color="@color/pastel_color_violet1"
-                app:layout_constraintBottom_toTopOf="@+id/comment"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.285" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <ImageView
-                android:id="@+id/comment_reply"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:layout_marginEnd="8dp"
-                android:background="@color/black"
-                android:clickable="true"
-                android:contentDescription="@string/comment_reply_description"
-                android:focusable="true"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/comment"
-                app:srcCompat="@drawable/ic_reply"
-                tools:ignore="TouchTargetSizeCheck" />
+        </androidx.cardview.widget.CardView>
 
-            <ImageView
-                android:id="@+id/comments_edit"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:background="@color/black"
-                android:clickable="true"
-                android:contentDescription="@string/comments_edit_text_description"
-                android:focusable="true"
-                app:layout_constraintBottom_toBottomOf="@+id/comment"
-                app:layout_constraintEnd_toEndOf="@+id/comment"
-                app:srcCompat="@drawable/ic_edit"
-                tools:ignore="TouchTargetSizeCheck" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-    </androidx.cardview.widget.CardView>
+<!--    </net.cachapa.expandablelayout.ExpandableLayout>-->
 
 </androidx.constraintlayout.widget.ConstraintLayout>
